@@ -62,8 +62,6 @@ export const AnimatedSearchBar = ({
             damping: 22,
             stiffness: 190,
             overshootClamping: false,
-            restDisplacementThreshold: 0.01,
-            restSpeedThreshold: 2,
             reduceMotion: ReduceMotion.System,
         })
     }, [inputContainerWidth, value.length])

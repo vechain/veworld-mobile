@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { Mutex } from "async-mutex"
 import React, { useCallback, useContext, useEffect, useMemo, useRef } from "react"
-import { InteractionManager, Linking } from "react-native"
+import { Linking } from "react-native"
 import { showInfoToast } from "~Components/Base/BaseToast"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
@@ -453,19 +453,17 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
             }
         }
 
-        const interaction = InteractionManager.runAfterInteractions(() => {
+        const interaction = requestIdleCallback(() => {
             Linking.addEventListener("url", handleDeepLink)
         })
 
         if (!mounted.current) {
             mounted.current = true
-            InteractionManager.runAfterInteractions(() =>
-                Linking.getInitialURL().then(url => url && handleDeepLink({ url })),
-            )
+            requestIdleCallback(() => Linking.getInitialURL().then(url => url && handleDeepLink({ url })))
         }
 
         return () => {
-            interaction?.cancel()
+            cancelIdleCallback(interaction)
             Linking.removeAllListeners("url")
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps

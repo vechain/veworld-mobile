@@ -59,7 +59,7 @@ jobs:
                   yarn generate:indexer-schema:mainnet
 
             - name: Lint, Format Check & TS Check
-              run: yarn lint && yarn format:check & yarn ts-check
+              run: yarn lint && yarn format:check && yarn ts-check
 
             - name: Tests with Coverage
               env:

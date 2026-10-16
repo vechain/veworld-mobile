@@ -1,73 +1,70 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback, useState } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseSpacer, BaseText, BaseButton, BaseBottomSheet, BaseBottomSheetTextInput, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { setIsAppLoading, useAppDispatch } from "~Storage/Redux"
-import { InteractionManager } from "react-native"
 
 type Props = {
     onHide: () => void
     onUnlock: (pwd: string) => Promise<void>
 }
 
-export const UnlockKeystoreBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ onHide, onUnlock }, ref) => {
-        const { LL } = useI18nContext()
+export const UnlockKeystoreBottomSheet = React.forwardRef<BottomSheetModal, Props>(({ onHide, onUnlock }, ref) => {
+    const { LL } = useI18nContext()
 
-        const dispatch = useAppDispatch()
-        const [password, setPassword] = useState<string>("")
+    const dispatch = useAppDispatch()
+    const [password, setPassword] = useState<string>("")
 
-        const handleUnlock = useCallback(() => {
-            dispatch(setIsAppLoading(true))
-            setTimeout(() => {
-                InteractionManager.runAfterInteractions(() => {
-                    onUnlock(password).finally(() => {
-                        dispatch(setIsAppLoading(false))
-                    })
+    const handleUnlock = useCallback(() => {
+        dispatch(setIsAppLoading(true))
+        setTimeout(() => {
+            requestIdleCallback(() => {
+                onUnlock(password).finally(() => {
+                    dispatch(setIsAppLoading(false))
                 })
-            }, 1000)
-            onHide()
-        }, [dispatch, onHide, onUnlock, password])
+            })
+        }, 1000)
+        onHide()
+    }, [dispatch, onHide, onUnlock, password])
 
-        // Clear password only when sheet is fully dismissed
-        const handleDismiss = useCallback(() => {
-            setPassword("")
-        }, [])
+    // Clear password only when sheet is fully dismissed
+    const handleDismiss = useCallback(() => {
+        setPassword("")
+    }, [])
 
-        return (
-            <BaseBottomSheet
-                dynamicHeight
-                ignoreMinimumSnapPoint
-                ref={ref}
-                onDismiss={handleDismiss}
-                title={LL.TITLE_UNLOCK_KEYSTORE()}>
-                <BaseView>
-                    <BaseText typographyFont="subSubTitleLight" pt={8}>
-                        {LL.SB_INSERT_KEYSTORE_PASSWORD()}
-                    </BaseText>
-                    <BaseSpacer height={16} />
-                    <BaseBottomSheetTextInput
-                        value={password}
-                        onChangeText={setPassword}
-                        autoCapitalize="none"
-                        autoComplete="off"
-                        secureTextEntry={true}
-                        placeholder="Insert password..."
-                        testID="unlock-keystore-password-input"
-                    />
-                    <BaseSpacer height={16} />
-                    <BaseButton
-                        testID="unlock-keystore-button"
-                        haptics="Medium"
-                        disabled={password.length < 1}
-                        action={handleUnlock}
-                        w={100}
-                        title={LL.COMMON_BTN_UNLOCK().toUpperCase()}
-                    />
-                </BaseView>
+    return (
+        <BaseBottomSheet
+            dynamicHeight
+            ignoreMinimumSnapPoint
+            ref={ref}
+            onDismiss={handleDismiss}
+            title={LL.TITLE_UNLOCK_KEYSTORE()}>
+            <BaseView>
+                <BaseText typographyFont="subSubTitleLight" pt={8}>
+                    {LL.SB_INSERT_KEYSTORE_PASSWORD()}
+                </BaseText>
+                <BaseSpacer height={16} />
+                <BaseBottomSheetTextInput
+                    value={password}
+                    onChangeText={setPassword}
+                    autoCapitalize="none"
+                    autoComplete="off"
+                    secureTextEntry={true}
+                    placeholder="Insert password..."
+                    testID="unlock-keystore-password-input"
+                />
+                <BaseSpacer height={16} />
+                <BaseButton
+                    testID="unlock-keystore-button"
+                    haptics="Medium"
+                    disabled={password.length < 1}
+                    action={handleUnlock}
+                    w={100}
+                    title={LL.COMMON_BTN_UNLOCK().toUpperCase()}
+                />
+            </BaseView>
 
-                <BaseSpacer height={18} />
-            </BaseBottomSheet>
-        )
-    },
-)
+            <BaseSpacer height={18} />
+        </BaseBottomSheet>
+    )
+})

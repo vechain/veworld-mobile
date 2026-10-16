@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useQueries } from "@tanstack/react-query"
 import { forwardRef, default as React, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
@@ -23,7 +23,7 @@ type Props = {
     setSelectedDelegationUrl: (url: string) => void
     onCloseBottomSheet: () => void
 }
-export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function DelegationBottomSheet(
+export const DelegationBottomSheet = forwardRef<BottomSheetModal, Props>(function DelegationBottomSheetRender(
     {
         setNoDelegation,
         selectedDelegationOption,

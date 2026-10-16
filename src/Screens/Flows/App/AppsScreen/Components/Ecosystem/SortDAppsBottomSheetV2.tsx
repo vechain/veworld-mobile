@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { RefObject, useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseRadioGroup, BaseText, BaseView, RadioButton } from "~Components"
@@ -11,7 +11,7 @@ export type SortableKeys = "asc" | "desc" | "newest"
 type Props = {
     selectedSort: UseDappsWithPaginationSortKey
     onSortChange: (sort: UseDappsWithPaginationSortKey) => void
-    bsRef: RefObject<BottomSheetModalMethods>
+    bsRef: RefObject<BottomSheetModal>
 }
 
 export const SortDAppsBottomSheetV2 = ({ selectedSort, onSortChange, bsRef }: Props) => {

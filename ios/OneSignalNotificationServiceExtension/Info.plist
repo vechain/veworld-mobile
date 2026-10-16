@@ -11,5 +11,7 @@
 	</dict>
 	<key>OneSignal_app_groups_key</key>
 	<string>group.org.veworld.app.onesignal</string>
+	<key>RCTNewArchEnabled</key>
+	<true/>
 </dict>
 </plist>

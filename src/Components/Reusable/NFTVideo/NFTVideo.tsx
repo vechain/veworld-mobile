@@ -1,5 +1,6 @@
-import React, { memo, useCallback, useEffect, useRef } from "react"
-import { Audio, Video, ResizeMode, InterruptionModeAndroid, InterruptionModeIOS } from "expo-av"
+import { setAudioModeAsync } from "expo-audio"
+import { useVideoPlayer, VideoView } from "expo-video"
+import React, { memo, useEffect } from "react"
 import { BaseView } from "~Components/Base"
 import { useTheme } from "~Hooks"
 
@@ -12,57 +13,39 @@ type Props = {
 
 // Workaround to play audio on iOS
 // https://stackoverflow.com/a/74493514/7977491
-const triggerAudio = async (ref: React.RefObject<Video | null>) => {
-    if (!ref.current) {
-        Promise.reject(new Error("Video reference is null"))
-        return
-    }
-
-    await Audio.setAudioModeAsync({
-        playsInSilentModeIOS: true, // play audio even when phone is on silent mode
-        interruptionModeAndroid: InterruptionModeAndroid.DoNotMix, // interrupt other apps' audio
-        interruptionModeIOS: InterruptionModeIOS.DoNotMix, // interrupt other apps' audio
+const triggerAudio = () =>
+    setAudioModeAsync({
+        playsInSilentMode: true, // play audio even when phone is on silent mode
+        interruptionMode: "doNotMix", // interrupt other apps' audio
     })
-
-    await ref?.current?.playAsync()
-}
 
 export const NFTVideo = memo((props: Props) => {
     const { uri, style, isPlayAudio } = props
-    const ref = useRef<Video | null>(null)
-    const firstLoadRef = useRef(true)
 
-    const initPLayback = useCallback(async () => {
-        if (isPlayAudio) await triggerAudio(ref)
-    }, [isPlayAudio])
+    const player = useVideoPlayer(uri, instance => {
+        instance.loop = true
+        instance.volume = isPlayAudio ? 1 : 0
+        instance.play()
+    })
 
     useEffect(() => {
-        if (firstLoadRef.current) {
-            initPLayback()
-            firstLoadRef.current = false
-            return
-        }
-    }, [initPLayback])
+        if (isPlayAudio) triggerAudio()
+    }, [isPlayAudio])
 
     const theme = useTheme()
 
     return (
         <BaseView>
-            <Video
-                volume={isPlayAudio ? 1 : 0}
-                usePoster
-                ref={ref}
-                shouldPlay
-                useNativeControls={props.useNativeControls}
+            <VideoView
+                player={player}
+                nativeControls={props.useNativeControls}
                 style={[
                     {
                         backgroundColor: theme.colors.placeholder,
                     },
                     style,
                 ]}
-                source={{ uri }}
-                resizeMode={ResizeMode.COVER}
-                isLooping
+                contentFit="cover"
             />
         </BaseView>
     )

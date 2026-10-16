@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import * as FileSystem from "expo-file-system"
+import * as FileSystem from "expo-file-system/legacy"
 import React, { useCallback } from "react"
 import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"

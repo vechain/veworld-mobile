@@ -1,5 +1,5 @@
 import { renderHook, act } from "@testing-library/react-hooks"
-import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent } from "react-native"
+import { LayoutChangeEvent, NativeScrollEvent, NativeSyntheticEvent, ViewStyle } from "react-native"
 import { useAnimatedHorizontalFilters, UseAnimatedHorizontalFiltersProps } from "./useAnimatedHorizontalFilters"
 
 jest.mock("react-native-reanimated", () => {
@@ -245,7 +245,7 @@ describe("useAnimatedHorizontalFilters", () => {
             }),
         )
 
-        const style = result.current.indicatorAnimatedStyle
+        const style = result.current.indicatorAnimatedStyle as unknown as ViewStyle
 
         expect(style).toEqual({
             width: 0,
@@ -279,7 +279,7 @@ describe("useAnimatedHorizontalFilters", () => {
             })
         })
 
-        const style = result.current.indicatorAnimatedStyle
+        const style = result.current.indicatorAnimatedStyle as unknown as ViewStyle
 
         expect(style).toHaveProperty("width")
         expect(style).toHaveProperty("height")

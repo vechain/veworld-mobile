@@ -7,7 +7,6 @@ import {
     BottomSheetView,
 } from "@gorhom/bottom-sheet"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { isFinite } from "lodash"
 import { PropsWithChildren, default as React, ReactNode, useCallback, useMemo } from "react"
 import { Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
@@ -229,7 +228,7 @@ const BaseBottomSheetContent = ({
     )
 }
 
-const _BaseBottomSheet = <TData,>(
+const BaseBottomSheetWithRef = <TData,>(
     {
         contentStyle,
         snapPoints,
@@ -257,7 +256,7 @@ const _BaseBottomSheet = <TData,>(
         scrollEnabled = true,
         ...props
     }: BaseBottomSheetProps<TData>,
-    ref: React.ForwardedRef<BottomSheetModalMethods>,
+    ref: React.ForwardedRef<BottomSheetModal>,
 ) => {
     const { onChange, ...sheetProps } = props
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -279,8 +278,8 @@ const _BaseBottomSheet = <TData,>(
     const handleColor = useMemo(() => {
         if (_handleColor) return _handleColor
         if (!theme.isDark) return COLORS.GREY_300
-        return flattenedBsStyle.backgroundColor === theme.colors.card ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300
-    }, [flattenedBsStyle.backgroundColor, theme.colors.card, theme.isDark, _handleColor])
+        return flattenedBsStyle?.backgroundColor === theme.colors.card ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300
+    }, [flattenedBsStyle?.backgroundColor, theme.colors.card, theme.isDark, _handleColor])
 
     const renderBlurBackdrop = useCallback((props_: BottomSheetBackdropProps) => {
         return <BlurBackdropBottomSheet animatedIndex={props_.animatedIndex} />
@@ -301,10 +300,11 @@ const _BaseBottomSheet = <TData,>(
 
     const renderHandle = useCallback(() => <BaseBottomSheetHandle color={handleColor} />, [handleColor])
 
-    const onSheetPositionChange = useCallback(
-        (index: number) => {
-            if (enableBackToClose) handleSheetPositionChange(index)
-            onChange?.(index)
+    const onSheetPositionChange = useCallback<NonNullable<BottomSheetModalProps["onChange"]>>(
+        // v5's onChange also reports the position and snap-point type; both are forwarded on.
+        (index, position, type) => {
+            if (enableBackToClose) handleSheetPositionChange(index, position, type)
+            onChange?.(index, position, type)
         },
         [enableBackToClose, handleSheetPositionChange, onChange],
     )
@@ -410,7 +410,7 @@ const _BaseBottomSheet = <TData,>(
                         floating={floating}
                         scrollable={scrollable}
                         stickyHeaderIndices={stickyIndices}>
-                        {children(p?.data)}
+                        {children(p?.data as TData)}
                     </BaseBottomSheetContent>
                 )
             ) : (
@@ -440,7 +440,7 @@ const _BaseBottomSheet = <TData,>(
  * `BaseBottomSheet` component. This is a wrapper around the `BottomSheetModal`
  * component from `@gorhom/bottom-sheet` library with some additional features.
  */
-export const BaseBottomSheet = typedForwardRef(_BaseBottomSheet)
+export const BaseBottomSheet = typedForwardRef(BaseBottomSheetWithRef)
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({

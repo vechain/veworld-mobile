@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useMemo } from "react"
 import { LEDGER_ERROR_CODES } from "~Constants"
 import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView } from "~Components"
@@ -26,7 +26,7 @@ type DataToDisplay = {
 }
 
 // component to select an account
-export const ConnectionErrorBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const ConnectionErrorBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     ({ error, onDismiss, onRetry }, ref) => {
         const { LL } = useI18nContext()
         const theme = useTheme()

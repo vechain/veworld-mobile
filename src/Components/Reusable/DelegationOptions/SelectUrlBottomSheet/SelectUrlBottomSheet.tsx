@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useState } from "react"
 import { BaseBottomSheet } from "~Components"
 import { DelegationType } from "~Model/Delegation"
@@ -16,7 +16,7 @@ type Props = {
 }
 
 // component to select an account for delegation
-export const SelectUrlBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const SelectUrlBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     ({ setSelectedDelegationUrl, selectedDelegationUrl, selectedDelegationOption, setNoDelegation, onClose }, ref) => {
         const [addUrlMode, setAddUrlMode] = useState(false)
         const [newUrl, setNewUrl] = useState("")

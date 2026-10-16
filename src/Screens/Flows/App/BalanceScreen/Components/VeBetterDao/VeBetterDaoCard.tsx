@@ -1,5 +1,5 @@
 import React, { forwardRef, useMemo } from "react"
-import { StyleSheet, View } from "react-native"
+import { HostInstance, StyleSheet, View } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { b3mo } from "~Assets"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
@@ -13,7 +13,7 @@ import { StatsCard } from "./StatsCard"
 import { VeBetterPoweredSvg } from "~Assets/Img/VeBetterPoweredSvg"
 import FontUtils from "~Utils/FontUtils"
 
-export const VeBetterDaoCard = forwardRef<View>((_, ref) => {
+export const VeBetterDaoCard = forwardRef<HostInstance>((_, ref) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
 

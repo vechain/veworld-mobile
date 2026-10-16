@@ -1,11 +1,11 @@
-import { MMKV } from "react-native-mmkv"
+import { createMMKV } from "react-native-mmkv"
 import { warn } from "~Utils"
 import KeychainService from "~Services/KeychainService"
 import { ERROR_EVENTS } from "~Constants"
 
 const OLD_REDUX_KEY = "VeWorld_Redux_key"
 
-const previousStorage = new MMKV({ id: "mmkv.default" })
+const previousStorage = createMMKV({ id: "mmkv.default" })
 
 const clearOldStorage = async () => {
     try {

@@ -1,5 +1,5 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView, CloudKitWalletCard } from "~Components"
 import { useI18nContext } from "~i18n"
 import { CloudKitWallet } from "~Model"
@@ -10,7 +10,7 @@ type Props = {
     selectedWallet: CloudKitWallet
 }
 
-export const DeleteCloudKitWalletBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const DeleteCloudKitWalletBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     ({ onClose, onConfirm, selectedWallet }, ref) => {
         const { LL } = useI18nContext()
 

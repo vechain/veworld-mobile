@@ -1,24 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
 import Lottie from "lottie-react-native"
 import React, { useCallback, useMemo } from "react"
-import {
-    FlexAlignType,
-    StyleProp,
-    StyleSheet,
-    TextStyle,
-    TouchableOpacity,
-    TouchableOpacityProps,
-    ViewStyle,
-} from "react-native"
+import { StyleProp, StyleSheet, TextStyle, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native"
 import { StyleProps } from "react-native-reanimated"
 import { LoaderDark, LoaderLight } from "~Assets"
-import { ColorThemeType, TFonts } from "~Constants"
+import { ColorThemeType, FlexAlignType, TFonts } from "~Constants"
 import { typography } from "~Constants/Theme"
 import { useThemedStyles } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
 import { BaseText, BaseTextProps } from "./BaseText"
-
-const { defaults: defaultTypography, ...otherTypography } = typography
 
 type Props = {
     action: () => void
@@ -40,10 +30,10 @@ type Props = {
     h?: number // NOTE: this is a number in percentage
     radius?: number
     size?: "sm" | "md" | "lg"
-    typographyFont?: keyof typeof defaultTypography
-    fontSize?: keyof typeof otherTypography.fontSize
-    fontWeight?: keyof typeof otherTypography.fontWeight
-    fontFamily?: keyof typeof otherTypography.fontFamily
+    typographyFont?: keyof typeof typography.defaults
+    fontSize?: keyof typeof typography.fontSize
+    fontWeight?: keyof typeof typography.fontWeight
+    fontFamily?: keyof typeof typography.fontFamily
     selfAlign?: "auto" | FlexAlignType
     haptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
     leftIcon?: React.ReactNode

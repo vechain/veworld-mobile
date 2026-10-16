@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { default as React, useCallback, useEffect, useMemo } from "react"
 import { Image, Linking, StyleSheet } from "react-native"
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated"
@@ -21,7 +21,7 @@ type Props = {
 
 const AnimatedIcon = Animated.createAnimatedComponent(BaseIcon)
 
-export const ConvertedBetterBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const ConvertedBetterBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     ({ txId, amount, from, to, onClose, onFailure }: Props, ref) => {
         const { isFetching, isSuccess } = useWaitTransaction({ txId })
 

@@ -188,7 +188,7 @@ describe("useCreateWallet", () => {
                     newLedger: ledger,
                     onError: undefined,
                 })
-            } catch (e) {}
+            } catch {}
 
             expect(addLedgerDeviceAndAccounts).toHaveBeenCalledWith(ledger)
         })

@@ -1,4 +1,4 @@
-import { MMKV, MMKVConfiguration } from "react-native-mmkv"
+import { Configuration, createMMKV, MMKV } from "react-native-mmkv"
 import { SynchronousCache } from "./interface"
 import { createKey } from "~Utils/CacheKeyUtils/CacheKeyUtils"
 import { CryptoUtils, error } from "~Utils"
@@ -10,8 +10,8 @@ export default class SecurePersistedCache<T> implements SynchronousCache<T> {
 
     constructor(cacheKey: string, encryptionKey: string) {
         this.encryptionKey = encryptionKey
-        const config: MMKVConfiguration = { id: cacheKey }
-        this._cache = new MMKV(config)
+        const config: Configuration = { id: cacheKey }
+        this._cache = createMMKV(config)
     }
 
     public lock() {
@@ -46,7 +46,7 @@ export default class SecurePersistedCache<T> implements SynchronousCache<T> {
     }
     public removeItem(key: string): void {
         if (!this.encryptionKey) throw Error("Encryption key not set")
-        this._cache.delete(createKey(key))
+        this._cache.remove(createKey(key))
     }
     public reset(): void {
         this._cache.clearAll()

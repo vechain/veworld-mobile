@@ -7,45 +7,31 @@ import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-
 import { Component, PropsWithChildren, ReactNode } from "react"
 import { SecurityLevelType } from "~Model/Biometrics"
 import { WALLET_STATUS } from "~Model/Wallet"
-import { MMKV } from "react-native-mmkv"
+import { createMMKV } from "react-native-mmkv"
 import * as localizeMock from "react-native-localize/mock"
 import * as dotenv from "dotenv"
-import { FlatList, SectionList, View } from "react-native"
-import { randomBytes as cryptoRandomBytes } from "crypto"
+import { FlatList, Keyboard, SectionList } from "react-native"
 
 const componentMock = ({ children }: { children: ReactNode }) => children
 
 dotenv.config({ path: "./.env" })
 
+// Emitter unwired under the RN 0.88 preset; assigned not spied, so restoreAllMocks can't undo it.
+Keyboard.addListener = (() => ({ remove: () => {} })) as never
+
+// RN 0.88 re-exports Touchable for react-native-svg but leaves it non-enumerable, so the
+// `{ ...jest.requireActual("react-native") }` mocks several suites use drop it and svg
+// reads Mixin off undefined.
+const actualReactNative = jest.requireActual("react-native")
+Object.defineProperty(actualReactNative, "Touchable", {
+    ...Object.getOwnPropertyDescriptor(actualReactNative, "Touchable"),
+    enumerable: true,
+})
+
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 jest.mock("react-native/src/private/animated/NativeAnimatedHelper.js")
 jest.mock("jail-monkey", () => require("./src/Test/mocks/jail-monkey"))
-jest.mock("react-native-quick-crypto", () => ({
-    getRandomValues: jest.fn(buffer => buffer),
-    randomFillSync: jest.fn(buffer => buffer),
-    randomBytes: jest.fn(size => cryptoRandomBytes(size)),
-    createCipheriv: jest.fn(() => ({
-        update: (first: string) => first,
-        final: () => "",
-    })),
-    createDecipheriv: jest.fn(() => ({
-        update: (first: string) => first,
-        final: () => "",
-    })),
-    createHash: jest.fn(() => ({
-        update: () => ({
-            digest: (first: string) => first,
-        }),
-    })),
-}))
-
 jest.mock("react-native-keyboard-controller", () => require("react-native-keyboard-controller/jest"))
-jest.mock("react-native-vision-camera", () => ({
-    Camera: View,
-    useCameraDevice: jest.fn(),
-    useCodeScanner: jest.fn().mockImplementation(args => args),
-}))
-
 jest.mock("react-native-onesignal", () => ({
     ...jest.requireActual("react-native-onesignal"),
     OneSignal: {
@@ -131,10 +117,29 @@ jest.mock("expo-local-authentication", () => ({
     AuthenticationType: jest.requireActual("expo-local-authentication").AuthenticationType,
 }))
 
-jest.mock("expo-av", () => {})
 jest.mock("expo-background-fetch", () => {})
 
-jest.mock("expo-file-system", () => ({
+// Gesture Handler 3 installs UI runtime bindings from a microtask at import time, and
+// the worklets web build throws there, which takes the worker down rather than a test.
+jest.mock("react-native-worklets", () => ({
+    ...jest.requireActual("react-native-worklets"),
+    getUIRuntimeHolder: () => ({}),
+}))
+
+jest.mock("expo-audio", () => ({
+    setAudioModeAsync: jest.fn().mockResolvedValue(undefined),
+}))
+
+jest.mock("expo-video", () => ({
+    VideoView: "VideoView",
+    useVideoPlayer: jest.fn((_source, setup) => {
+        const player = { loop: false, volume: 0, muted: false, playing: false, play: jest.fn(), pause: jest.fn() }
+        setup?.(player)
+        return player
+    }),
+}))
+
+jest.mock("expo-file-system/legacy", () => ({
     documentDirectory: "file:///test/documents/",
     getInfoAsync: jest.fn().mockResolvedValue({ exists: false }),
     makeDirectoryAsync: jest.fn().mockResolvedValue(undefined),
@@ -168,6 +173,11 @@ jest.mock("expo-font", () => ({
 
 jest.mock("react-native-localize", () => localizeMock)
 
+jest.mock("react-native-android-location-enabler", () => ({
+    promptForEnableLocationIfNeeded: jest.fn().mockResolvedValue("already-enabled"),
+    isLocationEnabled: jest.fn().mockResolvedValue(true),
+}))
+
 jest.mock("react-native-webview", () => ({
     ...jest.requireActual("react-native-webview").WebView,
 }))
@@ -199,8 +209,13 @@ jest.mock("react-native-wagmi-charts", () => {
         LineChart,
     }
 })
+jest.mock("react-native-edge-to-edge", () => ({
+    SystemBars: () => null,
+}))
+
 jest.mock("expo-camera", () => ({
     Camera: componentMock,
+    CameraView: componentMock,
     CameraType: {
         back: "back",
     },
@@ -266,7 +281,7 @@ jest.mock("~Components/Providers/EncryptedStorageProvider/ApplicationSecurityPro
     ...jest.requireActual("~Components/Providers/EncryptedStorageProvider/ApplicationSecurityProvider"),
     useApplicationSecurity: jest.fn().mockReturnValue({
         redux: {
-            mmkv: new MMKV({ id: "test-redux" }),
+            mmkv: createMMKV({ id: "test-redux" }),
             encryptionKey: "test-redux",
         },
         images: undefined,

@@ -1,5 +1,5 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useState } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { URIUtils } from "~Utils"
 import {
     BaseBottomSheet,
@@ -19,7 +19,7 @@ type Props = {
     handleClose: () => void
 }
 
-export const AddUrlBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ handleClose }, ref) => {
+export const AddUrlBottomSheet = React.forwardRef<BottomSheetModal, Props>(({ handleClose }, ref) => {
     const [newUrl, setNewUrl] = useState("")
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()

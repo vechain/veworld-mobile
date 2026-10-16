@@ -1,12 +1,13 @@
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
-import { useCallback, useMemo } from "react"
+import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs"
+import { useCallback, useContext, useMemo } from "react"
 import { PlatformType } from "~Constants"
 import { PlatformUtils } from "~Utils"
 
 const ANDROID_DEFAULT_PADDING = 24
 
 export const useTabBarBottomMargin = () => {
-    const rawPadding = useBottomTabBarHeight() || 0
+    // The hook form throws outside a tab navigator; these screens render in both.
+    const rawPadding = useContext(BottomTabBarHeightContext) ?? 0
 
     const getPadding = useCallback(
         (onlyForThisPlatform?: PlatformType) => {

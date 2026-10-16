@@ -6,7 +6,7 @@ import { TestWrapper } from "~Test"
 import { useBrowserScreenshot } from "./useBrowserScreenshot"
 
 jest.mock("react-native-view-shot")
-jest.mock("expo-file-system", () => ({
+jest.mock("expo-file-system/legacy", () => ({
     documentDirectory: "/test/directory/",
     getInfoAsync: jest.fn().mockResolvedValue({ exists: true }),
     makeDirectoryAsync: jest.fn().mockResolvedValue(undefined),

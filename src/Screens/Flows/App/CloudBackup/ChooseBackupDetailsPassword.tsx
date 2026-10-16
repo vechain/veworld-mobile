@@ -1,7 +1,6 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native"
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { Keyboard } from "react-native"
-import { TextInput } from "react-native-gesture-handler"
+import { Keyboard, TextInputInstance } from "react-native"
 import { getTimeZone } from "react-native-localize"
 import { Easing, useSharedValue, withTiming } from "react-native-reanimated"
 import {
@@ -37,7 +36,7 @@ export const ChooseBackupDetailsPassword = () => {
     const route = useRoute<RouteProp<RootStackParamListSettings, Routes.CHOOSE_DETAILS_BACKUP_PASSWORD>>()
     const { backupDetails, device } = route.params
 
-    const inputRef = useRef<TextInput>(null)
+    const inputRef = useRef<TextInputInstance>(null)
 
     const [secureText1, setSecureText1] = useState(true)
     const [secureText2, setSecureText2] = useState(true)
@@ -93,7 +92,7 @@ export const ChooseBackupDetailsPassword = () => {
                     }),
                 )
                 onOpenSuccess()
-            } catch (error) {
+            } catch {
                 showErrorToast({
                     text1: PlatformUtils.isIOS() ? LL.CLOUDKIT_ERROR_GENERIC() : LL.GOOGLE_DRIVE_ERROR_GENERIC(),
                 })

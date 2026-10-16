@@ -10,5 +10,10 @@ module.exports = {
                 ios: null,
             },
         },
+        "react-native-background-secure": {
+            platforms: {
+                ios: null,
+            },
+        },
     },
 }
