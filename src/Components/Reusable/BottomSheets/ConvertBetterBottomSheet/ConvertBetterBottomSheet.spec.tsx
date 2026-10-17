@@ -96,6 +96,7 @@ describe("ConvertBetterBottomSheet - Ref-based dismissal pattern", () => {
         ;(useConvertBetterTokens as jest.Mock).mockReturnValue({
             convertB3tr: mockConvertB3tr,
             convertVot3: mockConvertVot3,
+            isConvertB3trDisabled: false,
         })
         mockUseUserHasNavigator.mockReturnValue({ data: false })
         mockUseGetUnlockedVot3Balance.mockReturnValue({ data: undefined })

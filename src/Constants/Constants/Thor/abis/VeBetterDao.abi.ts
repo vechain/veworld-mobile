@@ -1,6 +1,12 @@
 import { abi } from "thor-devkit"
 
-type Vot3AbiKeys = "convertToB3TR" | "convertToVOT3" | "unlockedBalance" | "getNavigatorLockedAmount"
+type Vot3AbiKeys =
+    | "convertToB3TR"
+    | "convertToVOT3"
+    | "delegate"
+    | "delegates"
+    | "unlockedBalance"
+    | "getNavigatorLockedAmount"
 
 export const X2EarnDapps = {
     inputs: [],
@@ -100,6 +106,38 @@ export const Vot3Abis: Record<Vot3AbiKeys, abi.Function.Definition> = {
         name: "convertToVOT3",
         outputs: [],
         stateMutability: "nonpayable",
+        type: "function",
+    },
+    delegate: {
+        inputs: [
+            {
+                internalType: "address",
+                name: "delegatee",
+                type: "address",
+            },
+        ],
+        name: "delegate",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    delegates: {
+        inputs: [
+            {
+                internalType: "address",
+                name: "account",
+                type: "address",
+            },
+        ],
+        name: "delegates",
+        outputs: [
+            {
+                internalType: "address",
+                name: "",
+                type: "address",
+            },
+        ],
+        stateMutability: "view",
         type: "function",
     },
     getNavigatorLockedAmount: {
