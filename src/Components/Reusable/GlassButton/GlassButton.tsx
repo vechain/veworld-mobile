@@ -93,8 +93,10 @@ const GlassButton = ({ icon, onPress, disabled, size = "md", themed }: GlassButt
                     <BaseIcon name={icon} size={size === "sm" ? 20 : 24} color={iconColor} />
                 </BaseView>
             ) : (
-                <BaseView style={[styles.gradientBtnContainer, borderStyle, gradientStyle]}>
-                    <BaseIcon name={icon} size={size === "sm" ? 20 : 24} color={activeIconColor} />
+                <BaseView style={[styles.gradientBtnContainer, gradientStyle]}>
+                    <BaseView style={[styles.gradientBtnBorder, borderStyle]}>
+                        <BaseIcon name={icon} size={size === "sm" ? 20 : 24} color={activeIconColor} />
+                    </BaseView>
                 </BaseView>
             )}
         </Pressable>
@@ -155,7 +157,11 @@ const baseStyles = (size: "sm" | "md") => () =>
         textContainer: {
             maxWidth: 55,
         },
+        // The gradient tile is sized to the padding box, so the border lives on a child or it leaves seams.
         gradientBtnContainer: {
+            borderRadius: 99,
+        },
+        gradientBtnBorder: {
             padding: size === "sm" ? 10 : 16,
             borderRadius: 99,
             borderWidth: 1,
