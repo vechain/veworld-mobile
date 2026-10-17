@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { Pressable, StyleSheet } from "react-native"
-import LinearGradient from "react-native-linear-gradient"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, TFonts } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -39,6 +38,11 @@ const GlassButton = ({ icon, onPress, disabled, size = "md", themed }: GlassButt
         if (!themed) return darkGradientColors
         return theme.isDark ? darkGradientColors : lightGradientColors
     }, [darkGradientColors, lightGradientColors, theme.isDark, themed])
+
+    const gradientStyle = useMemo(
+        () => ({ backgroundImage: `linear-gradient(0deg, ${gradientColors.join(", ")})` }),
+        [gradientColors],
+    )
 
     const darkBorderColor = useMemo(() => {
         if (pressed) return COLORS.PURPLE_LABEL_10
@@ -89,13 +93,9 @@ const GlassButton = ({ icon, onPress, disabled, size = "md", themed }: GlassButt
                     <BaseIcon name={icon} size={size === "sm" ? 20 : 24} color={iconColor} />
                 </BaseView>
             ) : (
-                <LinearGradient
-                    colors={gradientColors}
-                    angle={0}
-                    useAngle
-                    style={[styles.gradientBtnContainer, borderStyle]}>
+                <BaseView style={[styles.gradientBtnContainer, borderStyle, gradientStyle]}>
                     <BaseIcon name={icon} size={size === "sm" ? 20 : 24} color={activeIconColor} />
-                </LinearGradient>
+                </BaseView>
             )}
         </Pressable>
     )
