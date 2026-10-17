@@ -1,5 +1,4 @@
-import { TouchableOpacity } from "@gorhom/bottom-sheet"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal, TouchableOpacity } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { SectionListData, SectionListRenderItemInfo, StyleSheet } from "react-native"
@@ -39,7 +38,7 @@ const SectionSeparator = (props: BaseSectionListSeparatorProps<Network, Section>
     <SectionListSeparator {...props} headerToItemsHeight={8} headerToHeaderHeight={24} />
 )
 
-export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
+export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModal, Props>(({ onClose }, ref) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)

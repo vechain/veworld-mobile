@@ -11,7 +11,7 @@ export const newStorage = (mmkv: MMKV): Storage => ({
         return Promise.resolve(value)
     },
     removeItem(key: string): any {
-        mmkv.delete(key)
+        mmkv.remove(key)
         return Promise.resolve()
     },
 })

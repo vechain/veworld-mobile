@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { ethers } from "ethers"
 import { default as React, useCallback, useMemo, useRef, useState } from "react"
 import { Keyboard, StyleSheet } from "react-native"
@@ -20,7 +20,7 @@ type Props = {
     onClose: () => void
 }
 
-export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
+export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModal, Props>(({ onClose }, ref) => {
     const { input, setInput, removeInvalidCharacters } = useAmountInput("")
     const [isSwapped, setIsSwapped] = useState(false)
     const [isSwapEnabled, setIsSwapEnabled] = useState(true)

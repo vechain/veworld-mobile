@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import { Blake2b256, Certificate } from "@vechain/sdk-core"
 import React, { useCallback, useMemo, useRef, useState } from "react"
@@ -39,7 +39,7 @@ type Props = {
     request: CertificateRequest
     onCancel: (request: CertificateRequest) => Promise<void>
     onSign: (args: { request: CertificateRequest; password?: string }) => Promise<void>
-    selectAccountBsRef: React.RefObject<BottomSheetModalMethods>
+    selectAccountBsRef: React.RefObject<BottomSheetModal>
     isLoading: boolean
 }
 

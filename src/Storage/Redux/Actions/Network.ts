@@ -52,7 +52,7 @@ const validateCustomNode = async ({ url, name }: { url: string; name: string }) 
             genesis: block,
         }
         return network
-    } catch (e) {
+    } catch {
         throw new Error("Failed to add validate network")
     }
 }
@@ -76,7 +76,7 @@ export const validateAndAddCustomNode = createAppAsyncThunk(
 
             dispatch(addCustomNetwork(network))
             dispatch(changeSelectedNetwork(network))
-        } catch (e) {
+        } catch {
             return rejectWithValue("Failed to add custom network")
         }
     },
@@ -107,7 +107,7 @@ export const validateAndUpdateCustomNode = createAppAsyncThunk(
                     updatedNetwork: network,
                 }),
             )
-        } catch (e) {
+        } catch {
             return rejectWithValue("Failed to add update network")
         }
     },
@@ -165,7 +165,7 @@ export const handleChangeNode = (): AppThunk<Promise<void>> => async (dispatch, 
         } else {
             throw new Error("Failed to connect to any URL for the current network.")
         }
-    } catch (e) {
+    } catch {
         dispatch(updateNodeError(true))
     }
 }

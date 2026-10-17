@@ -1,11 +1,10 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { Canvas, Fill, Skia } from "@shopify/react-native-skia"
-import { Camera } from "expo-camera"
-import React, { forwardRef, RefObject, useCallback, useEffect, useMemo, useState } from "react"
+import { Camera, CameraView } from "expo-camera"
+import React, { forwardRef, RefObject, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { LayoutChangeEvent, StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { useDerivedValue, useSharedValue } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
-import { Camera as RNVCamera, useCameraDevice, useCodeScanner } from "react-native-vision-camera"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { BaseTabs } from "~Components/Base/BaseTabs"
 import { WalletConnectIcon } from "~Components/Reusable/WalletConnectIconSvg"
@@ -18,8 +17,8 @@ import { ReceiveTab } from "./ReceiveTab"
 import { ScanTab } from "./ScanTab"
 import FontUtils from "~Utils/FontUtils"
 
-const SEND_RECEIVE_BS_TABS = ["scan", "receive"] as const
-export type SendReceiveBsTab = (typeof SEND_RECEIVE_BS_TABS)[number]
+type SendReceiveBsTabs = readonly ["scan", "receive"]
+export type SendReceiveBsTab = SendReceiveBsTabs[number]
 
 type Props = {
     onScan: (data: string) => Promise<boolean>
@@ -104,11 +103,14 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
         [cameraX, cameraY],
     )
 
-    const device = useCameraDevice("back")
     const offsetX = useDerivedValue(() => rootX.value + cameraX.value, [rootX.value, cameraX.value])
     const offsetY = useDerivedValue(() => rootY.value + cameraY.value, [rootY.value, cameraY.value])
+    const lastScanAt = useRef(0)
     const handleScan = useCallback(
         async (data: string) => {
+            // onBarcodeScanned fires for every frame the code stays in view
+            if (Date.now() - lastScanAt.current < 1500) return
+            lastScanAt.current = Date.now()
             const result = await onScan(data)
             if (result) onClose()
         },
@@ -122,30 +124,23 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
         onScan: handleScan,
     })
 
-    const codeScanner = useCodeScanner({
-        codeTypes: ["qr"],
-        onCodeScanned,
-    })
-
     const skiaClip = useDerivedValue(() => {
         if (offsetX.value === 0 || offsetY.value === 0)
             return Skia.RRectXY(Skia.XYWHRect(offsetX.value, offsetY.value, 0, 0), 16, 16)
         return Skia.RRectXY(Skia.XYWHRect(offsetX.value, offsetY.value, 200, 200), 16, 16)
     })
 
-    const showCamera = useMemo(
-        () => selectedTab === "scan" && hasCameraPerms && device,
-        [device, hasCameraPerms, selectedTab],
-    )
+    const showCamera = useMemo(() => selectedTab === "scan" && hasCameraPerms, [hasCameraPerms, selectedTab])
 
     return (
         <BaseView flex={1} position="relative">
             {showCamera && (
-                <RNVCamera
+                <CameraView
                     style={styles.cameraView}
-                    device={device!}
-                    isActive={currentState === "active"}
-                    codeScanner={codeScanner}
+                    facing="back"
+                    active={currentState === "active"}
+                    barcodeScannerSettings={{ barcodeTypes: ["qr"] }}
+                    onBarcodeScanned={onCodeScanned}
                 />
             )}
 
@@ -227,15 +222,15 @@ const SendReceiveBottomSheetContent = <TTabs extends SendReceiveBsTab[] | readon
     )
 }
 
-export const SendReceiveBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function SendReceiveBottomSheet(
+export const SendReceiveBottomSheet = forwardRef<BottomSheetModal, Props>(function SendReceiveBottomSheetRender(
     { onScan, title, description, hasWCTarget },
     ref,
 ) {
     const { styles } = useThemedStyles(baseStyles)
-    const { onClose } = useBottomSheetModal({ externalRef: ref as RefObject<BottomSheetModalMethods> })
+    const { onClose } = useBottomSheetModal({ externalRef: ref as RefObject<BottomSheetModal> })
 
     return (
-        <BaseBottomSheet<SendReceiveBottomSheetOpenProps<typeof SEND_RECEIVE_BS_TABS>>
+        <BaseBottomSheet<SendReceiveBottomSheetOpenProps<SendReceiveBsTabs>>
             snapPoints={["100%"]}
             noMargins
             ref={ref}

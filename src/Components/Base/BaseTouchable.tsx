@@ -1,4 +1,4 @@
-import { StyleSheet, TextProps, TouchableOpacity, TouchableOpacityProps } from "react-native"
+import { StyleProp, StyleSheet, TextProps, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native"
 import React, { useCallback } from "react"
 import { BaseText } from "./BaseText"
 import { TFonts } from "~Constants"
@@ -11,8 +11,9 @@ type Props = {
     font?: TFonts
     children?: React.ReactNode
     haptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
-} & TouchableOpacityProps &
-    TextProps
+    style?: StyleProp<ViewStyle>
+} & Omit<TouchableOpacityProps, "style"> &
+    Omit<TextProps, "style">
 
 export const BaseTouchable = (props: Props) => {
     const { action, title, underlined, style, children, font = "bodyMedium", haptics, ...otherProps } = props

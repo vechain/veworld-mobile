@@ -1,5 +1,5 @@
 module.exports = {
-    presets: [["module:@react-native/babel-preset", { enableBabelRuntime: false }]],
+    presets: ["babel-preset-expo"],
 
     env: {
         production: {
@@ -41,13 +41,13 @@ module.exports = {
                     stream: "stream-browserify",
                     buffer: "@craftzdog/react-native-buffer",
                     "@ethersproject/pbkdf2": "./patches/patch-pbkdf2.js",
-                    url: "react-native-fast-url",
+                    url: "react-native-url-polyfill",
                 },
             },
         ],
         [
             // should always come last
-            "react-native-reanimated/plugin",
+            "react-native-worklets/plugin",
             {
                 globals: ["__scanCodes"],
             },

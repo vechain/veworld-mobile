@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback } from "react"
 import { SelectAccountBottomSheet } from "~Components"
 import { AccountWithDevice, LocalAccountWithDevice, WatchedAccount } from "~Model"
@@ -15,7 +15,7 @@ type Props = {
 }
 
 // component to select an account for delegation
-export const SelectDelegationAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const SelectDelegationAccountBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     ({ onClose, setSelectedAccount, selectedAccount, selectedDelegationOption, setNoDelegation, accounts }, ref) => {
         const onDismiss = () => {
             if (selectedDelegationOption === DelegationType.ACCOUNT && !selectedAccount) {

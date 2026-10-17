@@ -10,7 +10,8 @@ import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
  */
 
 export const useAppState = () => {
-    const appState = useRef(_Appstate.currentState)
+    // RN 0.88 types currentState as a bare string; it is null only before the first event
+    const appState = useRef<AppStateStatus>((_Appstate.currentState as AppStateStatus | null) ?? "unknown")
 
     const [previousState, setPreviousState] = useState<AppStateStatus>("unknown")
     const [currentState, setCurrentState] = useState<AppStateStatus>("active")

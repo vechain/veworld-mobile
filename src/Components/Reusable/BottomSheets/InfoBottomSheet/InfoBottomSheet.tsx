@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { RefObject } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
@@ -7,7 +7,7 @@ import { useBottomSheetModal } from "~Hooks/useBottomSheet"
 import { useThemedStyles } from "~Hooks/useTheme"
 
 type BaseInfoBottomSheetProps = {
-    bsRef: RefObject<BottomSheetModalMethods>
+    bsRef: RefObject<BottomSheetModal>
     title: string
     description: string
 }

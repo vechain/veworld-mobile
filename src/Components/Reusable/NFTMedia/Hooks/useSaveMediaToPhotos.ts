@@ -79,7 +79,7 @@ export const useSaveMediaToPhotos = (image?: NFTMedia, nftName: string = "VeWorl
             )
 
             _image.flush()
-        } catch (_error) {
+        } catch {
             setProgress(0)
 
             // let er = error as IRCTPromiseRejectBlock

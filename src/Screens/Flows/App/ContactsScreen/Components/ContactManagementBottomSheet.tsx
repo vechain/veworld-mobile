@@ -1,5 +1,5 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { ContactForm } from "../../AddContactScreen/Components"
@@ -16,7 +16,7 @@ type Props = {
     onSaveContact: (alias: string, address: string) => void
 }
 
-export const ContactManagementBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const ContactManagementBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     ({ contact, isAddingContact = false, checkTouched = true, onSaveContact }, ref) => {
         const { LL } = useI18nContext()
 

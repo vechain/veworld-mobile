@@ -1,5 +1,5 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
 import { BaseButton, DefaultBottomSheet } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -13,7 +13,7 @@ type Props = {
     collectionAddress: string
 }
 
-export const ReportCollectionBottomsheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const ReportCollectionBottomsheet = React.forwardRef<BottomSheetModal, Props>(
     ({ onClose, collectionAddress }, ref) => {
         const { LL } = useI18nContext()
         const track = useAnalyticTracking()

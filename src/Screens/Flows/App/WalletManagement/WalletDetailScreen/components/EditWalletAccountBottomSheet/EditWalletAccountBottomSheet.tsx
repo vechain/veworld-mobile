@@ -1,5 +1,5 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback, useEffect, useState } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseBottomSheet, BaseBottomSheetTextInput, BaseButton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 
@@ -10,7 +10,7 @@ type Props = {
     onCancel: () => void
 }
 
-export const EditWalletAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const EditWalletAccountBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     ({ type, accountAlias, onConfirm, onCancel }, ref) => {
         const { LL } = useI18nContext()
         const [alias, setAlias] = useState(() => accountAlias)

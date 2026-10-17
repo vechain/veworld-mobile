@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { memo, useCallback, useMemo, useState } from "react"
-import { FlatList, StyleSheet, ViewToken } from "react-native"
+import { FlatList, StyleSheet, ListViewToken } from "react-native"
 import {
     AccountIcon,
     BaseIcon,
@@ -101,7 +101,7 @@ export const TransferCard = memo(
             return shortenedAddresses
         }, [toAddresses])
 
-        const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: ViewToken[] }) => {
+        const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: ListViewToken[] }) => {
             const activeIdx = viewableItems[0]?.index
 
             setActiveIndex(activeIdx ?? 0)

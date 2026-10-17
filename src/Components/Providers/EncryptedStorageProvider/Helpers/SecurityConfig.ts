@@ -1,11 +1,11 @@
 import { SecurityLevelType } from "~Model"
-import { MMKV } from "react-native-mmkv"
+import { createMMKV } from "react-native-mmkv"
 
 /**
  * SecurityStore is used to store the security level of the app
  */
 
-const SecurityStore = new MMKV({
+const SecurityStore = createMMKV({
     id: "SecurityStore",
 })
 
@@ -21,6 +21,6 @@ const get = (): SecurityLevelType => {
     return type as SecurityLevelType
 }
 
-const remove = () => SecurityStore.delete(SECURITY_CONFIG_KEY)
+const remove = () => SecurityStore.remove(SECURITY_CONFIG_KEY)
 
 export default { set, get, remove }

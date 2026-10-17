@@ -1,7 +1,12 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { NativeScrollEvent, NativeSyntheticEvent, StyleSheet } from "react-native"
-import { Gesture, GestureDetector, ScrollView as GestureScrollView, GestureType } from "react-native-gesture-handler"
+import {
+    Gesture,
+    GestureDetector,
+    GestureType,
+    LegacyScrollView as GestureScrollView,
+} from "react-native-gesture-handler"
 import Animated, {
     clamp,
     Extrapolation,
@@ -147,7 +152,7 @@ export const AssetDetailScreenWrapper = ({ children, handle = true }: Props) => 
     return (
         <BaseSafeArea grow={1} style={styles.safeArea} bg="transparent">
             <Animated.View
-                style={[StyleSheet.absoluteFillObject, backdropStyles]}
+                style={[StyleSheet.absoluteFill, backdropStyles]}
                 onTouchStart={() => {
                     nav.goBack()
                 }}

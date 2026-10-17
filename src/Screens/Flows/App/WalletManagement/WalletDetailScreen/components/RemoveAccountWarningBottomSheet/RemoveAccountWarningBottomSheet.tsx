@@ -1,5 +1,5 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { PlatformUtils } from "~Utils"
@@ -13,7 +13,7 @@ type Props = {
     isBalanceVisible: boolean
 }
 
-export const RemoveAccountWarningBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const RemoveAccountWarningBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     ({ onConfirm, onCancel, accountToRemove, isBalanceVisible }, ref) => {
         const { LL } = useI18nContext()
 

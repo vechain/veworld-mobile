@@ -1,5 +1,7 @@
 import React from "react"
-import { DefaultSectionT, SectionListData } from "react-native"
+import { SectionListData } from "react-native"
+
+type DefaultSectionT = { [key: string]: any }
 import { BaseSpacer } from "~Components/Base"
 
 /**

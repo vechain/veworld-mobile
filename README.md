@@ -52,6 +52,8 @@ You can run the unit tests without Xcode or Android Studio: run `yarn install:an
 
 # iOS
 
+VeWorld requires iOS 16.4 or later, the minimum React Native 0.88 supports (`platform :ios` in `ios/Podfile`).
+
 ### 1. Install Xcode 26.2 and point the command line tools at it
 
 Use the Xcode version CI uses. Xcode 27 builds the app, but iOS 27 stops it at launch because VeWorld doesn't use the UIScene lifecycle yet. You can install Xcode 26.2 alongside a newer Xcode:

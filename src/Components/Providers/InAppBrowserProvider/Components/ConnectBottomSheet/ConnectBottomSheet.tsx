@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback, useMemo, useRef } from "react"
 import {
     BaseBottomSheet,
@@ -47,7 +47,7 @@ const ConnectBottomSheetContent = ({
     onCancel: (req: ConnectAppRequest) => Promise<void>
     onCloseBs: () => void
     isLoading: boolean
-    selectAccountBsRef: React.RefObject<BottomSheetModalMethods>
+    selectAccountBsRef: React.RefObject<BottomSheetModal>
 }) => {
     const { LL } = useI18nContext()
     const allApps = useAppSelector(selectFeaturedDapps)

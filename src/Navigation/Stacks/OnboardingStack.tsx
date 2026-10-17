@@ -41,7 +41,7 @@ export const OnboardingStack = () => {
     const { betterWorldFeature } = useFeatureFlags()
 
     return (
-        <Onboarding.Navigator screenOptions={{ headerShown: false, animationEnabled: !isLowEndDevice }}>
+        <Onboarding.Navigator screenOptions={{ headerShown: false, animation: !isLowEndDevice ? "default" : "none" }}>
             <Onboarding.Screen
                 name={Routes.WELCOME}
                 component={betterWorldFeature.onboardingScreen.enabled ? WelcomeScreenV2 : WelcomeScreen}

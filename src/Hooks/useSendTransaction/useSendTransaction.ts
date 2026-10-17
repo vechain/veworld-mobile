@@ -92,7 +92,7 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
             } else {
                 try {
                     error(ERROR_EVENTS.SEND, JSON.stringify(e))
-                } catch (_) {
+                } catch {
                     error(ERROR_EVENTS.SEND, e)
                 }
             }

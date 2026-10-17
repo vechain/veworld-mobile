@@ -46,7 +46,7 @@ const { Navigator, Screen } = createStackNavigator<RootStackParamListApps>()
 
 export const AppsStack = () => {
     return (
-        <Navigator id="AppsStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
+        <Navigator id="AppsStack" screenOptions={{ headerShown: false, animation: isIOS() ? "default" : "none" }}>
             <Screen name={Routes.APPS} component={AppsScreen} options={{ headerShown: false }} />
             <Screen
                 name={Routes.BROWSER}

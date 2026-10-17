@@ -1,7 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query"
-import React, { ComponentType, forwardRef, useCallback, useState } from "react"
-import { RefreshControlProps } from "react-native"
-import { NativeViewGestureHandlerProps, RefreshControl } from "react-native-gesture-handler"
+import React, { forwardRef, useCallback, useState } from "react"
+import { RefreshControl, RefreshControlProps } from "react-native"
 import { useIsOnline, useTheme } from "~Hooks"
 import { useOfflineCallback } from "~Hooks/useOfflineCallback"
 import { useStargateInvalidation } from "~Hooks/useStargateInvalidation"
@@ -15,9 +14,9 @@ import {
 } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
-type Props = Omit<RefreshControlProps, "onRefresh" | "refreshing" | "tintColor"> & NativeViewGestureHandlerProps
+type Props = Omit<RefreshControlProps, "onRefresh" | "refreshing" | "tintColor">
 
-export const PullToRefresh = forwardRef<ComponentType<any>, Props>(function PullToRefresh(props, ref) {
+export const PullToRefresh = forwardRef<RefreshControl, Props>(function PullToRefreshRender(props, ref) {
     const [refreshing, setRefreshing] = useState(false)
     const queryClient = useQueryClient()
     const selectedNetwork = useAppSelector(selectSelectedNetwork)

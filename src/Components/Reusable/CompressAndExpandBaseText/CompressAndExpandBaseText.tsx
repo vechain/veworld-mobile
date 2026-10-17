@@ -3,15 +3,13 @@ import { BaseText } from "~Components/Base"
 import { typography } from "~Constants/Theme"
 import { useI18nContext } from "~i18n"
 
-const { defaults: defaultTypography, ...otherTypography } = typography
-
 type Props = {
     text: string
     numberOfLines?: number
-    typographyFont?: keyof typeof defaultTypography
-    fontSize?: keyof typeof otherTypography.fontSize
-    fontWeight?: keyof typeof otherTypography.fontWeight
-    fontFamily?: keyof typeof otherTypography.fontFamily
+    typographyFont?: keyof typeof typography.defaults
+    fontSize?: keyof typeof typography.fontSize
+    fontWeight?: keyof typeof typography.fontWeight
+    fontFamily?: keyof typeof typography.fontFamily
     onReadMore?: (isExpanded: boolean) => void
 }
 

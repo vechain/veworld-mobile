@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
-import { NavigationContainer } from "@react-navigation/native"
+import { DefaultTheme, NavigationContainer } from "@react-navigation/native"
 import { configureStore } from "@reduxjs/toolkit"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import React, { useEffect, useMemo, useState } from "react"
 import { Platform } from "react-native"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
-import { MMKV } from "react-native-mmkv"
+import { createMMKV } from "react-native-mmkv"
 import { Provider } from "react-redux"
 import { PersistConfig } from "redux-persist/es/types"
 import { BaseToast } from "~Components"
@@ -33,6 +33,7 @@ const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
         () => ({
             dark: theme.isDark,
             colors: theme.colors,
+            fonts: DefaultTheme.fonts,
         }),
         [theme],
     )
@@ -65,7 +66,7 @@ export const TestTranslationProvider = ({ children }: { children: React.ReactNod
 
 const nftPersistence: PersistConfig<NftSliceState> = {
     key: NftSlice.name,
-    storage: newStorage(new MMKV({ id: "test-nft-storage" })),
+    storage: newStorage(createMMKV({ id: "test-nft-storage" })),
     whitelist: ["blackListedCollections"],
 }
 
