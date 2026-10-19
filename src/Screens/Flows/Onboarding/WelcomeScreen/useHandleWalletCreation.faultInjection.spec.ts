@@ -16,16 +16,10 @@ import { CryptoUtils } from "~Utils"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
 
 /**
- * Invariant under test: a local wallet may exist in state only while the current wallet
- * key decrypts it, and the wallet key is never replaced while such a wallet exists.
- *
- * The harness drives the real hook, the real key helpers and the real single-flight
- * latch against a fake keychain that can fail once at any slot and operation, with a
- * key-sensitive cipher so a rotated key is observable. Every onboarding step is failed
- * in turn, once as a cancelled biometric prompt and once as a keychain error, and the
- * invariant is checked after the failure and after the retry that follows.
- *
- * Under jest Platform.OS is ios, so the cancelled prompt carries the iOS code (-128).
+ * Invariant: a local wallet exists in state only while the current wallet key decrypts it,
+ * and that key is never replaced while such a wallet exists. Each onboarding step is failed
+ * as a cancelled prompt and as a keychain error, then retried, against a fake keychain and
+ * a key-sensitive cipher. Under jest Platform.OS is ios, so a cancel carries code -128.
  */
 
 const WALLET_SLOT = "WALLET_BIOMETRIC_KEY_STORAGE"

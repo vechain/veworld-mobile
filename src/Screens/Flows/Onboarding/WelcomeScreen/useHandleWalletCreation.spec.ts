@@ -104,8 +104,7 @@ describe("useHandleWalletCreation", () => {
     })
 
     it("rolls back to nothing when the user cancels the biometric prompt, and says so", async () => {
-        // iOS keychain user-cancel error shape (BiometricErrors.IOS_CANCEL). Keeping state here
-        // is what let a retry mint a new key over a wallet already in state.
+        // iOS keychain user-cancel error shape (BiometricErrors.IOS_CANCEL)
         const cancel = Object.assign(new Error("user canceled the operation"), { code: "-128" })
         mockCreateLocalWallet.mockRejectedValueOnce(cancel)
         const { result } = renderHook(() => useHandleWalletCreation())
