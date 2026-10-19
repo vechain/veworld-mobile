@@ -1,4 +1,4 @@
-app_identifier([ENV["APP_IDENTIFIER"], ENV["EXTENSION_IDENTIFIER"]]) # The bundle identifier of your app
+app_identifier(["org.vechain.veworld.app", "org.vechain.veworld.app.OneSignalExtension"]) # The bundle identifier of your app
 
 team_id("8CYJM57MNT") # Developer Portal Team ID
 

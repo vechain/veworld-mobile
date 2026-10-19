@@ -27,6 +27,7 @@ jobs:
     build-release-ios:
         name: Build release for iOS
         runs-on: macos-26-xlarge
+        # Secrets: docs/release-secrets.md
         environment: ios-release
         env:
             DEVELOPER_DIR: /Applications/Xcode_26.2.app/Contents/Developer
@@ -98,22 +99,6 @@ jobs:
                   is-executable: false
                   working-directory: "./ios"
 
-            - name: Env default decode
-              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
-              with:
-                  base64-encoded-secret: ${{ secrets.IOS_ENV_DEFAULT }}
-                  filename: "env.default"
-                  is-executable: false
-                  working-directory: "./ios/fastlane"
-
-            - name: Env decode
-              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
-              with:
-                  base64-encoded-secret: ${{ secrets.IOS_ENV_RELEASE}}
-                  filename: ".env"
-                  is-executable: false
-                  working-directory: "./ios/fastlane"
-
             - name: Decode prod env
               uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:
@@ -129,7 +114,6 @@ jobs:
                   APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.IOS_ASC_ISSUER_ID }}
                   APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.IOS_ASC_KEY_P8_BASE64 }}
                   APP_STORE_CONNECT_API_KEY_IS_KEY_CONTENT_BASE64: "true"
-                  EXTENSION_IDENTIFIER: "org.vechain.veworld.app.OneSignalExtension"
                   INPUTS_VERSION: ${{inputs.version}}
                   INPUTS_BUILD: ${{inputs.build}}
               run: |
@@ -139,3 +123,13 @@ jobs:
                   git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
                   cd fastlane
                   fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${INPUTS_VERSION} build:${INPUTS_BUILD}
+
+            - name: Notify Slack
+              if: always()
+              continue-on-error: true
+              uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d # v2.0.0
+              with:
+                  webhook: ${{ secrets.SLACK_RELEASE_WEBHOOK }}
+                  webhook-type: incoming-webhook
+                  payload: |
+                      text: "${{ job.status == 'success' && ':white_check_mark:' || ':x:' }} iOS release ${{ inputs.version }} (${{ inputs.build }}): ${{ job.status }}\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

@@ -68,14 +68,6 @@ jobs:
                   is-executable: false
                   working-directory: "./ios"
 
-            - name: Env default decode
-              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
-              with:
-                  base64-encoded-secret: ${{ secrets.IOS_ENV_DEFAULT }}
-                  filename: "env.default"
-                  is-executable: false
-                  working-directory: "./ios/fastlane"
-
             - name: Env decode
               uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
               with:

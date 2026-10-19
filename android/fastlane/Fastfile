@@ -68,7 +68,6 @@ platform :android do
     key_password = ENV["KEY_PASSWORD"]
     key_alias = ENV["KEY_ALIAS"]
 
-    github_username = options[:github_username]
     version_name = options[:version_name]
     version_code = options[:version_code]
 
@@ -76,72 +75,47 @@ platform :android do
       sh("yarn purge:android && yarn install:android")
     end
 
-    begin
-      releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
+    releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
-      sh("./bump_gradle_app_versions.sh #{version_code} #{version_name}")
+    sh("./bump_gradle_app_versions.sh #{version_code} #{version_name}")
 
-      gradle(task: 'clean')
-      gradle(
-        task: 'assemble',
-        build_type: 'Release',
-        print_command: true,
-        print_command_output: true,
-        properties: {
-          "android.injected.version.code" => version_code,
-          "android.injected.version.name" => version_name,
-          "android.injected.signing.store.file" => releaseFilePath,
-          "android.injected.signing.store.password" => store_password,
-          "android.injected.signing.key.alias" => key_alias,
-          "android.injected.signing.key.password" => key_password,
-        }
-      )
+    gradle(task: 'clean')
+    gradle(
+      task: 'assemble',
+      build_type: 'Release',
+      print_command: true,
+      print_command_output: true,
+      properties: {
+        "android.injected.version.code" => version_code,
+        "android.injected.version.name" => version_name,
+        "android.injected.signing.store.file" => releaseFilePath,
+        "android.injected.signing.store.password" => store_password,
+        "android.injected.signing.key.alias" => key_alias,
+        "android.injected.signing.key.password" => key_password,
+      }
+    )
 
-      gradle(
-        task: 'bundle',
-        build_type: 'Release',
-        print_command: true,
-        print_command_output: true,
-        properties: {
-          "android.injected.version.code" => version_code,
-          "android.injected.version.name" => version_name,
-          "android.injected.signing.store.file" => releaseFilePath,
-          "android.injected.signing.store.password" => store_password,
-          "android.injected.signing.key.alias" => key_alias,
-          "android.injected.signing.key.password" => key_password,
-        }
-      )
+    gradle(
+      task: 'bundle',
+      build_type: 'Release',
+      print_command: true,
+      print_command_output: true,
+      properties: {
+        "android.injected.version.code" => version_code,
+        "android.injected.version.name" => version_name,
+        "android.injected.signing.store.file" => releaseFilePath,
+        "android.injected.signing.store.password" => store_password,
+        "android.injected.signing.key.alias" => key_alias,
+        "android.injected.signing.key.password" => key_password,
+      }
+    )
 
-      # Upload .aab to the Play Store as internal track
-      upload_to_play_store(
-        track: 'internal',
-        skip_upload_changelogs: true,
-        skip_upload_metadata: true
-      )
-
-      slack(
-        message: version_name.nil? ? "VeWorld build number: #{version_code} was successfully released! [Android]" : "VeWorld version number: #{version_name} was successfully released! [Android]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: true,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
-
-    rescue => exception
-      puts exception
-
-      slack(
-        message: version_name.nil? ? "Error releasing VeWorld build number: #{version_code} [Android]" : "Error releasing VeWorld version number: #{version_name} [Android]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: false,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
-    end
+    # Upload .aab to the Play Store as internal track
+    upload_to_play_store(
+      track: 'internal',
+      skip_upload_changelogs: true,
+      skip_upload_metadata: true
+    )
   end
 
   # @param {object} options - The options for the build process.
@@ -153,7 +127,6 @@ platform :android do
     key_password = ENV["KEY_PASSWORD"]
     key_alias = ENV["KEY_ALIAS"]
 
-    github_username = options[:github_username]
     version_name = options[:version_name]
     version_code = options[:version_code]
 
@@ -165,58 +138,31 @@ platform :android do
       sh("yarn purge:android && yarn install:android")
     end
 
-    begin
-      releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
+    releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
-      sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
+    sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
 
-      gradle(task: 'clean')
-      gradle(
-        task: 'bundle',
-        build_type: 'Release',
-        print_command: true,
-        print_command_output: true,
-        properties: {
-          "android.injected.version.code" => version_code,
-          "android.injected.version.name" => version_name,
-          "android.injected.signing.store.file" => releaseFilePath,
-          "android.injected.signing.store.password" => store_password,
-          "android.injected.signing.key.alias" => key_alias,
-          "android.injected.signing.key.password" => key_password,
-        }
-      )
+    gradle(task: 'clean')
+    gradle(
+      task: 'bundle',
+      build_type: 'Release',
+      print_command: true,
+      print_command_output: true,
+      properties: {
+        "android.injected.version.code" => version_code,
+        "android.injected.version.name" => version_name,
+        "android.injected.signing.store.file" => releaseFilePath,
+        "android.injected.signing.store.password" => store_password,
+        "android.injected.signing.key.alias" => key_alias,
+        "android.injected.signing.key.password" => key_password,
+      }
+    )
 
-      upload_to_play_store(
-        track: 'internal',
-        skip_upload_changelogs: true,
-        skip_upload_metadata: true
-      )
-
-     
-       slack(
-         message: "VeWorld version number: #{version_name} build number: #{version_code} was successfully released! [Android]",
-         slack_url: ENV["SLACK_WEBHOOK"],
-         success: true,
-         payload: {
-           "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-           "Built by" => github_username,
-         },
-       )
-
-    rescue => exception
-      puts exception
-
-      
-       slack(
-         message: "Error releasing VeWorld version number: #{version_name} build number: #{version_code} [Android]",
-         slack_url: ENV["SLACK_WEBHOOK"],
-         success: false,
-         payload: {
-           "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-           "Built by" => github_username,
-         },
-       )
-    end
+    upload_to_play_store(
+      track: 'internal',
+      skip_upload_changelogs: true,
+      skip_upload_metadata: true
+    )
   end
 
   lane :build_test_ci do |options|

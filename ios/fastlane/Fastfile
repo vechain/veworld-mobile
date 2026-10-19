@@ -9,6 +9,8 @@ end
 
 # match certificates belong to one Apple team, so each team gets its own branch in the certificates repo
 MATCH_GIT_BRANCH = "team-8CYJM57MNT"
+APP_IDENTIFIER = "org.vechain.veworld.app"
+EXTENSION_IDENTIFIER = "org.vechain.veworld.app.OneSignalExtension"
 
 default_platform(:ios)
 
@@ -19,7 +21,7 @@ platform :ios do
     match_nuke( # https://docs.fastlane.tools/actions/match_nuke/
       api_key: app_store_connect_api_key,
       type: "appstore", # The type of code signing identity to revoke.
-      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
+      app_identifier: APP_IDENTIFIER, # The app identifier of your app.
       readonly: false, # If true, will only print out the commands it would run, without actually running them.
     )
   end
@@ -55,7 +57,7 @@ platform :ios do
     sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
       api_key: api_key,
       type: "appstore", # The type of code signing identity to generate.
-      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
+      app_identifier: APP_IDENTIFIER, # The app identifier of your app.
       force_for_new_devices: true, # If true, will revoke and recreate all provisioning profiles if there are new devices added to the account.
       readonly: false, # If true, will only print out the commands it would run, without actually running them.
       git_branch: MATCH_GIT_BRANCH, # The branch to commit the code signing files to.
@@ -67,7 +69,7 @@ platform :ios do
     sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
       api_key: api_key,
       type: "appstore", # The type of code signing identity to generate.
-      app_identifier: ENV["EXTENSION_IDENTIFIER"], # The app identifier of your app.
+      app_identifier: EXTENSION_IDENTIFIER, # The app identifier of your app.
       force_for_new_devices: true, # If true, will revoke and recreate all provisioning profiles if there are new devices added to the account.
       readonly: false, # If true, will only print out the commands it would run, without actually running them.
       git_branch: MATCH_GIT_BRANCH, # The branch to commit the code signing files to.
@@ -81,7 +83,7 @@ platform :ios do
     # Get Certificates for the App form GitHub
     sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
       type: "appstore", # The type of code signing identity to generate.
-      app_identifier: [ENV["APP_IDENTIFIER"], ENV["EXTENSION_IDENTIFIER"]], # The app identifier of your app.
+      app_identifier: [APP_IDENTIFIER, EXTENSION_IDENTIFIER], # The app identifier of your app.
       readonly: true, # If true, will only print out the commands it would run, without actually running them.
       git_branch: MATCH_GIT_BRANCH, # The branch to commit the code signing files to.
       verbose: true # If true, will print out extra information and debugging info.
@@ -94,10 +96,9 @@ platform :ios do
     # Get Certificates for App from GitHub
     sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
       type: "appstore", # The type of code signing identity to generate.
-      app_identifier: [ENV["APP_IDENTIFIER"], ENV["EXTENSION_IDENTIFIER"]], # The app identifier of your app.
+      app_identifier: [APP_IDENTIFIER, EXTENSION_IDENTIFIER], # The app identifier of your app.
       readonly: true, # If true, will only print out the commands it would run, without actually running them.
       git_branch: MATCH_GIT_BRANCH, # The branch to commit the code signing files to.
-      git_basic_authorization: ENV["MATCH_GIT_BASIC_AUTHORIZATION"], # The GitHub token for authentication.
       verbose: true # If true, will print out extra information and debugging info.
     )
   end
@@ -188,34 +189,6 @@ platform :ios do
 
 
 
-  lane :upload_source_maps do |values|
-    build = values[:build]
-    version = values[:version]
-
-    Dir.chdir "../.." do # Navigate to the root of the project where the Detox files are placed.
-
-      sentry_check_cli_installed
-
-      # generate source maps for sentry
-      sh("npx react-native bundle --platform ios --dev false --entry-file index.js --reset-cache --bundle-output main.jsbundle --sourcemap-output main.jsbundle.map --minify false")
-      #compile source maps
-      sh("ios/Pods/hermes-engine/destroot/bin/hermesc -O -emit-binary -output-source-map -out=main.jsbundle.hbc main.jsbundle")
-      sh("rm -f main.jsbundle")
-      sh("mv main.jsbundle.hbc main.jsbundle")
-
-      # merge the two source maps
-      sh("mv main.jsbundle.map main.jsbundle.packager.map")
-      sh("node node_modules/react-native/scripts/compose-source-maps.js main.jsbundle.packager.map main.jsbundle.hbc.map -o main.jsbundle.map")
-
-      # upload source maps to sentry with cli - handled by xcode build phase?
-
-      sh("node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload --release #{ENV["APP_IDENTIFIER"]}@#{version}+#{build} --dist #{build} --strip-prefix ../../ main.jsbundle main.jsbundle.map --org 'vechain-foundation' --project 'veworld-mobile' --log-level=info")
-      
-    end
-  end
-
- 
-
   lane :create_tags_gh do |values|
     build = values[:build]
     version = values[:version]
@@ -228,7 +201,17 @@ platform :ios do
   end
 
 
-# Builds the app using specified options.
+  # Each step may fail so that cleanup never hides the original error.
+  private_lane :delete_release_branch do |options|
+    branch = options[:branch]
+    ignore = ->(_) {}
+    clean_build_artifacts
+    sh("git checkout main", error_callback: ignore)
+    sh("git branch -D #{branch}", error_callback: ignore)
+    sh("git push origin --delete #{branch}", error_callback: ignore)
+  end
+
+  # Builds the app using specified options.
   #
   # @param {string} options[:username] - The GitHub username for authentication.
   # @param {string} options[:token] - The GitHub personal token for authentication.
@@ -277,13 +260,9 @@ platform :ios do
     end
 
 
-    # begin -> rescure == try -> catch
     begin
-      
-
-      # create new branch and push to github
       gh_setup_before(
-        github_username:github_username, 
+        github_username:github_username,
         github_token:github_token,
         build_number: build,
         version_number: version,
@@ -291,92 +270,42 @@ platform :ios do
 
       fetch_certificates_from_gh
 
-      # build app
       build_app(
-        workspace: "VeWorld.xcworkspace", 
-        scheme: "VeWorld", 
+        workspace: "VeWorld.xcworkspace",
+        scheme: "VeWorld",
         export_method: "app-store",
         clean: true,
         build_path: "./build",
         output_directory: "./build",
       )
-        
-      # upload to testflight
+
       upload_to_testflight(
         api_key: api_key,
         skip_waiting_for_build_processing: true,
         apple_id: "6446854569",
         ipa: "./build/VeWorld.ipa",
       )
-
-      create_changelog(version:version)
-
-      create_tags_gh(build:build, version:version)
-
-      upload_source_maps(build:build, version:version)
-
-      gh_setup_after
-
-      # create pull request
-      create_pull_request(
-        api_token: github_token,
-        repo: "vechain/veworld-mobile",
-        title: versionType.nil? ? "build: build artifacts build-#{build} [iOS]" : "version: build artifacts version-#{version} [iOS]", 
-        base: "main",
-        api_url: "https://api.github.com"
-      )
-
-      # send slack message
-      slack(
-        message: versionType.nil? ? "VeWorld build number: #{build} was successfully released! [iOS]" : "VeWorld version number: #{version} was successfully released! [iOS]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        fail_on_error: false,
-        success: true,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
-
-      # clean build artifacts if any
-      clean_build_artifacts
-
-
-    rescue => exception # catch
-      puts exception
-
-      # send slack message
-      slack(
-        message: versionType.nil? ? "Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        fail_on_error: false,
-        success: false,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
-
-      # clean build artifacts if any
-      clean_build_artifacts
-
-      # checkout main
-      sh("git checkout main")
-
-      # delete branch locally
-      sh("git branch -D release-build-#{build}-#{version}")
-      
-      # delete branch remotely
-      sh("git push origin --delete release-build-#{build}-#{version}")
-
-      if git_tag_exists(tag: "v#{version}-#{build}")
-        # delete tag locally
-        sh("git tag -d v#{version}-#{build}") 
-        # delete tag remotely
-        sh("git push --delete origin v#{version}-#{build}") 
-      end
-      raise exception
+    rescue
+      delete_release_branch(branch: "release-build-#{build}-#{version}")
+      raise
     end
+
+    # The build is on TestFlight from here, so a failure keeps its branch and tag.
+    create_changelog(version:version)
+
+    create_tags_gh(build:build, version:version)
+
+    gh_setup_after
+
+    create_pull_request(
+      api_token: github_token,
+      repo: "vechain/veworld-mobile",
+      title: versionType.nil? ? "build: build artifacts build-#{build} [iOS]" : "version: build artifacts version-#{version} [iOS]",
+      base: "main",
+      api_url: "https://api.github.com"
+    )
+
+    clean_build_artifacts
   end
 
   # Builds the app using specified options.
@@ -428,120 +357,53 @@ platform :ios do
     end
 
 
-    # begin -> rescure == try -> catch
     begin
-      
-      sh("echo 'build number: #{build}'")
-      sh("echo 'version type: #{version}'")
-      # create new branch and push to github
       gh_setup_before_ci(
-        github_username:github_username, 
+        github_username:github_username,
         github_token:github_token,
         build_number: build,
         version_number: version,
       )
 
       fetch_certificates_from_gh_for_ci
-      
-      begin
-      
-        build_app(
-        workspace: "VeWorld.xcworkspace", 
-        scheme: "VeWorld", 
+
+      build_app(
+        workspace: "VeWorld.xcworkspace",
+        scheme: "VeWorld",
         export_method: "app-store",
         clean: true,
         build_path: "./build",
         output_directory: "./build",
-        )
+      )
 
-        sh("echo 'Build successful'")
-        
-        rescue => exception
-          puts exception
-      
-          sh("echo 'Build failed'")
-            # clean build artifacts if any
-            clean_build_artifacts
-        end
-        
-      # upload to testflight
       upload_to_testflight(
         api_key: api_key,
         skip_waiting_for_build_processing: true,
         apple_id: "6446854569",
         ipa: "./build/VeWorld.ipa",
       )
-
-      create_changelog(version:version)
-
-      create_tags_gh(build:build, version:version)
-
-      upload_source_maps(build:build, version:version)
-
-      gh_setup_after
-
-      # create pull request
-      create_pull_request(
-        api_token: github_token,
-        repo: "vechain/veworld-mobile",
-        title: version.nil? ? "build: build artifacts build-#{build} [iOS]" : "version: build artifacts version-#{version} [iOS]", 
-        base: "main",
-        body: "This PR was automatically created by the CI pipeline.",
-        api_url: "https://api.github.com"
-      )
-
-      # send slack message
-      slack(
-        message:  "CI: VeWorld version number: #{version}  build number: #{build} was successfully released! [iOS]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        fail_on_error: false,
-        success: true,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
-
-      # clean build artifacts if any
-      clean_build_artifacts
-
-
-    rescue => exception # catch
-      puts exception
-
-      ## send slack message
-      slack(
-        message: "CI:Error releasing VeWorld version number: #{version} build number: #{build} [iOS]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        fail_on_error: false,
-        success: false,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
-
-      # clean build artifacts if any
-      clean_build_artifacts
-
-      # checkout main
-      sh("git checkout main")
-
-      # delete branch locally
-      sh("git branch -D release-build-ci-#{build}-#{version}")
-      
-      # delete branch remotely
-      sh("git push origin --delete release-build-ci-#{build}-#{version}")
-
-      if git_tag_exists(tag: "v#{version}-#{build}")
-        # delete tag locally
-        sh("git tag -d v#{version}-#{build}") 
-        # delete tag remotely
-        sh("git push --delete origin v#{version}-#{build}") 
-      end
-      sh("echo 'Build failed'")
-      raise exception
+    rescue
+      delete_release_branch(branch: "release-build-ci-#{build}-#{version}")
+      raise
     end
+
+    # The build is on TestFlight from here, so a failure keeps its branch and tag.
+    create_changelog(version:version)
+
+    create_tags_gh(build:build, version:version)
+
+    gh_setup_after
+
+    create_pull_request(
+      api_token: github_token,
+      repo: "vechain/veworld-mobile",
+      title: version.nil? ? "build: build artifacts build-#{build} [iOS]" : "version: build artifacts version-#{version} [iOS]",
+      base: "main",
+      body: "This PR was automatically created by the CI pipeline.",
+      api_url: "https://api.github.com"
+    )
+
+    clean_build_artifacts
   end
 
   lane :build_test_ci do | options |
