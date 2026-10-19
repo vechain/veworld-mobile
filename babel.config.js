@@ -8,7 +8,8 @@ module.exports = {
     },
 
     plugins: [
-        ["module:react-native-dotenv"],
+        // safe: inline only keys declared in .env files, never the Metro worker's own environment
+        ["module:react-native-dotenv", { safe: true }],
         "@babel/plugin-transform-flow-strip-types",
         // "@babel/plugin-transform-export-namespace-from",
         ["@babel/plugin-transform-private-methods", { loose: true }],
