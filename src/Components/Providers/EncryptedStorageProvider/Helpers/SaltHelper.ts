@@ -4,6 +4,16 @@ import { Keychain } from "~Storage"
 const SALT_STORE_KEY = "salt"
 const SALT_AND_IV_STORE_KEY = "salt_and_iv"
 
+const singleFlight = <T>(run: () => Promise<T>) => {
+    let inFlight: Promise<T> | undefined
+    return () => {
+        inFlight ??= run().finally(() => {
+            inFlight = undefined
+        })
+        return inFlight
+    }
+}
+
 const _storeNewSalt = async (): Promise<string> => {
     const salt = HexUtils.generateRandom(256)
 
@@ -15,7 +25,7 @@ const _storeNewSalt = async (): Promise<string> => {
     return salt
 }
 
-const getSalt = async (): Promise<string> => {
+const getSalt = singleFlight(async (): Promise<string> => {
     let salt = await Keychain.get({
         key: SALT_STORE_KEY,
     })
@@ -25,7 +35,7 @@ const getSalt = async (): Promise<string> => {
     }
 
     return salt
-}
+})
 
 const _storeNewSaltAndIV = async (): Promise<string> => {
     const salt = await getSalt()
@@ -40,14 +50,16 @@ const _storeNewSaltAndIV = async (): Promise<string> => {
     return `salt:${salt},iv:${ivToBase64}`
 }
 
-const getSaltAndIV = async (): Promise<{ salt: string; iv: string }> => {
-    let saltAndIV = await Keychain.get({
+const _getOrCreateSaltAndIV = singleFlight(async (): Promise<string> => {
+    const saltAndIV = await Keychain.get({
         key: SALT_AND_IV_STORE_KEY,
     })
 
-    if (!saltAndIV) {
-        saltAndIV = await _storeNewSaltAndIV()
-    }
+    return saltAndIV || _storeNewSaltAndIV()
+})
+
+const getSaltAndIV = async (): Promise<{ salt: string; iv: string }> => {
+    const saltAndIV = await _getOrCreateSaltAndIV()
 
     // we save both salt and iv in the same key in order to avoid multiple keychain accesses
     // we split this -> `salt:${salt},iv:${ivToBase64}`,
