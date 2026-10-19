@@ -6,11 +6,16 @@ const SALT_AND_IV_STORE_KEY = "salt_and_iv"
 
 const singleFlight = <T>(run: () => Promise<T>) => {
     let inFlight: Promise<T> | undefined
-    return () => {
-        inFlight ??= run().finally(() => {
+
+    return async (): Promise<T> => {
+        if (inFlight) return inFlight
+
+        inFlight = run()
+        try {
+            return await inFlight
+        } finally {
             inFlight = undefined
-        })
-        return inFlight
+        }
     }
 }
 
