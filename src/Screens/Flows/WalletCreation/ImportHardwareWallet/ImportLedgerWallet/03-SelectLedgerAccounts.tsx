@@ -199,7 +199,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     const renderSeparator = useCallback(() => <BaseSpacer height={8} />, [])
 
     const checkViewableItems = useCallback(
-        ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+        ({ viewableItems }: { viewableItems: ViewToken<LedgerAccount>[] }) => {
             setIsScrollable(viewableItems.length < ledgerAccounts.length)
         },
         [ledgerAccounts.length],
@@ -260,11 +260,6 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                                 renderItem={renderItem}
                                 showsVerticalScrollIndicator={false}
                                 showsHorizontalScrollIndicator={false}
-                                estimatedItemSize={100}
-                                estimatedListSize={{
-                                    height: 184,
-                                    width: 152 * ledgerAccounts.length + (ledgerAccounts.length - 1) * 16,
-                                }}
                                 contentContainerStyle={themedStyles.flashListContent}
                             />
                         )}

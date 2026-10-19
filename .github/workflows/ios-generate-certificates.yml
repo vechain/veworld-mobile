@@ -1,0 +1,54 @@
+name: iOS - Generate signing certificates
+
+on:
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+jobs:
+    generate-certificates:
+        name: Generate App Store certificates
+        runs-on: macos-26
+        environment: ios-release
+        env:
+            BUNDLE_GEMFILE: ${{ github.workspace }}/ios/Gemfile
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+
+            - name: Setup Ruby
+              uses: ruby/setup-ruby@d5126b9b3579e429dd52e51e68624dda2e05be25 # v1
+              with:
+                  bundler-cache: true
+
+            - name: Env default decode
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
+              with:
+                  base64-encoded-secret: ${{ secrets.IOS_ENV_DEFAULT }}
+                  filename: "env.default"
+                  is-executable: false
+                  working-directory: "./ios/fastlane"
+
+            - name: Env decode
+              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
+              with:
+                  base64-encoded-secret: ${{ secrets.IOS_ENV_RELEASE }}
+                  filename: ".env"
+                  is-executable: false
+                  working-directory: "./ios/fastlane"
+
+            - name: Generate certificates with fastlane
+              working-directory: ios/fastlane
+              env:
+                  MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
+                  APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.IOS_ASC_KEY_ID }}
+                  APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.IOS_ASC_ISSUER_ID }}
+                  APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.IOS_ASC_KEY_P8_BASE64 }}
+                  APP_STORE_CONNECT_API_KEY_IS_KEY_CONTENT_BASE64: "true"
+                  EXTENSION_IDENTIFIER: "org.vechain.veworld.app.OneSignalExtension"
+                  CI_USER_TOKEN: ${{ secrets.CI_USER_TOKEN }}
+              run: |
+                  git config --global url."https://${CI_USER_TOKEN}@github.com".insteadOf https://github.com
+                  bundle exec fastlane generate_new_certificates

@@ -1,5 +1,5 @@
 module.exports = {
-    presets: [["module:@react-native/babel-preset", { enableBabelRuntime: false }]],
+    presets: ["babel-preset-expo"],
 
     env: {
         production: {
@@ -8,7 +8,8 @@ module.exports = {
     },
 
     plugins: [
-        ["module:react-native-dotenv"],
+        // safe: inline only keys declared in .env files, never the Metro worker's own environment
+        ["module:react-native-dotenv", { safe: true }],
         "@babel/plugin-transform-flow-strip-types",
         // "@babel/plugin-transform-export-namespace-from",
         ["@babel/plugin-transform-private-methods", { loose: true }],
@@ -41,13 +42,13 @@ module.exports = {
                     stream: "stream-browserify",
                     buffer: "@craftzdog/react-native-buffer",
                     "@ethersproject/pbkdf2": "./patches/patch-pbkdf2.js",
-                    url: "react-native-fast-url",
+                    url: "react-native-url-polyfill",
                 },
             },
         ],
         [
             // should always come last
-            "react-native-reanimated/plugin",
+            "react-native-worklets/plugin",
             {
                 globals: ["__scanCodes"],
             },

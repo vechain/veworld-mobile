@@ -1,5 +1,5 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseButton, DefaultBottomSheet } from "~Components"
 import { useReportNFT } from "~Hooks/useReportNFT"
 import { useI18nContext } from "~i18n"
@@ -11,7 +11,7 @@ type Props = {
     nftAddress: string
 }
 
-export const NFTReportCollectionBottomsheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const NFTReportCollectionBottomsheet = React.forwardRef<BottomSheetModal, Props>(
     ({ onClose, nftAddress }, ref) => {
         const { LL } = useI18nContext()
         const { reportNFTCollection } = useReportNFT()

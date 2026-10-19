@@ -1,7 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query"
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { FlatList } from "react-native"
-import { RefreshControl } from "react-native-gesture-handler"
+import { FlatList, RefreshControl } from "react-native"
 import { Layout } from "~Components"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"

@@ -149,7 +149,7 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                             <BaseIcon name="icon-alert-triangle" color={theme.colors.errorVariant.icon} size={16} />
                             <BaseText
                                 color={theme.colors.errorVariant.titleInline}
-                                lineBreakMode="clip"
+                                ellipsizeMode="clip"
                                 typographyFont="captionRegular">
                                 {isNotAvailable ? LL.ERROR_DOMAIN_ALREADY_TAKEN() : errorMessage}
                             </BaseText>

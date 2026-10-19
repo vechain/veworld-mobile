@@ -11,7 +11,7 @@ export const isValidDateLocale = (locale: string): boolean => {
     try {
         Intl.DateTimeFormat(locale)
         return true
-    } catch (ex) {
+    } catch {
         return false
     }
 }
@@ -26,7 +26,7 @@ export const isValidTimezone = (timezone: string): boolean => {
     try {
         Intl.DateTimeFormat(undefined, { timeZone: timezone })
         return true
-    } catch (ex) {
+    } catch {
         return false
     }
 }

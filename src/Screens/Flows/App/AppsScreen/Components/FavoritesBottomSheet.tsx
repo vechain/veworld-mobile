@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import DraggableFlatList, { DragEndParams, RenderItem, ScaleDecorator } from "react-native-draggable-flatlist"
@@ -24,7 +24,7 @@ type Props = {
     onClose: () => void
 }
 
-export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
+export const FavoritesBottomSheet = React.forwardRef<BottomSheetModal, Props>(({ onClose }, ref) => {
     const [isEditingMode, setIsEditingMode] = useState(false)
     const { styles } = useThemedStyles(baseStyles)
     const theme = useTheme()

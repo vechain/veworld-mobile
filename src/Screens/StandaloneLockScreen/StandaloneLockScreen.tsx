@@ -45,7 +45,7 @@ export const StandaloneLockScreen: React.FC<Props> = memo(({ onPinInserted }) =>
         async (userPin: string) => {
             try {
                 await onPinInserted(userPin)
-            } catch (err) {
+            } catch {
                 setIsError({
                     type: PinVerificationError.VALIDATE_PIN,
                     value: true,

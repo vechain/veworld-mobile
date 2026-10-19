@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback } from "react"
 import { BaseBottomSheet, BaseSpacer, BaseText } from "~Components"
 import { WatchedAccount } from "~Model"
@@ -13,7 +13,7 @@ type Props = {
 }
 
 // component to select an account
-export const SelectWatchedAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const SelectWatchedAccountBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     ({ closeBottomSheet, onDismiss, confirmAccount, account }, ref) => {
         const { LL } = useI18nContext()
 

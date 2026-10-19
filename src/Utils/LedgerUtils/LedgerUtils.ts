@@ -291,7 +291,7 @@ const getAccountsWithBalances = async (
                 address: childNode.address,
                 balance: balance,
             })
-        } catch (e) {
+        } catch {
             accounts.push({ address: childNode.address })
         }
     }

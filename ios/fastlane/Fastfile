@@ -7,6 +7,8 @@ before_all do
 	Dotenv.load ".env"
 end
 
+# match certificates belong to one Apple team, so each team gets its own branch in the certificates repo
+MATCH_GIT_BRANCH = "team-8CYJM57MNT"
 
 default_platform(:ios)
 
@@ -15,6 +17,7 @@ platform :ios do
   desc "Revoke certificates from Apple Developer Portal" # CAUTION!!! This lane will prompt you to choose which sertificate to revoke. Make sure you choose the right one.
   lane :nuke_appstore_certificates do
     match_nuke( # https://docs.fastlane.tools/actions/match_nuke/
+      api_key: app_store_connect_api_key,
       type: "appstore", # The type of code signing identity to revoke.
       app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
       readonly: false, # If true, will only print out the commands it would run, without actually running them.
@@ -27,7 +30,7 @@ platform :ios do
       puts Dir.pwd # Print the current working directory.
 
       repo_name = ENV['CERTIFICATES_REPO']
-      sh("git clone #{repo_name}") # Clone the repo with the certificates.
+      sh("git clone -b #{MATCH_GIT_BRANCH} #{repo_name}") # Clone the repo with the certificates.
       Dir.chdir "veworld-mobile-ios-cert" # Navigate to the repo with the certificates.
 
       puts Dir.pwd # Print the current working directory.
@@ -36,7 +39,7 @@ platform :ios do
       sh("rm -rf profiles/appstore/*") # Remove the profiles.
       sh("git add --all") # Add the changes.
       sh("git commit -a -m 'chore: remove certificates'") # Commit the changes.
-      sh("git push -u origin main") # Push the changes to GitHub.
+      sh("git push -u origin #{MATCH_GIT_BRANCH}") # Push the changes to GitHub.
 
       Dir.chdir ".." # Navigate back outside of the repo.
       sh("rm -rf veworld-mobile-ios-cert") # Remove the repo folder.
@@ -45,24 +48,29 @@ platform :ios do
 
   desc "Generate new certificates"
   lane :generate_new_certificates do
+    setup_ci if ENV['CI']
+    api_key = app_store_connect_api_key
+
     # Generate App certs
     sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
+      api_key: api_key,
       type: "appstore", # The type of code signing identity to generate.
       app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
       force_for_new_devices: true, # If true, will revoke and recreate all provisioning profiles if there are new devices added to the account.
       readonly: false, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: "main", # The branch to commit the code signing files to.
+      git_branch: MATCH_GIT_BRANCH, # The branch to commit the code signing files to.
       skip_docs: true, # If true, will skip the creation of a README.md file.
       verbose: true # If true, will print out extra information and debugging info.
     )
 
     # Generate Onesignal extension certs
     sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
+      api_key: api_key,
       type: "appstore", # The type of code signing identity to generate.
       app_identifier: ENV["EXTENSION_IDENTIFIER"], # The app identifier of your app.
       force_for_new_devices: true, # If true, will revoke and recreate all provisioning profiles if there are new devices added to the account.
       readonly: false, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: "main", # The branch to commit the code signing files to.
+      git_branch: MATCH_GIT_BRANCH, # The branch to commit the code signing files to.
       skip_docs: true, # If true, will skip the creation of a README.md file.
       verbose: true # If true, will print out extra information and debugging info.
     )
@@ -75,7 +83,7 @@ platform :ios do
       type: "appstore", # The type of code signing identity to generate.
       app_identifier: [ENV["APP_IDENTIFIER"], ENV["EXTENSION_IDENTIFIER"]], # The app identifier of your app.
       readonly: true, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: "main", # The branch to commit the code signing files to.
+      git_branch: MATCH_GIT_BRANCH, # The branch to commit the code signing files to.
       verbose: true # If true, will print out extra information and debugging info.
     )
   end
@@ -88,7 +96,7 @@ platform :ios do
       type: "appstore", # The type of code signing identity to generate.
       app_identifier: [ENV["APP_IDENTIFIER"], ENV["EXTENSION_IDENTIFIER"]], # The app identifier of your app.
       readonly: true, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: "main", # The branch to commit the code signing files to.
+      git_branch: MATCH_GIT_BRANCH, # The branch to commit the code signing files to.
       git_basic_authorization: ENV["MATCH_GIT_BASIC_AUTHORIZATION"], # The GitHub token for authentication.
       verbose: true # If true, will print out extra information and debugging info.
     )
@@ -233,6 +241,8 @@ platform :ios do
     versionType = options[:version]
     buildNumber = options[:build]
 
+    api_key = app_store_connect_api_key
+
     # clean build artifacts if any
     clean_build_artifacts
 
@@ -293,7 +303,8 @@ platform :ios do
         
       # upload to testflight
       upload_to_testflight(
-        skip_waiting_for_build_processing: true, 
+        api_key: api_key,
+        skip_waiting_for_build_processing: true,
         apple_id: "6446854569",
         ipa: "./build/VeWorld.ipa",
       )
@@ -380,7 +391,9 @@ platform :ios do
 
     setup_ci if ENV['CI']
 
-    if !build.nil? 
+    api_key = app_store_connect_api_key
+
+    if !build.nil?
       build = increment_build_number(build_number: build, xcodeproj: "VeWorld.xcodeproj")
               increment_build_number(build_number: build, xcodeproj: "VeWorld.xcodeproj")
     else
@@ -389,11 +402,11 @@ platform :ios do
     end
 
     # check if spceicifed version number
-    if !version.nil? 
+    if !version.nil?
       if version.downcase != "patch" && version.downcase != "minor" && version.downcase != "major"
         version = increment_version_number(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
                   increment_version_number(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
-      else 
+      else
         version = increment_version_number(bump_type: version.downcase, xcodeproj: "VeWorld.xcodeproj")
                   increment_version_number(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
       end
@@ -450,7 +463,8 @@ platform :ios do
         
       # upload to testflight
       upload_to_testflight(
-        skip_waiting_for_build_processing: true, 
+        api_key: api_key,
+        skip_waiting_for_build_processing: true,
         apple_id: "6446854569",
         ipa: "./build/VeWorld.ipa",
       )

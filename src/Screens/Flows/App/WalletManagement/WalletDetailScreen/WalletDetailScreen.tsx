@@ -211,7 +211,6 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         bannerHeight.value = withSpring(claimableUsernames.length > 0 ? 45 : 0, {
             duration: 500,
             dampingRatio: 1,
-            stiffness: 72,
             overshootClamping: true,
         })
         bannerOpacity.value = withSpring(claimableUsernames.length > 0 ? 1 : 0, { duration: 100 })

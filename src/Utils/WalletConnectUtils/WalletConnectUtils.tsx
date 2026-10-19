@@ -111,7 +111,7 @@ export function getSessionRequestAttributes(sessionRequest: SessionTypes.Struct)
     }
 }
 
-export function shouldAutoNavigate(navState: NavigationState<ReactNavigation.RootParamList>) {
+export function shouldAutoNavigate(navState: NavigationState) {
     if (!navState || !navState.routes) return false
 
     return !navState.routes.some(
@@ -247,7 +247,7 @@ export function validateUri(providedUri: string | null | undefined): ValidURI | 
                 },
             }
         }
-    } catch (e) {
+    } catch {
         return { isValid: false }
     }
 }

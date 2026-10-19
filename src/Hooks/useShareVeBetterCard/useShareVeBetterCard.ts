@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react"
-import { Share, View } from "react-native"
+import { HostInstance, Share } from "react-native"
 import { captureRef, releaseCapture } from "react-native-view-shot"
 import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
@@ -9,7 +9,7 @@ import { useI18nContext } from "~i18n"
 export const useShareVeBetterCard = () => {
     const { LL } = useI18nContext()
     const track = useAnalyticTracking()
-    const cardRef = useRef<View>(null)
+    const cardRef = useRef<HostInstance>(null)
     const [isSharing, setIsSharing] = useState(false)
 
     const shareCard = useCallback(async () => {

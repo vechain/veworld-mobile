@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { GestureResponderEvent, NativeSyntheticEvent, Pressable, StyleSheet, TextLayoutEventData } from "react-native"
+import { GestureResponderEvent, Pressable, StyleSheet, TextLayoutEvent } from "react-native"
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from "react-native-reanimated"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
@@ -37,7 +37,7 @@ export const AssetDescription = ({ description }: Props) => {
      * Measures the actual rendered line count of the description text.
      * Uses state guard (prev === lineCount) to prevent infinite re-render loop.
      */
-    const handleTextLayout = useCallback((e: NativeSyntheticEvent<TextLayoutEventData>) => {
+    const handleTextLayout = useCallback((e: TextLayoutEvent) => {
         const lineCount = e.nativeEvent.lines.length
         setDescriptionLineCount(prev => (prev === lineCount ? prev : lineCount))
     }, [])

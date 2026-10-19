@@ -1,0 +1,80 @@
+name: PR Bloat Check
+
+# Fails a PR on bloated reviewer-facing prose; thresholds in scripts/check-pr-bloat.mjs.
+# `edited` is load-bearing: without it, fixing a description never re-runs the check.
+# Bypass is the `verbose-ok` label; anyone, including the author, may apply it.
+
+on:
+    pull_request:
+        types: [opened, synchronize, reopened, edited, labeled, unlabeled]
+
+permissions: {}
+
+concurrency:
+    group: pr-bloat-${{ github.ref }}
+    cancel-in-progress: true
+
+jobs:
+    check:
+        name: PR Bloat Guard
+        # Named, not `user.type == 'Bot'`: agent-authored PRs come from GitHub Apps and must be checked.
+        if: ${{ !contains(fromJSON('["dependabot[bot]", "renovate[bot]", "github-actions[bot]", "aikido-autofix[bot]", "vechain-ci"]'), github.event.pull_request.user.login) }}
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            pull-requests: write # sticky findings comment
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  persist-credentials: false
+                  fetch-depth: 0
+
+            - name: Use Node
+              uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+              with:
+                  node-version-file: .nvmrc
+
+            - name: Run PR bloat guard
+              id: guard
+              env:
+                  BASE_REF: origin/${{ github.event.pull_request.base.ref }}
+                  HEAD_REF: ${{ github.event.pull_request.head.sha }}
+                  PR_BODY: ${{ github.event.pull_request.body }}
+                  BLOAT_BYPASS: ${{ contains(github.event.pull_request.labels.*.name, 'verbose-ok') && '1' || '0' }}
+                  BLOAT_COMMENT_FILE: ${{ runner.temp }}/pr-bloat-comment.md
+              run: node scripts/check-pr-bloat.mjs
+
+            # One sticky comment, edited in place: a per-push comment thread is its own
+            # kind of noise. Cleared to a one-liner once the findings are gone.
+            - name: Report findings on the PR
+              if: always()
+              # The guard step above is the verdict. A fork PR gets a read-only token, so
+              # commenting can legitimately fail; findings still land in the step summary.
+              continue-on-error: true
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  REPO: ${{ github.repository }}
+                  PR: ${{ github.event.pull_request.number }}
+                  BODY_FILE: ${{ runner.temp }}/pr-bloat-comment.md
+                  PAYLOAD: ${{ runner.temp }}/pr-bloat-payload.json
+              run: |
+                  # No `head` pipe: `gh --paginate` keeps writing pages, so head triggers
+                  # SIGPIPE (141). `--jq` runs per page, so emit nothing on a miss and
+                  # strip to the first id.
+                  existing=$(gh api --paginate "/repos/$REPO/issues/$PR/comments" \
+                    --jq 'map(select(.body | startswith("<!-- pr-bloat-guard -->"))) | (.[0].id // empty)')
+                  existing=${existing%%$'\n'*}
+                  if [ -s "$BODY_FILE" ]; then
+                    jq -Rs '{body: .}' < "$BODY_FILE" > "$PAYLOAD"
+                  elif [ -n "$existing" ]; then
+                    printf '%s\n\n%s\n' '<!-- pr-bloat-guard -->' \
+                      'PR bloat check passed - nothing left to fix.' | jq -Rs '{body: .}' > "$PAYLOAD"
+                  else
+                    echo "nothing to report"; exit 0
+                  fi
+                  if [ -n "$existing" ]; then
+                    gh api -X PATCH "/repos/$REPO/issues/comments/$existing" --input "$PAYLOAD"
+                  else
+                    gh api -X POST "/repos/$REPO/issues/$PR/comments" --input "$PAYLOAD"
+                  fi

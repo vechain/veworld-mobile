@@ -176,7 +176,7 @@ export const HomeStack = () => {
     const theme = useTheme()
 
     return (
-        <Navigator id="HomeStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
+        <Navigator id="HomeStack" screenOptions={{ headerShown: false, animation: isIOS() ? "default" : "none" }}>
             <Group>
                 <Screen name={Routes.HOME} component={BalanceScreen} options={{ headerShown: false }} />
 

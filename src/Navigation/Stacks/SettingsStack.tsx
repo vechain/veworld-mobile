@@ -75,7 +75,7 @@ const Settings = createStackNavigator<RootStackParamListSettings>()
 
 export const SettingsStack = () => {
     return (
-        <Settings.Navigator screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
+        <Settings.Navigator screenOptions={{ headerShown: false, animation: isIOS() ? "default" : "none" }}>
             <Settings.Screen name={Routes.SETTINGS} component={SettingsScreen} options={{ headerShown: false }} />
             <Settings.Screen
                 name={Routes.SETTINGS_NETWORK}

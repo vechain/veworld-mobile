@@ -1,5 +1,4 @@
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet"
 import { Transaction } from "@vechain/sdk-core"
 import React, { ComponentProps, useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
@@ -35,7 +34,7 @@ type Props = {
     onTransactionSuccess: (transaction: Transaction, id: string) => Promise<void>
     onTransactionFailure: () => Promise<void>
     onNavigateToLedger: () => void
-    selectAccountBsRef: React.RefObject<BottomSheetModalMethods>
+    selectAccountBsRef: React.RefObject<BottomSheetModal>
 } & Pick<ComponentProps<typeof TransactionDetails>, "onShowDetails">
 
 export const TransactionBottomSheetContent = ({
@@ -111,6 +110,8 @@ export const TransactionBottomSheetContent = ({
         hasEnoughBalanceOnToken,
         isBiometricsEmpty,
         transactionOutputs,
+        exceedsTxGasLimit,
+        estimatedGas,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -168,6 +169,8 @@ export const TransactionBottomSheetContent = ({
                     hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
                     isFirstTimeLoadingFees={isFirstTimeLoadingFees}
                     hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}
+                    exceedsTxGasLimit={exceedsTxGasLimit}
+                    estimatedGas={estimatedGas}
                     containerStyle={styles.gasFeeSpeedContainer}>
                     <DelegationView
                         setNoDelegation={resetDelegation}

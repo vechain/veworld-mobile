@@ -97,8 +97,15 @@ export const useAccountActivities = (
                     return act.timestamp >= startingTimestamp
                 })
 
+                const localTxIds = new Set(localActivitiesByTimsstamp.map(act => act.txId).filter(Boolean))
+
+                // The local row carries the dapp name, so it wins over the indexer's unclassified row
+                const filteredRemoteActivities = remoteActivities.filter(
+                    act => !(act.type === ActivityType.UNKNOWN_TX && act.txId && localTxIds.has(act.txId)),
+                )
+
                 //Show `Dapp Transaction` only if there are no events associated to that transaction
-                const uniqueRemoteIds = new Set(remoteActivities.map(ra => ra.txId).filter(Boolean))
+                const uniqueRemoteIds = new Set(filteredRemoteActivities.map(ra => ra.txId).filter(Boolean))
                 const filteredLocalActivities = localActivitiesByTimsstamp.filter(activity => {
                     if (
                         [ActivityType.SIGN_CERT, ActivityType.SIGN_TYPED_DATA, ActivityType.DAPP_LOGIN].includes(
@@ -112,7 +119,7 @@ export const useAccountActivities = (
                     return true
                 })
 
-                const allActivities = [...remoteActivities, ...filteredLocalActivities]
+                const allActivities = [...filteredRemoteActivities, ...filteredLocalActivities]
                 sortActivitiesByTimestamp(allActivities)
                 return allActivities
             }

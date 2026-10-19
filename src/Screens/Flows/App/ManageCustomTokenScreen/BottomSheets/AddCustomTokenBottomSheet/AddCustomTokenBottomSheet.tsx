@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { isEmpty } from "lodash"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
@@ -34,7 +34,7 @@ type Props = {
     onClose: () => void
 }
 
-export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     ({ tokenAddress, token, onClose }, ref) => {
         const { LL } = useI18nContext()
 

@@ -1,9 +1,8 @@
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
-import { AxiosError } from "axios"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { showWarningToast, useFeatureFlags } from "~Components"
 import { showErrorToast } from "~Components/Base/BaseToast"
-import { AnalyticsEvent, B3TR, ERROR_EVENTS, GasPriceCoefficient, VET, VTHO } from "~Constants"
+import { AnalyticsEvent, B3TR, ERROR_EVENTS, GasPriceCoefficient, MAX_TX_GAS_LIMIT, VET, VTHO } from "~Constants"
 import {
     SignStatus,
     SignTransactionResponse,
@@ -19,7 +18,7 @@ import { useGenericDelegationTokens } from "~Hooks/useGenericDelegationTokens"
 import { useDelegatorDepositAddress } from "~Hooks/useDelegatorDepositAddress"
 import { useIsEnoughGas } from "~Hooks/useIsEnoughGas"
 import { useIsGalactica } from "~Hooks/useIsGalactica"
-import { useSendTransaction } from "~Hooks/useSendTransaction"
+import { getNodeRejectionReason, useSendTransaction } from "~Hooks/useSendTransaction"
 import { useTransactionFees } from "~Hooks/useTransactionFees/useTransactionFees"
 import { useI18nContext } from "~i18n"
 import { DelegationType } from "~Model/Delegation"
@@ -39,7 +38,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { BigNutils, BigNumberUtils, error } from "~Utils"
+import { BigNutils, BigNumberUtils, error, GasUtils } from "~Utils"
 
 type Props = {
     clauses: TransactionClause[]
@@ -159,6 +158,7 @@ export const useTransactionScreen = ({
     })
 
     const transactionOutputs = useMemo(() => gas?.outputs, [gas?.outputs])
+    const exceedsTxGasLimit = useMemo(() => Boolean(gas?.exceedsTxGasLimit), [gas?.exceedsTxGasLimit])
 
     // 2. Delegation
     const {
@@ -352,14 +352,15 @@ export const useTransactionScreen = ({
     // 6. Send transaction
     const { sendTransaction } = useSendTransaction(onTransactionSuccess)
 
-    const parseTxError = useCallback(
+    const describeSendError = useCallback(
         (e: unknown) => {
-            if (!(e instanceof AxiosError)) return LL.SEND_TRANSACTION_ERROR_GENERIC_ERROR()
-            if (e.response?.data?.includes("insufficient energy"))
-                return LL.SEND_TRANSACTION_ERROR_INSUFFICIENT_ENERGY()
-            if (e.response?.data?.includes("gas price is less than block base fee"))
-                return LL.SEND_TRANSACTION_ERROR_GAS_FEE()
-            return LL.SEND_TRANSACTION_ERROR_GENERIC_ERROR()
+            const reason = getNodeRejectionReason(e)
+            if (!reason) return LL.SEND_TRANSACTION_ERROR()
+            if (reason.includes("insufficient energy")) return LL.SEND_TRANSACTION_ERROR_INSUFFICIENT_ENERGY()
+            if (reason.includes("gas price is less than block base fee")) return LL.SEND_TRANSACTION_ERROR_GAS_FEE()
+            if (reason.includes("gas limit exceeds"))
+                return LL.SEND_TRANSACTION_ERROR_GAS_LIMIT({ limit: GasUtils.formatGasMillions(MAX_TX_GAS_LIMIT) })
+            return LL.SEND_TRANSACTION_ERROR_REJECTED({ reason })
         },
         [LL],
     )
@@ -371,7 +372,7 @@ export const useTransactionScreen = ({
             } catch (e) {
                 showErrorToast({
                     text1: LL.ERROR(),
-                    text2: `${LL.SEND_TRANSACTION_ERROR()}${parseTxError(e)}`,
+                    text2: describeSendError(e),
                 })
                 await onTransactionFailure(e)
             } finally {
@@ -379,7 +380,7 @@ export const useTransactionScreen = ({
                 dispatch(setIsAppLoading(false))
             }
         },
-        [sendTransaction, LL, parseTxError, onTransactionFailure, dispatch],
+        [sendTransaction, LL, describeSendError, onTransactionFailure, dispatch],
     )
 
     /**
@@ -491,8 +492,14 @@ export const useTransactionScreen = ({
     }, [resetDelegation, selectedAccount.device.type, selectedDelegationToken, selectedDelegationUrl])
 
     const isDisabledButtonState = useMemo(
-        () => !hasEnoughBalance || loading || isSubmitting.current || (gas?.gas ?? 0) === 0 || isSmartWalletLoading,
-        [hasEnoughBalance, loading, gas?.gas, isSmartWalletLoading],
+        () =>
+            !hasEnoughBalance ||
+            exceedsTxGasLimit ||
+            loading ||
+            isSubmitting.current ||
+            (gas?.gas ?? 0) === 0 ||
+            isSmartWalletLoading,
+        [hasEnoughBalance, exceedsTxGasLimit, loading, gas?.gas, isSmartWalletLoading],
     )
 
     return {
@@ -529,5 +536,7 @@ export const useTransactionScreen = ({
         hasEnoughBalanceOnToken,
         isBiometricsEmpty,
         transactionOutputs,
+        exceedsTxGasLimit,
+        estimatedGas: gas?.gas,
     }
 }

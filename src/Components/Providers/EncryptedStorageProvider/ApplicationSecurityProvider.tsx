@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import RNBootSplash from "react-native-bootsplash"
-import { MMKV } from "react-native-mmkv"
+import { createMMKV, MMKV } from "react-native-mmkv"
 import {
     PreviousInstallation,
     SecurityConfig,
@@ -38,23 +38,23 @@ import Onboarding from "./Helpers/Onboarding"
 import SaltHelper from "./Helpers/SaltHelper"
 import { StorageEncryptionKeys } from "./Model"
 
-const UserEncryptedStorage = new MMKV({
+const UserEncryptedStorage = createMMKV({
     id: "user_encrypted_storage",
 })
 
-const UserEncryptedStorage_V2 = new MMKV({
+const UserEncryptedStorage_V2 = createMMKV({
     id: "user_encrypted_storage_V2",
 })
 
-const OnboardingStorage = new MMKV({
+const OnboardingStorage = createMMKV({
     id: "onboarding_storage",
 })
 
-const ImageStorage = new MMKV({
+const ImageStorage = createMMKV({
     id: "image_storage",
 })
 
-const MetadataStorage = new MMKV({
+const MetadataStorage = createMMKV({
     id: "metadata_storage",
 })
 
@@ -263,7 +263,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 await PreviousInstallation.clearOldStorage()
 
                 OnboardingStorage.getAllKeys().forEach(key => {
-                    OnboardingStorage.delete(key)
+                    OnboardingStorage.remove(key)
                 })
 
                 setReduxStorage({

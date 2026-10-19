@@ -85,7 +85,7 @@ export const ImportMnemonicBackupPasswordScreen = () => {
 
         try {
             mnemonic = await CryptoUtils.decrypt(wallet.data, password, salt, PasswordUtils.base64ToBuffer(iv))
-        } catch (err) {
+        } catch {
             showErrorToast({
                 text1: LL.ERROR_DECRYPTING_WALLET(),
             })

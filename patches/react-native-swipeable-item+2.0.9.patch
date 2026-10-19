@@ -1,0 +1,17 @@
+diff --git a/node_modules/react-native-swipeable-item/src/index.tsx b/node_modules/react-native-swipeable-item/src/index.tsx
+index 3fb030b..1b32a8c 100644
+--- a/node_modules/react-native-swipeable-item/src/index.tsx
++++ b/node_modules/react-native-swipeable-item/src/index.tsx
+@@ -527,7 +527,11 @@ export function useSwipeableItemParams<T>() {
+ 
+ const styles = StyleSheet.create({
+   underlay: {
+-    ...StyleSheet.absoluteFillObject,
++    position: 'absolute',
++    left: 0,
++    right: 0,
++    top: 0,
++    bottom: 0,
+   },
+   flex: {
+     flex: 1,

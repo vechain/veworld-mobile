@@ -1,0 +1,34 @@
+diff --git a/node_modules/react-native-bootsplash/dist/commonjs/index.js b/node_modules/react-native-bootsplash/dist/commonjs/index.js
+index ce92b4e..7490819 100644
+--- a/node_modules/react-native-bootsplash/dist/commonjs/index.js
++++ b/node_modules/react-native-bootsplash/dist/commonjs/index.js
+@@ -81,7 +81,11 @@ function useHideAnimation(config) {
+   });
+   return (0, _react.useMemo)(() => {
+     const containerStyle = {
+-      ..._reactNative.StyleSheet.absoluteFillObject,
++      position: "absolute",
++      left: 0,
++      right: 0,
++      top: 0,
++      bottom: 0,
+       backgroundColor,
+       alignItems: "center",
+       justifyContent: "center"
+diff --git a/node_modules/react-native-bootsplash/dist/module/index.js b/node_modules/react-native-bootsplash/dist/module/index.js
+index 1c2b2da..2a90a5e 100644
+--- a/node_modules/react-native-bootsplash/dist/module/index.js
++++ b/node_modules/react-native-bootsplash/dist/module/index.js
+@@ -73,7 +73,11 @@ export function useHideAnimation(config) {
+   });
+   return useMemo(() => {
+     const containerStyle = {
+-      ...StyleSheet.absoluteFillObject,
++      position: "absolute",
++      left: 0,
++      right: 0,
++      top: 0,
++      bottom: 0,
+       backgroundColor,
+       alignItems: "center",
+       justifyContent: "center"

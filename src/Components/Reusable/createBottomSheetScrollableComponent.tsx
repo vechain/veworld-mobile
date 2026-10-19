@@ -6,15 +6,14 @@
 
 import {
     BottomSheetDraggableView,
-    GESTURE_SOURCE,
     SCROLLABLE_DECELERATION_RATE_MAPPER,
-    SCROLLABLE_STATE,
+    SCROLLABLE_STATUS,
     SCROLLABLE_TYPE,
     useBottomSheetInternal,
     useScrollHandler,
     useScrollableSetter,
 } from "@gorhom/bottom-sheet"
-import React, { forwardRef, useImperativeHandle, useMemo, useRef } from "react"
+import React, { ComponentType, forwardRef, useImperativeHandle, useMemo, useRef } from "react"
 import { Platform, StyleSheet } from "react-native"
 import { NativeViewGestureHandler } from "react-native-gesture-handler"
 import { useAnimatedProps, useAnimatedStyle } from "react-native-reanimated"
@@ -54,8 +53,8 @@ export function createBottomSheetScrollableComponent<T, P>(type: SCROLLABLE_TYPE
         }: any = props
 
         //#region refs
-        const nativeGestureRef = useRef<NativeViewGestureHandler>(null)
-        const refreshControlGestureRef = useRef<NativeViewGestureHandler>(null)
+        const nativeGestureRef = useRef<ComponentType | undefined | null>(null)
+        const refreshControlGestureRef = useRef<ComponentType | undefined | null>(null)
         //#endregion
 
         //#region hooks
@@ -65,15 +64,15 @@ export function createBottomSheetScrollableComponent<T, P>(type: SCROLLABLE_TYPE
             onScrollBeginDrag,
             onScrollEndDrag,
         )
-        const { enableContentPanningGesture, animatedFooterHeight, animatedScrollableState } = useBottomSheetInternal()
+        const { enableContentPanningGesture, animatedLayoutState, animatedScrollableStatus } = useBottomSheetInternal()
         //#endregion
 
         //#region variables
         const scrollableAnimatedProps = useAnimatedProps(
             () => ({
-                decelerationRate: SCROLLABLE_DECELERATION_RATE_MAPPER[animatedScrollableState.value],
+                decelerationRate: SCROLLABLE_DECELERATION_RATE_MAPPER[animatedScrollableStatus.value],
                 showsVerticalScrollIndicator: showsVerticalScrollIndicator
-                    ? animatedScrollableState.value === SCROLLABLE_STATE.UNLOCKED
+                    ? animatedScrollableStatus.value === SCROLLABLE_STATUS.UNLOCKED
                     : showsVerticalScrollIndicator,
             }),
             [showsVerticalScrollIndicator],
@@ -91,7 +90,7 @@ export function createBottomSheetScrollableComponent<T, P>(type: SCROLLABLE_TYPE
         //#region styles
         const containerAnimatedStyle = useAnimatedStyle(
             () => ({
-                marginBottom: enableFooterMarginAdjustment ? animatedFooterHeight.value : 0,
+                marginBottom: enableFooterMarginAdjustment ? animatedLayoutState.value.footerHeight : 0,
             }),
             [enableFooterMarginAdjustment],
         )
@@ -105,7 +104,13 @@ export function createBottomSheetScrollableComponent<T, P>(type: SCROLLABLE_TYPE
         //#region effects
         // @ts-ignore
         useImperativeHandle(ref, () => scrollableRef.current)
-        useScrollableSetter(scrollableRef, type, scrollableContentOffsetY, onRefresh !== undefined, focusHook)
+        useScrollableSetter(
+            scrollableRef as Parameters<typeof useScrollableSetter>[0],
+            type,
+            scrollableContentOffsetY,
+            onRefresh !== undefined,
+            focusHook,
+        )
         //#endregion
 
         //#region render
@@ -132,7 +137,6 @@ export function createBottomSheetScrollableComponent<T, P>(type: SCROLLABLE_TYPE
                 <BottomSheetDraggableView
                     nativeGestureRef={nativeGestureRef}
                     refreshControlGestureRef={refreshControlGestureRef}
-                    gestureType={GESTURE_SOURCE.SCROLLABLE}
                     style={styles.container}>
                     {onRefresh ? (
                         <BottomSheetRefreshControl
@@ -150,10 +154,7 @@ export function createBottomSheetScrollableComponent<T, P>(type: SCROLLABLE_TYPE
             )
         }
         return (
-            <BottomSheetDraggableView
-                nativeGestureRef={nativeGestureRef}
-                gestureType={GESTURE_SOURCE.SCROLLABLE}
-                style={styles.container}>
+            <BottomSheetDraggableView nativeGestureRef={nativeGestureRef} style={styles.container}>
                 <NativeViewGestureHandler
                     ref={nativeGestureRef}
                     enabled={enableContentPanningGesture}

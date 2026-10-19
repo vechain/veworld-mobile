@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { forwardRef, useCallback, useMemo, useState } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
@@ -50,7 +50,7 @@ const EnhancedTokenCard = ({ item, selected, onSelectedToken, disabled }: Enhanc
     )
 }
 
-export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function GasFeeSpeedBottomSheet(
+export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModal, Props>(function GasFeeSpeedBottomSheet(
     { selectedToken, setSelectedToken, onClose, availableTokens, hasEnoughBalanceOnToken, sendingTokenSymbol },
     ref,
 ) {
