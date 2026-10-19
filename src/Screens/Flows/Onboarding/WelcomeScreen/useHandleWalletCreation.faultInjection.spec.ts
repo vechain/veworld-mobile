@@ -15,12 +15,7 @@ import { Keychain } from "~Storage"
 import { CryptoUtils } from "~Utils"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
 
-/**
- * Invariant: a local wallet exists in state only while the current wallet key decrypts it,
- * and that key is never replaced while such a wallet exists. Each onboarding step is failed
- * as a cancelled prompt and as a keychain error, then retried, against a fake keychain and
- * a key-sensitive cipher. Under jest Platform.OS is ios, so a cancel carries code -128.
- */
+// Every onboarding step is failed as a cancel and as a keychain error, then retried. Jest is ios: cancel code -128.
 
 const WALLET_SLOT = "WALLET_BIOMETRIC_KEY_STORAGE"
 const STORAGE_SLOT = "BIOMETRIC_KEY_STORAGE"
