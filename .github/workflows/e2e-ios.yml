@@ -26,7 +26,7 @@ jobs:
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
                   # If it's a pre-release, check out the tag corresponding to the pre-release;
                   # otherwise, use the triggering branch unless it's a non-pre-release event.
@@ -44,13 +44,13 @@ jobs:
 
             # Setup Ruby
             - name: Setup Ruby
-              uses: ruby/setup-ruby@bbda85882f33075a3727c01e3c8d0de0be6146ce # v1.224.0
+              uses: ruby/setup-ruby@651ff0d62c5c79bed6d53ec518387aae20e72c1a # v1.329.0
               with:
                   bundler-cache: true
 
             # Setup Node.js
             - name: Setup Node
-              uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3.9.1
+              uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
               with:
                   node-version-file: .nvmrc
                   cache: "yarn"
@@ -61,7 +61,7 @@ jobs:
 
             # Install sentry properties
             - name: Sentry properties
-              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
+              uses: mobiledevops/secret-to-file-action@085a45b601133564d1311589e82b5b136d0839bb # v2.0.0
               with:
                   base64-encoded-secret: ${{ secrets.IOS_SENTRY_PROPERTIES }}
                   filename: "sentry.properties"
@@ -69,7 +69,7 @@ jobs:
                   working-directory: "./ios"
 
             - name: Env decode
-              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
+              uses: mobiledevops/secret-to-file-action@085a45b601133564d1311589e82b5b136d0839bb # v2.0.0
               with:
                   base64-encoded-secret: ${{ secrets.IOS_ENV}}
                   filename: ".env"
@@ -77,7 +77,7 @@ jobs:
                   working-directory: "./ios/fastlane"
 
             - name: Decode prod env
-              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
+              uses: mobiledevops/secret-to-file-action@085a45b601133564d1311589e82b5b136d0839bb # v2.0.0
               with:
                   base64-encoded-secret: ${{ secrets.RN_ENV_PROD_E2E}}
                   filename: ".env.production"
@@ -102,7 +102,7 @@ jobs:
                   echo "APP_PATH=$SIMULATOR_APP_PATH" >> $GITHUB_ENV
                   echo "APP_PATH_DSYM=$(find ~/ -path "*/Build/Products/Release-iphonesimulator/VeWorld.app.dSYM" -print -quit)" >> $GITHUB_ENV
             - name: Upload .app
-              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
                   name: VeWorld.app
                   path: ${{ env.APP_PATH }}
@@ -110,7 +110,7 @@ jobs:
             # Specifying version and device + retry on a temporary basis while devicecloud work on higher spec vm options.
             - name: Test iOS
               id: ios-test
-              uses: devicecloud-dev/device-cloud-for-maestro@d726a108189bb52a5cc90bb036a71b63a4036cd7 # v1
+              uses: devicecloud-dev/device-cloud-for-maestro@6f53f33a8a527772fbfc20255f220861d45bced4 # v2.6.1
               with:
                   api-key: ${{ secrets.DCD_API_KEY }}
                   app-file: ${{ env.APP_PATH }}

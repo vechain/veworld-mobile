@@ -6,7 +6,7 @@ const path = require("path")
 // misses the ones react-native's `exports` redirects into src/. Derive those from the
 // manifest so a react-native bump can't silently drop one.
 const reactNativeRoot = path.dirname(require.resolve("react-native/package.json"))
-const reactNativeSrcSubpaths = Object.entries(require("react-native/package.json").exports).reduce(
+const reactNativeSrcSubpaths = Object.entries(require(path.join(reactNativeRoot, "package.json")).exports).reduce(
     (mappings, [subpath, target]) => {
         const file = typeof target === "string" ? target : target?.default
         if (typeof file === "string" && file.startsWith("./src/") && !subpath.includes("*")) {

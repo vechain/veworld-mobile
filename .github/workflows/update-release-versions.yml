@@ -7,26 +7,18 @@ on:
         description: 'iOS Version'
         required: true
         default: '1.0.0'
-      ios_build:
-        description: 'iOS Build Number'
-        required: true
-        default: '1'
       android_version:
         description: 'Android Version'
         required: true
         default: '1.0.0'
-      android_build:
-        description: 'Android Build Number'
-        required: true
-        default: '1'
 jobs:
   set-variables:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Generate a token
         id: generate-token
-        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
+        uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
         with:
           app-id: ${{ secrets.APP_ID }}
           private-key: ${{ secrets.APP_PRIVATE_KEY }}
@@ -35,7 +27,7 @@ jobs:
         run: echo "GH_TOKEN=${{ steps.generate-token.outputs.token }}" >> $GITHUB_ENV
 
       - name: Checkout repository
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           token: ${{ steps.generate-token.outputs.token }}
 
@@ -43,14 +35,10 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           GITHUB_EVENT_INPUTS_IOS_VERSION: ${{ github.event.inputs.ios_version }}
-          GITHUB_EVENT_INPUTS_IOS_BUILD: ${{ github.event.inputs.ios_build }}
           GITHUB_EVENT_INPUTS_ANDROID_VERSION: ${{ github.event.inputs.android_version }}
-          GITHUB_EVENT_INPUTS_ANDROID_BUILD: ${{ github.event.inputs.android_build }}
         run: |
           gh variable set IOS_VERSION --body "${GITHUB_EVENT_INPUTS_IOS_VERSION}"
-          gh variable set IOS_BUILD --body "${GITHUB_EVENT_INPUTS_IOS_BUILD}"
           gh variable set ANDROID_VERSION --body "${GITHUB_EVENT_INPUTS_ANDROID_VERSION}"
-          gh variable set ANDROID_BUILD --body "${GITHUB_EVENT_INPUTS_ANDROID_BUILD}"
 
       - name: Verify Repository Variables
         run: |

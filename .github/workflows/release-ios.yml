@@ -4,24 +4,23 @@ on:
     workflow_dispatch:
         inputs:
             version:
-                description: "Version to build"
+                description: "Version, or patch/minor/major. Defaults to package.json"
                 type: string
-                required: true
-            build:
-                description: "Build number"
-                type: string
-                required: true
+                required: false
 
     workflow_call:
+        outputs:
+            version:
+                value: ${{ jobs.build-release-ios.outputs.version }}
+            build:
+                value: ${{ jobs.build-release-ios.outputs.build }}
+            pr_branch:
+                value: ${{ jobs.build-release-ios.outputs.pr_branch }}
         inputs:
             version:
-                description: "Version to build"
+                description: "Version, or patch/minor/major. Defaults to package.json"
                 type: string
-                required: true
-            build:
-                description: "Build number"
-                type: string
-                required: true
+                required: false
 
 jobs:
     build-release-ios:
@@ -31,13 +30,17 @@ jobs:
         environment: ios-release
         env:
             DEVELOPER_DIR: /Applications/Xcode_26.2.app/Contents/Developer
+        outputs:
+            version: ${{ steps.fastlane.outputs.version }}
+            build: ${{ steps.fastlane.outputs.build }}
+            pr_branch: ${{ steps.fastlane.outputs.pr_branch }}
 
         # Proceed only if it's either not a release event or it's a pre-release.
         if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
                   # If it's a pre-release, check out the tag corresponding to the pre-release;
                   # otherwise, use the triggering branch unless it's a non-pre-release event.
@@ -45,7 +48,7 @@ jobs:
 
             # Setup Node.js
             - name: Setup Node
-              uses: actions/setup-node@3235b876344d2a9aa001b8d1453c930bba69e610 # v3.9.1
+              uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
               with:
                   node-version-file: .nvmrc
                   cache: "yarn"
@@ -72,7 +75,7 @@ jobs:
 
             # Setup Ruby
             - name: Setup Ruby
-              uses: ruby/setup-ruby@d5126b9b3579e429dd52e51e68624dda2e05be25 # v1
+              uses: ruby/setup-ruby@651ff0d62c5c79bed6d53ec518387aae20e72c1a # v1.329.0
               with:
                   bundler-cache: true
 
@@ -92,7 +95,7 @@ jobs:
 
             # Install sentry properties
             - name: Sentry properties
-              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
+              uses: mobiledevops/secret-to-file-action@085a45b601133564d1311589e82b5b136d0839bb # v2.0.0
               with:
                   base64-encoded-secret: ${{ secrets.IOS_SENTRY_PROPERTIES }}
                   filename: "sentry.properties"
@@ -100,7 +103,7 @@ jobs:
                   working-directory: "./ios"
 
             - name: Decode prod env
-              uses: mobiledevops/secret-to-file-action@be5f14e82c235ccde011f6ab0f6c984b35dc34c6 # v1
+              uses: mobiledevops/secret-to-file-action@085a45b601133564d1311589e82b5b136d0839bb # v2.0.0
               with:
                   base64-encoded-secret: ${{ secrets.RN_ENV_PROD}}
                   filename: ".env.production"
@@ -108,6 +111,7 @@ jobs:
                   working-directory: "."
 
             - name: Build ipa with fastlane
+              id: fastlane
               env:
                   MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
                   APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.IOS_ASC_KEY_ID }}
@@ -115,7 +119,6 @@ jobs:
                   APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.IOS_ASC_KEY_P8_BASE64 }}
                   APP_STORE_CONNECT_API_KEY_IS_KEY_CONTENT_BASE64: "true"
                   INPUTS_VERSION: ${{inputs.version}}
-                  INPUTS_BUILD: ${{inputs.build}}
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
               run: |
                   cd ios
@@ -123,14 +126,14 @@ jobs:
                   git config --local user.name  "github-actions[bot]"
                   git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
                   cd fastlane
-                  fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${INPUTS_VERSION} build:${INPUTS_BUILD}
+                  fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} ${INPUTS_VERSION:+version:"$INPUTS_VERSION"}
 
             - name: Notify Slack
               if: always()
               continue-on-error: true
-              uses: slackapi/slack-github-action@485a9d42d3a73031f12ec201c457e2162c45d02d # v2.0.0
+              uses: slackapi/slack-github-action@dcb1066f776dd043e64d0e8ba94ca15cc7e1875d # v4.0.0
               with:
                   webhook: ${{ secrets.SLACK_RELEASE_WEBHOOK }}
                   webhook-type: incoming-webhook
                   payload: |
-                      text: "${{ job.status == 'success' && ':white_check_mark:' || ':x:' }} iOS release ${{ inputs.version }} (${{ inputs.build }}): ${{ job.status }}\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                      text: "${{ job.status == 'success' && ':white_check_mark:' || ':x:' }} iOS release ${{ steps.fastlane.outputs.version || 'unknown version' }} (${{ steps.fastlane.outputs.build || 'no build' }}): ${{ job.status }}\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
