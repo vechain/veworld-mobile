@@ -9,7 +9,7 @@ on:
 
 jobs:
     create-release-pr:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         permissions:
             contents: write
             pull-requests: write
@@ -19,12 +19,12 @@ jobs:
         steps:
             - name: Generate a token
               id: generate-token
-              uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
+              uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
               with:
                 app-id: ${{ secrets.APP_ID }}
                 private-key: ${{ secrets.APP_PRIVATE_KEY }}
             - name: Checkout repository
-              uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
             - name: Get version variables
               env:

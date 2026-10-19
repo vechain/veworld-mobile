@@ -13,12 +13,12 @@ on:
 
 jobs:
     check-merged-pr:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         outputs:
           should_release: ${{ steps.check_merged_prs.outputs.should_release }}
         steps:
             - name: Checkout repository
-              uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
             - name: Check for merged PRs
               id: check_merged_prs
               env:
