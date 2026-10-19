@@ -93,12 +93,7 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
     return (
         <Pressable testID={`VBD_COLLECTIBLE_CARD_${address}_${tokenId}`} style={styles.root} onPress={handlePress}>
             <BaseView style={styles.favoriteRootContainer}>
-                <LinearGradient
-                    colors={["rgba(29, 23, 58, 0.9)", "rgba(29, 23, 58, 0.65)", "rgba(29, 23, 58, 0)"]}
-                    useAngle
-                    locations={[0, 0.5, 1]}
-                    style={[styles.favoriteContainer, topStyle]}
-                    angle={180}>
+                <BaseView style={[styles.favoriteContainer, topStyle]}>
                     {isNew && (
                         <BaseText
                             bg="rgba(48, 38, 95, 0.90)"
@@ -124,7 +119,7 @@ export const CollectibleCard = ({ address, tokenId, onPress }: Props) => {
                             />
                         </Pressable>
                     )}
-                </LinearGradient>
+                </BaseView>
             </BaseView>
 
             {RenderMedia}
@@ -179,6 +174,8 @@ const baseStyles = () =>
             flexDirection: "row",
             alignItems: "center",
             minHeight: 32,
+            backgroundImage:
+                "linear-gradient(180deg, rgba(29, 23, 58, 0.9), rgba(29, 23, 58, 0.65), rgba(29, 23, 58, 0))",
         },
         favoriteContainerRight: {
             justifyContent: "flex-end",

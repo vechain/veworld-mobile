@@ -3,7 +3,6 @@ import moment from "moment"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import FastImage from "react-native-fast-image"
-import LinearGradient from "react-native-linear-gradient"
 import Animated from "react-native-reanimated"
 import { NFTPlaceholderDarkV2 } from "~Assets"
 import { BaseIcon, BaseText, BaseView, BlurView } from "~Components"
@@ -93,12 +92,7 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
                 defaultSource={NFTPlaceholderDarkV2}
                 blurred={isBlacklisted}>
                 <BaseView style={styles.favoriteRootContainer}>
-                    <LinearGradient
-                        colors={["rgba(29, 23, 58, 0.9)", "rgba(29, 23, 58, 0.65)", "rgba(29, 23, 58, 0)"]}
-                        useAngle
-                        locations={[0, 0.5, 1]}
-                        style={[styles.favoriteContainer, topStyle]}
-                        angle={180}>
+                    <BaseView style={[styles.favoriteContainer, topStyle]}>
                         {isNew && (
                             <BaseText
                                 bg="rgba(48, 38, 95, 0.90)"
@@ -125,7 +119,7 @@ export const CollectionCard = ({ collectionAddress, onPress, onToggleFavorite }:
                                 />
                             </TouchableOpacity>
                         )}
-                    </LinearGradient>
+                    </BaseView>
                 </BaseView>
 
                 <BlurView style={styles.bottom} overlayColor="transparent" blurAmount={10}>
@@ -190,6 +184,8 @@ const baseStyles = () =>
             flexDirection: "row",
             alignItems: "center",
             minHeight: 32,
+            backgroundImage:
+                "linear-gradient(180deg, rgba(29, 23, 58, 0.9), rgba(29, 23, 58, 0.65), rgba(29, 23, 58, 0))",
         },
         favoriteContainerRight: {
             justifyContent: "flex-end",
