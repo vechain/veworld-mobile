@@ -1,0 +1,89 @@
+# walletPersistsAcrossRelaunch
+# Guards against storage silently falling back to an in-memory store: a wallet
+# created in one process must still be there after the app is killed.
+appId: org.vechain.veworld.app
+tags:
+    - pull-request
+onFlowComplete:
+    - runFlow: ../setup_reset/resetApp.yaml
+---
+- launchApp:
+      clearState: true
+# Welcome screen V2 (onboardingScreen feature flag on)
+- runFlow:
+      when:
+          visible:
+              id: "SELF_CUSTODY_WALLET_BUTTON"
+      commands:
+          - tapOn:
+                id: "SELF_CUSTODY_WALLET_BUTTON"
+          - tapOn:
+                id: "SELF_CUSTODY_OPTIONS_CREATE"
+# Welcome screen V1
+- runFlow:
+      when:
+          visible:
+              id: "CREATE_WALLET_BTN"
+      commands:
+          - tapOn:
+                id: "CREATE_WALLET_BTN"
+#set wallet pin
+- repeat:
+      while:
+          visible: "Choose your 6-digit PIN"
+      commands:
+          - tapOn: "1"
+#confirm wallet pin
+- repeat:
+      while:
+          visible: "Choose your 6-digit PIN"
+      commands:
+          - tapOn: "1"
+#skip notification bottom sheet
+- runFlow:
+      when:
+          visible:
+              id: "button_notifications_skip"
+      commands:
+          - tapOn:
+                id: "button_notifications_skip"
+#skip backup bottom sheet (retry: a tap during the sheet's open animation can miss)
+- repeat:
+      while:
+          visible:
+              id: "Backup_later_button"
+      commands:
+          - tapOn:
+                id: "Backup_later_button"
+# Dismiss VeBetter card if visible
+- runFlow:
+      when:
+          visible:
+              id: "close-button"
+      commands:
+          - tapOn:
+                id: "close-button"
+- extendedWaitUntil:
+      visible:
+          id: "wallet-tab"
+      timeout: 30000
+#kill the app and relaunch it without clearing its data
+- stopApp
+- launchApp
+#the wallet is still there: the app asks for its PIN instead of onboarding again
+- extendedWaitUntil:
+      visible: "Insert your 6-digit PIN"
+      timeout: 30000
+- assertNotVisible:
+      id: "SELF_CUSTODY_WALLET_BUTTON"
+- assertNotVisible:
+      id: "CREATE_WALLET_BTN"
+- repeat:
+      times: 6
+      commands:
+          - tapOn:
+                id: "numpad-1"
+- extendedWaitUntil:
+      visible:
+          id: "wallet-tab"
+      timeout: 30000
