@@ -1,3 +1,8 @@
+def github_output(values)
+  return unless ENV["GITHUB_OUTPUT"]
+  File.open(ENV["GITHUB_OUTPUT"], "a") { |file| values.each { |key, value| file.puts("#{key}=#{value}") } }
+end
+
 default_platform(:android)
 
 platform :android do
@@ -7,6 +12,13 @@ platform :android do
     validate_play_store_json_key(
       json_key: "./pc-api-4895632399891248889-903-1f538768f7fe.json"
     )
+  end
+
+  # A track only lists its current release, and every upload reaches internal first, so the highest listed code is the latest.
+  private_lane :next_version_code do
+    codes = %w[internal alpha beta production].flat_map { |track| google_play_track_version_codes(track: track) }
+    UI.user_error!("Google Play returned no version codes") if codes.empty?
+    codes.max + 1
   end
 
   lane :build_android_test do 
@@ -59,17 +71,16 @@ platform :android do
     end
   end
 
-  # @param {object} options - The options for the build process.
-  # @param {string} options.version_name - The version name of the build.
-  # @param {string} options.version_code - The version code of the build.
+  # @param optional {string} options.version_name - The version name of the build; defaults to package.json.
   desc "Submit a new Beta Build to Play Store"
   lane :build_android do |options|
     store_password = ENV["STORE_PASSWORD"]
     key_password = ENV["KEY_PASSWORD"]
     key_alias = ENV["KEY_ALIAS"]
 
-    version_name = options[:version_name]
-    version_code = options[:version_code]
+    version_name = options[:version_name] || JSON.parse(File.read("../../package.json"))["version"]
+    version_code = next_version_code
+    github_output(version: version_name, build: version_code)
 
     Dir.chdir "../.." do
       sh("yarn purge:android && yarn install:android")
@@ -118,17 +129,16 @@ platform :android do
     )
   end
 
-  # @param {object} options - The options for the build process.
-  # @param {string} options.version_name - The version name of the build.
-  # @param {string} options.version_code - The version code of the build.
+  # @param optional {string} options.version_name - The version name of the build; defaults to package.json.
   desc "Submit a new Beta Build to Play Store"
   lane :build_android_ci do |options|
     store_password = ENV["STORE_PASSWORD"]
     key_password = ENV["KEY_PASSWORD"]
     key_alias = ENV["KEY_ALIAS"]
 
-    version_name = options[:version_name]
-    version_code = options[:version_code]
+    version_name = options[:version_name] || JSON.parse(File.read("../../package.json"))["version"]
+    version_code = next_version_code
+    github_output(version: version_name, build: version_code)
 
     setup_ci if ENV['CI']
 

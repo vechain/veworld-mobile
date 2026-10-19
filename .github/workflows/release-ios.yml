@@ -4,24 +4,23 @@ on:
     workflow_dispatch:
         inputs:
             version:
-                description: "Version to build"
+                description: "Version, or patch/minor/major. Defaults to package.json"
                 type: string
-                required: true
-            build:
-                description: "Build number"
-                type: string
-                required: true
+                required: false
 
     workflow_call:
+        outputs:
+            version:
+                value: ${{ jobs.build-release-ios.outputs.version }}
+            build:
+                value: ${{ jobs.build-release-ios.outputs.build }}
+            pr_branch:
+                value: ${{ jobs.build-release-ios.outputs.pr_branch }}
         inputs:
             version:
-                description: "Version to build"
+                description: "Version, or patch/minor/major. Defaults to package.json"
                 type: string
-                required: true
-            build:
-                description: "Build number"
-                type: string
-                required: true
+                required: false
 
 jobs:
     build-release-ios:
@@ -31,6 +30,10 @@ jobs:
         environment: ios-release
         env:
             DEVELOPER_DIR: /Applications/Xcode_26.2.app/Contents/Developer
+        outputs:
+            version: ${{ steps.fastlane.outputs.version }}
+            build: ${{ steps.fastlane.outputs.build }}
+            pr_branch: ${{ steps.fastlane.outputs.pr_branch }}
 
         # Proceed only if it's either not a release event or it's a pre-release.
         if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
@@ -108,6 +111,7 @@ jobs:
                   working-directory: "."
 
             - name: Build ipa with fastlane
+              id: fastlane
               env:
                   MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
                   APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.IOS_ASC_KEY_ID }}
@@ -115,7 +119,6 @@ jobs:
                   APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.IOS_ASC_KEY_P8_BASE64 }}
                   APP_STORE_CONNECT_API_KEY_IS_KEY_CONTENT_BASE64: "true"
                   INPUTS_VERSION: ${{inputs.version}}
-                  INPUTS_BUILD: ${{inputs.build}}
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
               run: |
                   cd ios
@@ -123,7 +126,7 @@ jobs:
                   git config --local user.name  "github-actions[bot]"
                   git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
                   cd fastlane
-                  fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${INPUTS_VERSION} build:${INPUTS_BUILD}
+                  fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} ${INPUTS_VERSION:+version:"$INPUTS_VERSION"}
 
             - name: Notify Slack
               if: always()
@@ -133,4 +136,4 @@ jobs:
                   webhook: ${{ secrets.SLACK_RELEASE_WEBHOOK }}
                   webhook-type: incoming-webhook
                   payload: |
-                      text: "${{ job.status == 'success' && ':white_check_mark:' || ':x:' }} iOS release ${{ inputs.version }} (${{ inputs.build }}): ${{ job.status }}\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                      text: "${{ job.status == 'success' && ':white_check_mark:' || ':x:' }} iOS release ${{ steps.fastlane.outputs.version || 'unknown version' }} (${{ steps.fastlane.outputs.build || 'no build' }}): ${{ job.status }}\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"

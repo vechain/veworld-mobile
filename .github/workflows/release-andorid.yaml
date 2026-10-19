@@ -4,28 +4,20 @@ on:
     workflow_dispatch:
         inputs:
             version:
-                description: "Version to build"
+                description: "Version name. Defaults to package.json"
                 type: string
-                required: true
-            build:
-                description: "Build number"
-                type: string
-                required: true
+                required: false
 
     workflow_call:
         inputs:
             version:
-                description: "Version to build"
+                description: "Version name. Defaults to package.json"
                 type: string
-                required: true
-            build:
-                description: "Build number"
-                type: string
-                required: true
+                required: false
             pr_branch:
-                description: "PR branch"
+                description: "Branch of the iOS release PR to add the Android artifacts to"
                 type: string
-                required: true
+                required: false
 
 jobs:
     build-test-android:
@@ -138,15 +130,14 @@ jobs:
                   working-directory: "."
 
             - name: Build apk
-              id: build
+              id: fastlane
               run: |
                   cd android
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
-                  fastlane build_android_ci version_code:${INPUTS_BUILD} version_name:${INPUTS_VERSION}
+                  fastlane build_android_ci ${INPUTS_VERSION:+version_name:"$INPUTS_VERSION"}
               env:
-                INPUTS_BUILD: ${{inputs.build}}
                 INPUTS_VERSION: ${{inputs.version}}
                 SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
@@ -162,6 +153,7 @@ jobs:
               run: echo 'Artifact ID is ${{ steps.upload.outputs.artifact-id }}'
 
             - name: Commit and Push Changes
+              if: inputs.pr_branch != ''
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   INPUTS_PR_BRANCH: ${{ inputs.pr_branch }}
@@ -180,4 +172,4 @@ jobs:
                   webhook: ${{ secrets.SLACK_RELEASE_WEBHOOK }}
                   webhook-type: incoming-webhook
                   payload: |
-                      text: "${{ job.status == 'success' && ':white_check_mark:' || ':x:' }} Android release ${{ inputs.version }} (${{ inputs.build }}): ${{ job.status }}\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+                      text: "${{ job.status == 'success' && ':white_check_mark:' || ':x:' }} Android release ${{ steps.fastlane.outputs.version || 'unknown version' }} (${{ steps.fastlane.outputs.build || 'no build' }}): ${{ job.status }}\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
