@@ -174,6 +174,24 @@ describe("useCreateWallet", () => {
 
             expect(addDeviceAndAccounts).not.toHaveBeenCalled()
         })
+
+        it("ignores a second call while the first is still in flight", async () => {
+            let finishEncryption: (value: string) => void = () => {}
+            ;(WalletEncryptionKeyHelper.encryptWallet as jest.Mock).mockReturnValueOnce(
+                new Promise<string>(resolve => (finishEncryption = resolve)),
+            )
+            const { result } = renderHook(() => useCreateWallet(), { wrapper: TestWrapper })
+            const args = { mnemonic, derivationPath: DerivationPath.VET }
+
+            const first = result.current.createLocalWallet(args)
+            await result.current.createLocalWallet(args)
+            finishEncryption(JSON.stringify(wallet))
+            await first
+            await result.current.createLocalWallet(args)
+
+            expect(WalletEncryptionKeyHelper.encryptWallet).toHaveBeenCalledTimes(2)
+            expect(addDeviceAndAccounts).toHaveBeenCalledTimes(2)
+        })
     })
 
     describe("createLedgerWallet", () => {
