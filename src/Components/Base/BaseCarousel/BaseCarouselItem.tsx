@@ -1,5 +1,5 @@
-import { NavigationState, useNavigation, useNavigationState } from "@react-navigation/native"
-import React, { useCallback, useMemo } from "react"
+import { useNavigation } from "@react-navigation/native"
+import React, { useCallback } from "react"
 import { Animated, Linking, Pressable, StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -38,8 +38,6 @@ type Props = {
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
 
-const routeNameSelector = (state: NavigationState) => state.routes[state.index].name
-
 export const BaseCarouselItem: React.FC<Props> = ({
     href,
     style,
@@ -56,15 +54,7 @@ export const BaseCarouselItem: React.FC<Props> = ({
 }) => {
     const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation()
-    const route = useNavigationState(routeNameSelector)
     const { navigateWithTab } = useBrowserTab()
-
-    const returnScreen = useMemo(() => {
-        if (route === Routes.TOKEN_DETAILS) {
-            return Routes.HOME
-        }
-        return route as Routes.SETTINGS | Routes.HOME | Routes.APPS
-    }, [route])
 
     const handleExternalLinkPress = useCallback(
         async (event: CarouselPressEvent) => {
@@ -85,6 +75,11 @@ export const BaseCarouselItem: React.FC<Props> = ({
                 propsOnPress?.(event)
                 if (event.defaultPrevented) return
             }
+            // Read on press, not via useNavigationState: that throws outside a navigator, e.g. in the dApp sign sheets.
+            const state = nav.getState()
+            const route = state?.routes[state.index].name
+            const returnScreen =
+                route === Routes.TOKEN_DETAILS ? Routes.HOME : (route as Routes.SETTINGS | Routes.HOME | Routes.APPS)
             navigateWithTab({
                 title: name || href,
                 url: href,
@@ -94,7 +89,7 @@ export const BaseCarouselItem: React.FC<Props> = ({
             })
             if (onPressActivation === "after") propsOnPress?.(event)
         },
-        [href, name, navigateWithTab, nav, returnScreen, onPressActivation, propsOnPress],
+        [href, name, navigateWithTab, nav, onPressActivation, propsOnPress],
     )
 
     const _onPress = useCallback(async () => {
