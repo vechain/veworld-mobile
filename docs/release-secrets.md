@@ -5,7 +5,7 @@ Release jobs run in the `ios-release` and `android-release` GitHub environments.
 - **Environment:** secrets used by one platform.
 - **Repository:** secrets shared by both platforms.
 
-Bundle identifiers are not secrets. They live in `ios/fastlane/Fastfile`, `Appfile` and `Matchfile`, and in `android/fastlane/Appfile`.
+Uploads authenticate with the App Store Connect API key, so no Apple ID or app-specific password is needed. Bundle identifiers are not secrets. They live in `ios/fastlane/Fastfile`, `Appfile` and `Matchfile`, and in `android/fastlane/Appfile`.
 
 ## iOS (`ios-release`)
 
@@ -36,6 +36,7 @@ Bundle identifiers are not secrets. They live in `ios/fastlane/Fastfile`, `Appfi
 | --- | --- | --- |
 | `CI_USER`, `CI_USER_TOKEN` | plain | Bot account that pushes release branches and reads the match certificates repo |
 | `RN_ENV_PROD` | base64 file | `.env.production` baked into the app |
+| `SENTRY_AUTH_TOKEN` | plain | Source map and debug symbol uploads during the native build; without it the iOS build fails |
 | `SLACK_RELEASE_WEBHOOK` | plain URL | Posts each release result; a Slack failure never fails the release |
 
 ## Rotating a secret

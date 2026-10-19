@@ -116,6 +116,7 @@ jobs:
                   APP_STORE_CONNECT_API_KEY_IS_KEY_CONTENT_BASE64: "true"
                   INPUTS_VERSION: ${{inputs.version}}
                   INPUTS_BUILD: ${{inputs.build}}
+                  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
               run: |
                   cd ios
                   git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com

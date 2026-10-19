@@ -148,6 +148,7 @@ jobs:
               env:
                 INPUTS_BUILD: ${{inputs.build}}
                 INPUTS_VERSION: ${{inputs.version}}
+                SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
             - name: Artifact apk
               id: upload

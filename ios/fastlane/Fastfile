@@ -31,7 +31,7 @@ platform :ios do
     Dir.chdir "../../.." do # Navigate to outside of the project as not have conflicts with this git repo. 
       puts Dir.pwd # Print the current working directory.
 
-      repo_name = ENV['CERTIFICATES_REPO']
+      repo_name = "https://github.com/vechain/veworld-mobile-ios-cert.git"
       sh("git clone -b #{MATCH_GIT_BRANCH} #{repo_name}") # Clone the repo with the certificates.
       Dir.chdir "veworld-mobile-ios-cert" # Navigate to the repo with the certificates.
 
