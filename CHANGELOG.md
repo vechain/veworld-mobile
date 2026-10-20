@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.6.1 (2026-10-20)
+
+### Bug Fixes
+
+* stop the Apps screen banners clipping on RN 0.88 ([#3994](https://github.com/vechain/veworld-mobile/issues/3994)) ([b0dc5f3](https://github.com/vechain/veworld-mobile/commit/b0dc5f35e5bd10fd7544660b62a10dc58ca2993d))
+
 ## 2.5.11 (2026-10-19)
 
 ## 2.5.11 (2026-10-13)
