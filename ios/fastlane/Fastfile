@@ -7,10 +7,10 @@ before_all do
 	Dotenv.load ".env"
 end
 
-# match certificates belong to one Apple team, so each team gets its own branch in the certificates repo
-MATCH_GIT_BRANCH = "team-8CYJM57MNT"
+# match certificates belong to one Apple team, so each team gets its own branch in the certificates repo; team RKZMX8AZ6P lives on main
+MATCH_GIT_BRANCH = "main"
 APP_IDENTIFIER = "org.vechain.veworld.app"
-EXTENSION_IDENTIFIER = "org.vechain.veworld.app.OneSignalExtension"
+EXTENSION_IDENTIFIER = "org.vechain.veworld.app.OneSignalNotificationServiceExtension"
 
 def github_output(values)
   return unless ENV["GITHUB_OUTPUT"]
