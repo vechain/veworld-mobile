@@ -1,6 +1,6 @@
-app_identifier(["org.vechain.veworld.app", "org.vechain.veworld.app.OneSignalExtension"]) # The bundle identifier of your app
+app_identifier(["org.vechain.veworld.app", "org.vechain.veworld.app.OneSignalNotificationServiceExtension"]) # The bundle identifier of your app
 
-team_id("8CYJM57MNT") # Developer Portal Team ID
+team_id("RKZMX8AZ6P") # Developer Portal Team ID
 
 
 # For more information about the Appfile, see:
