@@ -76,7 +76,7 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>$(PRODUCT_NAME) requires access to your photo album to use media.</string>
 	<key>OneSignal_app_groups_key</key>
-	<string>group.org.veworld.app.onesignal</string>
+	<string>group.org.vechain.veworld.app.onesignal</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UIAppFonts</key>
