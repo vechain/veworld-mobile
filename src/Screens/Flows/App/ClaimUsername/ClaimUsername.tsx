@@ -18,6 +18,7 @@ import { Routes, RootStackParamListHome, RootStackParamListSettings } from "~Nav
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { DEVICE_TYPE } from "~Model"
 
 type Props = NativeStackScreenProps<RootStackParamListHome | RootStackParamListSettings, Routes.CLAIM_USERNAME>
 
@@ -41,6 +42,8 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
     const trackEvent = useAnalyticTracking()
 
     const currentAccount = useAppSelector(selectSelectedAccount)
+    // The vet.domains sponsor does not cover smart accounts, so they pay the fee on a confirmation screen
+    const isSmartWallet = currentAccount.device.type === DEVICE_TYPE.SMART_WALLET
 
     const isFieldValid = useMemo(() => {
         if (subdomain.length < MIN_CHARS) {
@@ -112,12 +115,14 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
     )
 
     const onSubmit = useCallback(() => {
-        if (!isWalletSecurityBiometrics) {
+        if (isSmartWallet) {
+            navigation.navigate(Routes.CLAIM_USERNAME_CONFIRM, { subdomain })
+        } else if (!isWalletSecurityBiometrics) {
             openPasswordPrompt()
         } else {
             onClaimUsername()
         }
-    }, [isWalletSecurityBiometrics, onClaimUsername, openPasswordPrompt])
+    }, [isSmartWallet, isWalletSecurityBiometrics, navigation, onClaimUsername, openPasswordPrompt, subdomain])
 
     const isNotAvailable = useMemo(() => isAvailable === false, [isAvailable])
 
@@ -194,7 +199,9 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                     <BaseView style={[styles.contentContainer]}>
                         {/* Body */}
                         <BaseView flexGrow={1}>
-                            <BaseText typographyFont="body">{LL.SB_CLAIM_USERNAME()}</BaseText>
+                            <BaseText typographyFont="body">
+                                {isSmartWallet ? LL.SB_CLAIM_USERNAME_SMART_WALLET() : LL.SB_CLAIM_USERNAME()}
+                            </BaseText>
                             <BaseSpacer height={40} />
                             {/* Input container */}
                             <BaseView mb={8} flexDirection="row" justifyContent="space-between">
