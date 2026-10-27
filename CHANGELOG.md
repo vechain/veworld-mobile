@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.6.1 (2026-10-27)
+
+### Bug Fixes
+
+* **ios:** count builds from before the team transfer when picking the build number ([#4010](https://github.com/vechain/veworld-mobile/issues/4010)) ([3e85645](https://github.com/vechain/veworld-mobile/commit/3e856450e0f85c223a9b0d7aa8232a946c6442f8))
+
 ## 2.6.1 (2026-10-20)
 
 ### Bug Fixes
