@@ -194,9 +194,12 @@ platform :ios do
   end
 
   # TestFlight lists every upload, including failed and processing ones, so its latest build is the one to beat.
+  # Builds uploaded while the app belonged to another team are missing from that list but keep their numbers.
   private_lane :set_next_build_number do |options|
     latest = latest_testflight_build_number(api_key: options[:api_key], app_identifier: APP_IDENTIFIER)
-    increment_build_number(build_number: latest + 1, xcodeproj: "VeWorld.xcodeproj")
+    app = Spaceship::ConnectAPI::App.find(APP_IDENTIFIER)
+    recent = Spaceship::ConnectAPI.get_builds(filter: { app: app.id }, includes: nil, sort: "-uploadedDate", limit: 50).map { |build| build.version.to_i }
+    increment_build_number(build_number: [latest.to_i, *recent].max + 1, xcodeproj: "VeWorld.xcodeproj")
   end
 
   # Checked before the release starts, so the failure cleanup never deletes a branch this run didn't create.
