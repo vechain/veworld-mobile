@@ -68,7 +68,7 @@ jobs:
 
             # Only main writes the cache: PR-scoped copies would evict it from the 10 GB quota.
             - name: Save dependency cache
-              if: github.ref == 'refs/heads/main' && matrix.shard == 1
+              if: (github.ref == 'refs/heads/main' || github.head_ref == 'ci/unit-test-install-cache') && matrix.shard == 1
               uses: ./.github/actions/yarn-cache
               with:
                   mode: save
