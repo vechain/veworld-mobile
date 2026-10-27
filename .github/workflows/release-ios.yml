@@ -51,7 +51,11 @@ jobs:
               uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
               with:
                   node-version-file: .nvmrc
-                  cache: "yarn"
+
+            - name: Restore dependency cache
+              uses: ./.github/actions/yarn-cache
+              with:
+                  mode: restore
 
             - name: Select Xcode 26.2
               run: |
@@ -61,6 +65,12 @@ jobs:
             - name: Install Node.js dependencies
               run: |
                   yarn install:all
+
+            - name: Save dependency cache
+              if: github.ref == 'refs/heads/main'
+              uses: ./.github/actions/yarn-cache
+              with:
+                  mode: save
 
             # Install Homebrew and applesimutils for Detox
             - name: Install macOS dependencies

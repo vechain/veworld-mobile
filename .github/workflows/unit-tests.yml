@@ -22,7 +22,7 @@ jobs:
                   if [ -z "$PR" ]; then echo "code=true" >> "$GITHUB_OUTPUT"; exit 0; fi
                   files=$(gh api --paginate "/repos/$REPO/pulls/$PR/files" --jq '.[].filename')
                   if echo "$files" | grep -qvE '^(\.github|docs)/|\.md$' ||
-                      echo "$files" | grep -qE '^\.github/workflows/(unit-tests|install-build-test-scan)\.yml$'; then
+                      echo "$files" | grep -qE '^\.github/(workflows/(unit-tests|install-build-test-scan)\.yml|actions/yarn-cache/)'; then
                       echo "code=true" >> "$GITHUB_OUTPUT"
                   else
                       echo "code=false" >> "$GITHUB_OUTPUT"
@@ -49,25 +49,12 @@ jobs:
               with:
                   node-version-file: .nvmrc
 
-            - name: Locate yarn cache
-              id: yarn-cache
-              run: echo "dir=$(yarn cache dir)" >> "$GITHUB_OUTPUT"
-
-            # restore-keys lets a lockfile change reuse the previous cache instead of
-            # refetching everything; _libvips/_prebuilds hold sharp's binary downloads.
             - name: Restore dependency cache
-              uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+              uses: ./.github/actions/yarn-cache
               with:
-                  path: |
-                      ${{ steps.yarn-cache.outputs.dir }}
-                      ${{ runner.temp }}/npm-cache/_libvips
-                      ${{ runner.temp }}/npm-cache/_prebuilds
-                  key: deps-${{ runner.os }}-${{ hashFiles('yarn.lock', 'cli-tools/json-abi-to-ts/yarn.lock') }}
-                  restore-keys: deps-${{ runner.os }}-
+                  mode: restore
 
             - name: Install & Patch packages
-              env:
-                  npm_config_cache: ${{ runner.temp }}/npm-cache
               run: |
                   yarn abi:install
                   yarn abi:build
@@ -78,6 +65,13 @@ jobs:
                   done
                   yarn abi:generate
                   yarn generate:indexer-schema:mainnet
+
+            # Only main writes the cache: PR-scoped copies would evict it from the 10 GB quota.
+            - name: Save dependency cache
+              if: github.ref == 'refs/heads/main' && matrix.shard == 1
+              uses: ./.github/actions/yarn-cache
+              with:
+                  mode: save
 
             - name: Lint, Format Check & TS Check
               run: yarn lint && yarn format:check && yarn ts-check

@@ -1,0 +1,62 @@
+name: Yarn dependency cache
+description: Restores or saves the yarn and sharp download caches shared by CI, e2e and release workflows.
+
+inputs:
+    mode:
+        description: "`restore` before yarn install, `save` after it"
+        required: true
+
+runs:
+    using: composite
+    steps:
+        - name: Locate caches
+          id: cache
+          shell: bash
+          env:
+              KEY: deps-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('yarn.lock', 'cli-tools/json-abi-to-ts/yarn.lock') }}
+          run: |
+              echo "key=$KEY" >> "$GITHUB_OUTPUT"
+              echo "yarn=$(yarn cache dir)" >> "$GITHUB_OUTPUT"
+
+        # The fallback key keeps lockfile changes from refetching everything; the
+        # prune below stops that fallback from carrying stale packages forward.
+        # ~/.npm/_libvips and _prebuilds are where sharp's install script downloads to.
+        - name: Restore
+          if: inputs.mode == 'restore'
+          uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+          with:
+              path: |
+                  ${{ steps.cache.outputs.yarn }}
+                  ~/.npm/_libvips
+                  ~/.npm/_prebuilds
+              key: ${{ steps.cache.outputs.key }}
+              restore-keys: deps-${{ runner.os }}-${{ runner.arch }}-
+
+        - name: Check for an existing entry
+          id: existing
+          if: inputs.mode == 'save'
+          uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+          with:
+              path: |
+                  ${{ steps.cache.outputs.yarn }}
+                  ~/.npm/_libvips
+                  ~/.npm/_prebuilds
+              key: ${{ steps.cache.outputs.key }}
+              lookup-only: true
+
+        - name: Prune to lockfile
+          if: inputs.mode == 'save' && steps.existing.outputs.cache-hit != 'true'
+          shell: bash
+          env:
+              CACHE_DIR: ${{ steps.cache.outputs.yarn }}
+          run: node "$GITHUB_ACTION_PATH/prune.mjs" "$CACHE_DIR" yarn.lock cli-tools/json-abi-to-ts/yarn.lock
+
+        - name: Save
+          if: inputs.mode == 'save' && steps.existing.outputs.cache-hit != 'true'
+          uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+          with:
+              path: |
+                  ${{ steps.cache.outputs.yarn }}
+                  ~/.npm/_libvips
+                  ~/.npm/_prebuilds
+              key: ${{ steps.cache.outputs.key }}
