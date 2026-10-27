@@ -50,7 +50,11 @@ jobs:
               uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
               with:
                   node-version-file: .nvmrc
-                  cache: "yarn"
+
+            - name: Restore dependency cache
+              uses: ./.github/actions/yarn-cache
+              with:
+                  mode: restore
 
             - name: Configure Git user
               run: |
