@@ -33,8 +33,9 @@ jobs:
         if: needs.changes.outputs.code == 'true'
         runs-on: ubuntu-24.04
         strategy:
+            # Lint rides the matrix so it shares the install steps and runs alongside the shards.
             matrix:
-                shard: [1, 2, 3, 4]
+                task: [lint, "1", "2", "3", "4"]
             fail-fast: false
         permissions:
             contents: read
@@ -68,29 +69,45 @@ jobs:
 
             # Only main writes the cache: PR-scoped copies would evict it from the 10 GB quota.
             - name: Save dependency cache
-              if: github.ref == 'refs/heads/main' && matrix.shard == 1
+              if: github.ref == 'refs/heads/main' && matrix.task == 'lint'
               uses: ./.github/actions/yarn-cache
               with:
                   mode: save
 
             - name: Lint, Format Check & TS Check
+              if: matrix.task == 'lint'
               run: yarn lint && yarn format:check && yarn ts-check
 
             - name: Tests with Coverage
+              if: matrix.task != 'lint'
               env:
                   NODE_OPTIONS: "--max_old_space_size=8192"
                   REACT_APP_WALLET_CONNECT_PROJECT_ID: "f1c07ceecbc6115eaa26b2221c2e43cd"
-              run: yarn test:coverage --shard=${{ matrix.shard }}/${{ strategy.job-total }} | tee ./coverage.txt  && exit ${PIPESTATUS[0]}
+                  SHARD: ${{ matrix.task }}
+              run: yarn test:coverage --shard=$SHARD/4 --json --outputFile=jest-results.json | tee ./coverage.txt  && exit ${PIPESTATUS[0]}
 
             - name: Upload coverage folder
-              run: mkdir -p $COVERAGE_PARENT_FOLDER && mv coverage/coverage-final.json $COVERAGE_PARENT_FOLDER/${{ matrix.shard }}.json
+              if: matrix.task != 'lint'
+              env:
+                  SHARD: ${{ matrix.task }}
+              run: mkdir -p $COVERAGE_PARENT_FOLDER && mv coverage/coverage-final.json $COVERAGE_PARENT_FOLDER/$SHARD.json
 
             - name: Upload coverage folder
+              if: matrix.task != 'lint'
               uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
-                  name: coverage-artifacts-${{ matrix.shard }}
+                  name: coverage-artifacts-${{ matrix.task }}
                   path: ${{ env.COVERAGE_PARENT_FOLDER }}
                   retention-days: 1
+
+            # Input for scripts/update-jest-shard-timings.mjs.
+            - name: Upload test timings
+              if: matrix.task != 'lint'
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+              with:
+                  name: jest-results-${{ matrix.task }}
+                  path: jest-results.json
+                  retention-days: 7
 
     coverage:
         runs-on: ubuntu-24.04

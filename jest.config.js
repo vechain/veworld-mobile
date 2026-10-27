@@ -90,6 +90,7 @@ module.exports = {
         Intl: "<rootDir>/node_modules/intl/",
     },
     resolver: "<rootDir>/src/Test/jestResolver.js",
+    testSequencer: "<rootDir>/src/Test/jestShardSequencer.js",
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     testMatch: ["**/*.(spec|test).(ts|tsx|js|jsx)"],
     collectCoverageFrom: ["**src/**/*.{js,jsx,ts,tsx}"],
