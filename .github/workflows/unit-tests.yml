@@ -48,13 +48,34 @@ jobs:
               uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
               with:
                   node-version-file: .nvmrc
-                  cache: "yarn"
+
+            - name: Locate yarn cache
+              id: yarn-cache
+              run: echo "dir=$(yarn cache dir)" >> "$GITHUB_OUTPUT"
+
+            # restore-keys lets a lockfile change reuse the previous cache instead of
+            # refetching everything; _libvips/_prebuilds hold sharp's binary downloads.
+            - name: Restore dependency cache
+              uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+              with:
+                  path: |
+                      ${{ steps.yarn-cache.outputs.dir }}
+                      ${{ runner.temp }}/npm-cache/_libvips
+                      ${{ runner.temp }}/npm-cache/_prebuilds
+                  key: deps-${{ runner.os }}-${{ hashFiles('yarn.lock', 'cli-tools/json-abi-to-ts/yarn.lock') }}
+                  restore-keys: deps-${{ runner.os }}-
 
             - name: Install & Patch packages
+              env:
+                  npm_config_cache: ${{ runner.temp }}/npm-cache
               run: |
                   yarn abi:install
                   yarn abi:build
-                  yarn install
+                  for attempt in 1 2 3; do
+                      yarn install --network-timeout 300000 && break
+                      [ "$attempt" = 3 ] && exit 1
+                      sleep 20
+                  done
                   yarn abi:generate
                   yarn generate:indexer-schema:mainnet
 
