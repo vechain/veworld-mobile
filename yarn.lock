@@ -16672,7 +16672,7 @@ react-keyed-flatten-children@^1.3.0:
   dependencies:
     react-is "^16.8.6"
 
-react-native-android-location-enabler@^3.0.1:
+react-native-android-location-enabler@3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/react-native-android-location-enabler/-/react-native-android-location-enabler-3.0.1.tgz#b263b1fbac1491888601ccff9ef88430a13dc7ed"
   integrity sha512-X4gHdEFf/dqSNhVDQ2cQUibnNRd6xIG34UGDMnwoCKIPLC2wYzALs/gPrDnjrAWsuxjaleZXwUIrX3o9nbtsgw==
@@ -16690,7 +16690,7 @@ react-native-ble-plx@3.2.1:
     "@expo/config-plugins" "^7.2.5 || ^8.0.0"
     expo "^51.0.14"
 
-react-native-blob-util@^0.19.11:
+react-native-blob-util@0.19.11:
   version "0.19.11"
   resolved "https://registry.yarnpkg.com/react-native-blob-util/-/react-native-blob-util-0.19.11.tgz#20c0ca589e975fee849cba1cdba712cc6adb4f59"
   integrity sha512-lxaeDzFLYffR6lbRiOce0oTYO6pE3/PyT8Sa7qiz8B+IT9oe4G85SlVCdl5F9xMJh/Zer2onBLw7u+B1AS+GFA==
@@ -16698,7 +16698,7 @@ react-native-blob-util@^0.19.11:
     base-64 "0.1.0"
     glob "^10.3.10"
 
-react-native-bootsplash@^6.3.7:
+react-native-bootsplash@6.3.11:
   version "6.3.11"
   resolved "https://registry.yarnpkg.com/react-native-bootsplash/-/react-native-bootsplash-6.3.11.tgz#5ed543e5273d7d75912dbfc56c5b0a66bb4ee924"
   integrity sha512-VA102LDBPyqMJzRtIb5H6MWsKSSpjzW49e34E2kpOivmkYllLlOpkpB/Q6Yvrt4u3EbkgOxB5gerJERhvcO4Tg==
@@ -16725,7 +16725,7 @@ react-native-bouncy-checkbox@^4.1.2:
   dependencies:
     "@freakycoder/react-native-bounceable" "^1.0.3"
 
-react-native-context-menu-view@^1.16.0:
+react-native-context-menu-view@1.18.0:
   version "1.18.0"
   resolved "https://registry.yarnpkg.com/react-native-context-menu-view/-/react-native-context-menu-view-1.18.0.tgz#3e997cd389f1cee4324c0ef827ab70f15f758d8c"
   integrity sha512-Rj4ralJ1hQUiTCduTI8EH1MEd1n3FNOas6tQhX4kLgcb0ZiqZPYAiLlA4WMClYrstD3gVnl3EU8y+5es1ulolw==
@@ -16735,14 +16735,14 @@ react-native-device-info@^13.1.0:
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-13.2.0.tgz#2b4026daf59dd08d82b6d65b63c18cb26f310ed2"
   integrity sha512-VpTxHZsEZ7kes2alaZkB31278KuSPXfTZ4TmCCN77+bYxNnaHUDiBiQ1TSoKAOp51b7gZ/7EvM4McfgHofcTBQ==
 
-react-native-dotenv@^3.4.11:
+react-native-dotenv@3.4.11:
   version "3.4.11"
   resolved "https://registry.yarnpkg.com/react-native-dotenv/-/react-native-dotenv-3.4.11.tgz#2e6c4eabd55d5f1bf109b3dd9141dadf9c55cdd4"
   integrity sha512-6vnIE+WHABSeHCaYP6l3O1BOEhWxKH6nHAdV7n/wKn/sciZ64zPPp2NUdEUf1m7g4uuzlLbjgr+6uDt89q2DOg==
   dependencies:
     dotenv "^16.4.5"
 
-react-native-draggable-flatlist@^4.0.3:
+react-native-draggable-flatlist@4.0.3:
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/react-native-draggable-flatlist/-/react-native-draggable-flatlist-4.0.3.tgz#eb0bb3149059f48855b53aeb9728ab2eb361e4db"
   integrity sha512-2F4x5BFieWdGq9SetD2nSAR7s7oQCSgNllYgERRXXtNfSOuAGAVbDb/3H3lP0y5f7rEyNwabKorZAD/SyyNbDw==
@@ -16759,7 +16759,7 @@ react-native-edge-to-edge@1.8.2:
   resolved "https://registry.yarnpkg.com/react-native-edge-to-edge/-/react-native-edge-to-edge-1.8.2.tgz#965e8956e02488e30305c2e124c834662e18d5b5"
   integrity sha512-9yhI/RpaXVkMqFKNHz72A7Vi8KrT6BqDcY8HOdck/so+qH0fq1EkIeNTSLplnoFW84DcLn2D7s9L/xfYSN8gyQ==
 
-react-native-fast-image@^8.6.3:
+react-native-fast-image@8.6.3:
   version "8.6.3"
   resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.6.3.tgz#6edc3f9190092a909d636d93eecbcc54a8822255"
   integrity sha512-Sdw4ESidXCXOmQ9EcYguNY2swyoWmx53kym2zRsvi+VeFCHEdkO+WG1DK+6W81juot40bbfLNhkc63QnWtesNg==
@@ -16864,7 +16864,7 @@ react-native-nitro-modules@0.37.1:
   resolved "https://registry.yarnpkg.com/react-native-nitro-modules/-/react-native-nitro-modules-0.37.1.tgz#368bda3038ebe796b219d98e0a364f9166e2cc7c"
   integrity sha512-KpW6EQVQ/bfegpCGxN9Be+ndvsfj56t4IESEvCASu9gWpJa/NDfHpIeIwCOvZQ3eXmLEj6YD4wCLqcC1FJPr2w==
 
-react-native-onesignal@^5.2.5:
+react-native-onesignal@5.2.9:
   version "5.2.9"
   resolved "https://registry.yarnpkg.com/react-native-onesignal/-/react-native-onesignal-5.2.9.tgz#1d9b19caaa604fc0340909428f0d55ff4fb735d9"
   integrity sha512-0/MRRZkR5hDPBedDmBNn6iopYCA/q/34aLHq1WxanBOMd8nNzyhDJ0qN9zJn8ZZUEM9SlR52YRPCXUB+NqJPkw==
@@ -16964,7 +16964,7 @@ react-native-screenshot-prevent@^1.2.2:
   resolved "https://registry.yarnpkg.com/react-native-screenshot-prevent/-/react-native-screenshot-prevent-1.2.2.tgz#2c307af25af2bccf2796ca9b2cbff4b88d7260c6"
   integrity sha512-aP6ZOs6sLeSAFGc30EC+XfCP4aFSWr4Q+LxKf8CIvKq2gi+viKQRBZZQJY4vcMx65UJvhxnB174hMScGRqGCTA==
 
-react-native-scrypt@^1.2.1:
+react-native-scrypt@1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-scrypt/-/react-native-scrypt-1.2.1.tgz#22323d56fec370a9fb6ece143a5104e32af39195"
   integrity sha512-y03UtSmpY6RtdNB4Ne3yxe7xFNl2BYQMB59p+/iJGch+9eJ05Lw8DObX9dOA/bldlCljtP3KsCiZmf/rwrzeSA==
@@ -17007,7 +17007,7 @@ react-native-svg@15.15.5:
     css-select "^5.1.0"
     css-tree "^1.1.3"
 
-react-native-swipeable-item@^2.0.9:
+react-native-swipeable-item@2.0.9:
   version "2.0.9"
   resolved "https://registry.yarnpkg.com/react-native-swipeable-item/-/react-native-swipeable-item-2.0.9.tgz#694a3f10333b47ba7f0e57d916fa39407b76a6d6"
   integrity sha512-NUBX5Xs8cYCU7lWj5O/NtY7kq8I9dIo3eQVtnSbfYU39RXi/n0TpRqpmaQTPM6sE5EQR/BcygD4jwDcrE5h/sQ==
@@ -17060,7 +17060,7 @@ react-native-view-shot@5.1.1:
   dependencies:
     html2canvas "^1.4.1"
 
-react-native-wagmi-charts@^2.5.3:
+react-native-wagmi-charts@2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/react-native-wagmi-charts/-/react-native-wagmi-charts-2.6.0.tgz#3e58477c73908e54d5e6274a27d16b96bb80ca66"
   integrity sha512-IITGLDjZWcESZaoDqTWQxIo+JDFERqFD85dJlCFUqtN/Arzkl4OhWHSsIb5p0x5bNxN3rGHhLdU19cU/rqAvww==
