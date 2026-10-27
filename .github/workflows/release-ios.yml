@@ -25,11 +25,11 @@ on:
 jobs:
     build-release-ios:
         name: Build release for iOS
-        runs-on: macos-26-xlarge
+        runs-on: xcode-27-xlarge
         # Secrets: docs/release-secrets.md
         environment: ios-release
         env:
-            DEVELOPER_DIR: /Applications/Xcode_26.2.app/Contents/Developer
+            DEVELOPER_DIR: /Applications/Xcode_27.1.app/Contents/Developer
         outputs:
             version: ${{ steps.fastlane.outputs.version }}
             build: ${{ steps.fastlane.outputs.build }}
@@ -57,7 +57,7 @@ jobs:
               with:
                   mode: restore
 
-            - name: Select Xcode 26.2
+            - name: Select Xcode 27.1
               run: |
                   sudo xcode-select -s "$DEVELOPER_DIR"
                   xcodebuild -version
