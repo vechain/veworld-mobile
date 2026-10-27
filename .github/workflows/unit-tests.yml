@@ -22,7 +22,7 @@ jobs:
                   if [ -z "$PR" ]; then echo "code=true" >> "$GITHUB_OUTPUT"; exit 0; fi
                   files=$(gh api --paginate "/repos/$REPO/pulls/$PR/files" --jq '.[].filename')
                   if echo "$files" | grep -qvE '^(\.github|docs)/|\.md$' ||
-                      echo "$files" | grep -qE '^\.github/workflows/(unit-tests|install-build-test-scan)\.yml$'; then
+                      echo "$files" | grep -qE '^\.github/(workflows/(unit-tests|install-build-test-scan)\.yml|actions/yarn-cache/)'; then
                       echo "code=true" >> "$GITHUB_OUTPUT"
                   else
                       echo "code=false" >> "$GITHUB_OUTPUT"
@@ -48,15 +48,30 @@ jobs:
               uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
               with:
                   node-version-file: .nvmrc
-                  cache: "yarn"
+
+            - name: Restore dependency cache
+              uses: ./.github/actions/yarn-cache
+              with:
+                  mode: restore
 
             - name: Install & Patch packages
               run: |
                   yarn abi:install
                   yarn abi:build
-                  yarn install
+                  for attempt in 1 2 3; do
+                      yarn install --network-timeout 300000 && break
+                      [ "$attempt" = 3 ] && exit 1
+                      sleep 20
+                  done
                   yarn abi:generate
                   yarn generate:indexer-schema:mainnet
+
+            # Only main writes the cache: PR-scoped copies would evict it from the 10 GB quota.
+            - name: Save dependency cache
+              if: github.ref == 'refs/heads/main' && matrix.shard == 1
+              uses: ./.github/actions/yarn-cache
+              with:
+                  mode: save
 
             - name: Lint, Format Check & TS Check
               run: yarn lint && yarn format:check && yarn ts-check
