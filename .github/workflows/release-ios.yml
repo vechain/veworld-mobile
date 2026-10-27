@@ -4,7 +4,7 @@ on:
     workflow_dispatch:
         inputs:
             version:
-                description: "Version, or patch/minor/major. Defaults to package.json"
+                description: "Version. Defaults to package.json"
                 type: string
                 required: false
 
@@ -14,11 +14,9 @@ on:
                 value: ${{ jobs.build-release-ios.outputs.version }}
             build:
                 value: ${{ jobs.build-release-ios.outputs.build }}
-            pr_branch:
-                value: ${{ jobs.build-release-ios.outputs.pr_branch }}
         inputs:
             version:
-                description: "Version, or patch/minor/major. Defaults to package.json"
+                description: "Version. Defaults to package.json"
                 type: string
                 required: false
 
@@ -33,18 +31,10 @@ jobs:
         outputs:
             version: ${{ steps.fastlane.outputs.version }}
             build: ${{ steps.fastlane.outputs.build }}
-            pr_branch: ${{ steps.fastlane.outputs.pr_branch }}
-
-        # Proceed only if it's either not a release event or it's a pre-release.
-        if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
 
         steps:
             - name: Checkout repository
               uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-              with:
-                  # If it's a pre-release, check out the tag corresponding to the pre-release;
-                  # otherwise, use the triggering branch unless it's a non-pre-release event.
-                  ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
 
             # Setup Node.js
             - name: Setup Node
@@ -137,7 +127,7 @@ jobs:
                   git config --local user.name  "github-actions[bot]"
                   git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
                   cd fastlane
-                  fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} ${INPUTS_VERSION:+version:"$INPUTS_VERSION"}
+                  fastlane build_ci ${INPUTS_VERSION:+version:"$INPUTS_VERSION"}
 
             - name: Notify Slack
               if: always()

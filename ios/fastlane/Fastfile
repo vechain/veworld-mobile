@@ -23,42 +23,6 @@ default_platform(:ios)
 
 platform :ios do
 
-  desc "Create changelog"
-  lane :create_changelog do |values|
-
-    Dir.chdir "../.." do # Navigate to the root
-      sh("yarn release:ci")
-    end
-
-    version = values[:version]
-
-    package_json = JSON.parse(File.read("../../package.json"))
-    package_json["version"] = version
-    File.write("../../package.json", JSON.pretty_generate(package_json))
-  end
-
-
-
-  desc "Create Release Branch on GitHub via CI"
-  lane :gh_setup_before_ci do |values|
-    sh("git checkout -b #{values[:branch]}")
-    sh("git remote set-url origin https://#{values[:github_username]}:#{values[:github_token]}@github.com/vechain/veworld-mobile.git")
-    sh("git commit -a -m 'build: init'")
-    sh("git push -u origin #{values[:branch]}")
-  end
-
-
-
-  desc "Commit latest artifacts to GitHub"
-  lane :gh_setup_after do |values|
-    sh("git add --all")
-    sh("git commit -a -m 'build: complete'")
-    # Push the branch to GitHub
-    sh("git push")
-  end
-
-
-
   lane :create_tags_gh do |values|
     build = values[:build]
     version = values[:version]
@@ -71,16 +35,8 @@ platform :ios do
   end
 
 
-  # Without a requested version, release the one in package.json, which every release's artifacts PR updates.
   private_lane :set_release_version do |options|
-    requested = options[:requested]
-    version = if requested.nil?
-      JSON.parse(File.read("../../package.json"))["version"]
-    elsif %w[patch minor major].include?(requested.downcase)
-      increment_version_number(bump_type: requested.downcase, xcodeproj: "VeWorld.xcodeproj")
-    else
-      requested
-    end
+    version = options[:requested] || JSON.parse(File.read("../../package.json"))["version"]
     increment_version_number(version_number: version, xcodeproj: "VeWorld.xcodeproj")
   end
 
@@ -91,23 +47,6 @@ platform :ios do
     app = Spaceship::ConnectAPI::App.find(APP_IDENTIFIER)
     recent = Spaceship::ConnectAPI.get_builds(filter: { app: app.id }, includes: nil, sort: "-uploadedDate", limit: 50).map { |build| build.version.to_i }
     increment_build_number(build_number: [latest.to_i, *recent].max + 1, xcodeproj: "VeWorld.xcodeproj")
-  end
-
-  # Checked before the release starts, so the failure cleanup never deletes a branch this run didn't create.
-  private_lane :ensure_release_branch_is_new do |options|
-    branch = options[:branch]
-    exists = sh("git ls-remote --exit-code --heads origin #{branch}", log: false) { |status| status.success? }
-    UI.user_error!("#{branch} already exists on origin from an earlier run. Delete it and run the release again.") if exists
-  end
-
-  # Each step may fail so that cleanup never hides the original error.
-  private_lane :delete_release_branch do |options|
-    branch = options[:branch]
-    ignore = ->(_) {}
-    clean_build_artifacts
-    sh("git checkout main", error_callback: ignore)
-    sh("git branch -D #{branch}", error_callback: ignore)
-    sh("git push origin --delete #{branch}", error_callback: ignore)
   end
 
   # The distribution certificate lives in the ios-release environment; profiles are fetched (or created) on each run.
@@ -165,22 +104,16 @@ platform :ios do
 
   # Builds the app using specified options.
   #
-  # @param {string} options[:username] - The GitHub username for authentication.
-  # @param {string} options[:token] - The GitHub personal token for authentication.
-  # @param optional {string} options[:version] - "patch", "minor", "major" or an explicit version; defaults to package.json.
+  # @param optional {string} options[:version] - Version to release; defaults to package.json.
   desc "Push a new beta build to TestFlight"
   lane :build_ci do |options|
-    github_username = options[:username]
-    github_token = options[:token]
     setup_ci if ENV['CI']
 
     api_key = app_store_connect_api_key
 
     version = set_release_version(requested: options[:version])
     build = set_next_build_number(api_key: api_key)
-    branch = "release-build-ci-#{build}-#{version}"
-    github_output(version: version, build: build, pr_branch: branch)
-    ensure_release_branch_is_new(branch: branch)
+    github_output(version: version, build: build)
 
     # clean build artifacts if any
     clean_build_artifacts
@@ -193,52 +126,32 @@ platform :ios do
     end
 
 
-    begin
-      gh_setup_before_ci(github_username: github_username, github_token: github_token, branch: branch)
+    install_signing(api_key: api_key)
 
-      install_signing(api_key: api_key)
-
-      build_app(
-        workspace: "VeWorld.xcworkspace",
-        scheme: "VeWorld",
-        export_method: "app-store",
-        export_options: {
-          signingStyle: "manual",
-          provisioningProfiles: { APP_IDENTIFIER => APP_PROFILE_NAME, EXTENSION_IDENTIFIER => EXTENSION_PROFILE_NAME },
-        },
-        clean: true,
-        build_path: "./build",
-        output_directory: "./build",
-      )
-
-      verify_entitlements(ipa: lane_context[SharedValues::IPA_OUTPUT_PATH])
-
-      upload_to_testflight(
-        api_key: api_key,
-        skip_waiting_for_build_processing: true,
-        apple_id: "6446854569",
-        ipa: "./build/VeWorld.ipa",
-      )
-    rescue
-      delete_release_branch(branch: branch)
-      raise
-    end
-
-    # The build is on TestFlight from here, so a failure keeps its branch and tag.
-    create_changelog(version:version)
-
-    create_tags_gh(build:build, version:version)
-
-    gh_setup_after
-
-    create_pull_request(
-      api_token: github_token,
-      repo: "vechain/veworld-mobile",
-      title: "version: build artifacts version-#{version} build-#{build} [iOS]",
-      base: "main",
-      body: "This PR was automatically created by the CI pipeline.",
-      api_url: "https://api.github.com"
+    build_app(
+      workspace: "VeWorld.xcworkspace",
+      scheme: "VeWorld",
+      export_method: "app-store",
+      export_options: {
+        signingStyle: "manual",
+        provisioningProfiles: { APP_IDENTIFIER => APP_PROFILE_NAME, EXTENSION_IDENTIFIER => EXTENSION_PROFILE_NAME },
+      },
+      clean: true,
+      build_path: "./build",
+      output_directory: "./build",
     )
+
+    verify_entitlements(ipa: lane_context[SharedValues::IPA_OUTPUT_PATH])
+
+    upload_to_testflight(
+      api_key: api_key,
+      skip_waiting_for_build_processing: true,
+      apple_id: "6446854569",
+      ipa: "./build/VeWorld.ipa",
+    )
+
+    # Nothing is committed, so the tag lands on the commit that was built.
+    create_tags_gh(build:build, version:version)
 
     clean_build_artifacts
   end

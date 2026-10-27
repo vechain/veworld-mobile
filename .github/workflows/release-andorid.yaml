@@ -14,10 +14,6 @@ on:
                 description: "Version name. Defaults to package.json"
                 type: string
                 required: false
-            pr_branch:
-                description: "Branch of the iOS release PR to add the Android artifacts to"
-                type: string
-                required: false
 
 jobs:
     build-test-android:
@@ -27,19 +23,13 @@ jobs:
         environment: android-release
         permissions:
             actions: write
-            contents: write
+            contents: read
 
         steps:
             - name: Checkout repository
               uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
-                  ref: ${{ inputs.pr_branch }}
                   fetch-depth: 0
-
-            - name: Check PR_BRANCH
-              run: echo ${INPUTS_PR_BRANCH}
-              env:
-                INPUTS_PR_BRANCH: ${{ inputs.pr_branch }}
 
             - name: Clear Ubuntu junk
               run: |
@@ -55,11 +45,6 @@ jobs:
               uses: ./.github/actions/yarn-cache
               with:
                   mode: restore
-
-            - name: Configure Git user
-              run: |
-                  git config user.name "${GITHUB_ACTOR}"
-                  git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
 
             - name: Install & Patch packages
               run: |
@@ -155,18 +140,6 @@ jobs:
 
             - name: Output Artifact id
               run: echo 'Artifact ID is ${{ steps.upload.outputs.artifact-id }}'
-
-            - name: Commit and Push Changes
-              if: inputs.pr_branch != ''
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  INPUTS_PR_BRANCH: ${{ inputs.pr_branch }}
-              run: |
-                  git config user.name "vechain-ci"
-                  git config user.email "vechain.ci@vechain.org"
-                  git add --all
-                  git commit -m "build: android build artifacts" || echo "No changes to commit"
-                  git push origin HEAD:${INPUTS_PR_BRANCH}
 
             - name: Notify Slack
               if: always()
