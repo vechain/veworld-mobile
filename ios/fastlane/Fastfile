@@ -7,11 +7,10 @@ before_all do
 	Dotenv.load ".env"
 end
 
-# match certificates belong to one Apple team, so each team gets its own branch in the certificates repo; team RKZMX8AZ6P lives on main
-MATCH_GIT_BRANCH = "main"
+TEAM_ID = "RKZMX8AZ6P"
 APP_IDENTIFIER = "org.vechain.veworld.app"
 EXTENSION_IDENTIFIER = "org.vechain.veworld.app.OneSignalNotificationServiceExtension"
-# After the team transfer Apple rejects match's default "match AppStore <id>" names as duplicates; must match PROVISIONING_PROFILE_SPECIFIER in the Xcode project
+# Must match PROVISIONING_PROFILE_SPECIFIER in the Xcode project
 APP_PROFILE_NAME = "VeWorld AppStore #{APP_IDENTIFIER}"
 EXTENSION_PROFILE_NAME = "VeWorld AppStore #{EXTENSION_IDENTIFIER}"
 
@@ -23,108 +22,6 @@ end
 default_platform(:ios)
 
 platform :ios do
-
-  desc "Revoke certificates from Apple Developer Portal" # CAUTION!!! This lane will prompt you to choose which sertificate to revoke. Make sure you choose the right one.
-  lane :nuke_appstore_certificates do
-    match_nuke( # https://docs.fastlane.tools/actions/match_nuke/
-      api_key: app_store_connect_api_key,
-      type: "appstore", # The type of code signing identity to revoke.
-      app_identifier: APP_IDENTIFIER, # The app identifier of your app.
-      readonly: false, # If true, will only print out the commands it would run, without actually running them.
-    )
-  end
-
-  desc "Remove certificates from GitHub"
-  lane :remove_certificates_from_gh do
-    Dir.chdir "../../.." do # Navigate to outside of the project as not have conflicts with this git repo. 
-      puts Dir.pwd # Print the current working directory.
-
-      repo_name = "https://github.com/vechain/veworld-mobile-ios-cert.git"
-      sh("git clone -b #{MATCH_GIT_BRANCH} #{repo_name}") # Clone the repo with the certificates.
-      Dir.chdir "veworld-mobile-ios-cert" # Navigate to the repo with the certificates.
-
-      puts Dir.pwd # Print the current working directory.
-
-      sh("rm -rf certs/distribution/*") # Remove the certificates.
-      sh("rm -rf profiles/appstore/*") # Remove the profiles.
-      sh("git add --all") # Add the changes.
-      sh("git commit -a -m 'chore: remove certificates'") # Commit the changes.
-      sh("git push -u origin #{MATCH_GIT_BRANCH}") # Push the changes to GitHub.
-
-      Dir.chdir ".." # Navigate back outside of the repo.
-      sh("rm -rf veworld-mobile-ios-cert") # Remove the repo folder.
-    end  
-  end
-
-  desc "Generate new certificates"
-  lane :generate_new_certificates do
-    setup_ci if ENV['CI']
-    api_key = app_store_connect_api_key
-
-    # Generate App certs
-    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
-      api_key: api_key,
-      type: "appstore", # The type of code signing identity to generate.
-      app_identifier: APP_IDENTIFIER, # The app identifier of your app.
-      profile_name: APP_PROFILE_NAME, # The provisioning profile name to create on the Dev Portal.
-      force_for_new_devices: true, # If true, will revoke and recreate all provisioning profiles if there are new devices added to the account.
-      readonly: false, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: MATCH_GIT_BRANCH, # The branch to commit the code signing files to.
-      skip_docs: true, # If true, will skip the creation of a README.md file.
-      verbose: true # If true, will print out extra information and debugging info.
-    )
-
-    # Generate Onesignal extension certs
-    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
-      api_key: api_key,
-      type: "appstore", # The type of code signing identity to generate.
-      app_identifier: EXTENSION_IDENTIFIER, # The app identifier of your app.
-      profile_name: EXTENSION_PROFILE_NAME, # The provisioning profile name to create on the Dev Portal.
-      force_for_new_devices: true, # If true, will revoke and recreate all provisioning profiles if there are new devices added to the account.
-      readonly: false, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: MATCH_GIT_BRANCH, # The branch to commit the code signing files to.
-      skip_docs: true, # If true, will skip the creation of a README.md file.
-      verbose: true # If true, will print out extra information and debugging info.
-    )
-  end
-
-  desc "Get certificates"
-  lane :fetch_certificates_from_gh do # Get the certificates from GitHub.
-    # Get Certificates for the App form GitHub
-    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
-      type: "appstore", # The type of code signing identity to generate.
-      app_identifier: [APP_IDENTIFIER, EXTENSION_IDENTIFIER], # The app identifier of your app.
-      readonly: true, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: MATCH_GIT_BRANCH, # The branch to commit the code signing files to.
-      verbose: true # If true, will print out extra information and debugging info.
-    )
-  end
-
-  desc "Get certificates"
-  lane :fetch_certificates_from_gh_for_ci do # Get the certificates from GitHub.
-    setup_ci
-    # Get Certificates for App from GitHub
-    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
-      type: "appstore", # The type of code signing identity to generate.
-      app_identifier: [APP_IDENTIFIER, EXTENSION_IDENTIFIER], # The app identifier of your app.
-      readonly: true, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: MATCH_GIT_BRANCH, # The branch to commit the code signing files to.
-      verbose: true # If true, will print out extra information and debugging info.
-    )
-  end
-
-
-
-  desc "Rotate certificates"
-  lane :rotate_certificates do
-    sh("./rotate_match_password.sh") # Generate new password for the certificates.
-    nuke_appstore_certificates # CAUTION!!! This lane will prompt you to choose which sertificate to revoke. Make sure you choose the right one.
-    remove_certificates_from_gh # Remove the certificates from GitHub.
-    # Before the next step - Need to run fastlane match change_password and use the new password generated in the previous step.
-    generate_new_certificates # Generate new certificates.
-  end
-
-
 
   desc "Create changelog"
   lane :create_changelog do |values|
@@ -141,12 +38,6 @@ platform :ios do
   end
 
 
-
-  desc "Create Release Branch on GitHub for Beta"
-  lane :gh_setup_before do |values|
-    sh("git checkout -b #{values[:branch]}")
-    sh("git remote set-url origin https://#{values[:github_username]}:#{values[:github_token]}@github.com/vechain/veworld-mobile.git")
-  end
 
   desc "Create Release Branch on GitHub via CI"
   lane :gh_setup_before_ci do |values|
@@ -219,77 +110,57 @@ platform :ios do
     sh("git push origin --delete #{branch}", error_callback: ignore)
   end
 
-  # Builds the app using specified options.
-  #
-  # @param {string} options[:username] - The GitHub username for authentication.
-  # @param {string} options[:token] - The GitHub personal token for authentication.
-  # @param optional {string} options[:version] - "patch", "minor", "major" or an explicit version; defaults to package.json.
-  desc "Push a new beta build to TestFlight"
-  lane :build do |options|
-    github_username = options[:username]
-    github_token = options[:token]
+  # The distribution certificate lives in the ios-release environment; profiles are fetched (or created) on each run.
+  private_lane :install_signing do |options|
+    keychain = ENV.fetch("MATCH_KEYCHAIN_NAME")
+    p12_data = Base64.decode64(ENV.fetch("IOS_DIST_CERT_P12_BASE64"))
+    password = ENV.fetch("IOS_DIST_CERT_P12_PASSWORD")
+    p12 = Tempfile.new(["distribution", ".p12"])
+    File.binwrite(p12.path, p12_data)
+    import_certificate(certificate_path: p12.path, certificate_password: password, keychain_name: keychain, keychain_password: "")
+    p12.close!
+    FastlaneCore::CertChecker.install_missing_wwdr_certificates(in_keychain: FastlaneCore::Helper.keychain_path(keychain))
 
-    api_key = app_store_connect_api_key
-
-    # clean build artifacts if any
-    clean_build_artifacts
-
-    version = set_release_version(requested: options[:version])
-    build = set_next_build_number(api_key: api_key)
-    branch = "release-build-#{build}-#{version}"
-    github_output(version: version, build: build, pr_branch: branch)
-    ensure_release_branch_is_new(branch: branch)
-
-
-    clear_derived_data
-
-    # update yarn packages and pods
-    Dir.chdir "../.." do
-      sh("yarn purge && yarn install:all")
-    end
-
-
-    begin
-      gh_setup_before(github_username: github_username, github_token: github_token, branch: branch)
-
-      fetch_certificates_from_gh
-
-      build_app(
-        workspace: "VeWorld.xcworkspace",
-        scheme: "VeWorld",
-        export_method: "app-store",
-        clean: true,
-        build_path: "./build",
-        output_directory: "./build",
+    certificate = OpenSSL::PKCS12.new(p12_data, password).certificate.to_der
+    Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.from(hash: options[:api_key])
+    { APP_IDENTIFIER => APP_PROFILE_NAME, EXTENSION_IDENTIFIER => EXTENSION_PROFILE_NAME }.each do |identifier, name|
+      # sigh renames a new profile whose name is taken, which breaks PROVISIONING_PROFILE_SPECIFIER, so clear stale ones first.
+      Spaceship::ConnectAPI::Profile.all(filter: { name: name }, includes: "certificates").each do |profile|
+        next if profile.name != name || (profile.valid? && profile.certificates.any? { |c| Base64.decode64(c.certificate_content) == certificate })
+        UI.important("Deleting profile #{profile.uuid} '#{name}': it cannot sign with the current certificate")
+        profile.delete!
+      end
+      get_provisioning_profile(
+        api_key: options[:api_key],
+        app_identifier: identifier,
+        provisioning_name: name,
+        ignore_profiles_with_different_name: true,
       )
-
-      upload_to_testflight(
-        api_key: api_key,
-        skip_waiting_for_build_processing: true,
-        apple_id: "6446854569",
-        ipa: "./build/VeWorld.ipa",
-      )
-    rescue
-      delete_release_branch(branch: branch)
-      raise
     end
+  end
 
-    # The build is on TestFlight from here, so a failure keeps its branch and tag.
-    create_changelog(version:version)
-
-    create_tags_gh(build:build, version:version)
-
-    gh_setup_after
-
-    create_pull_request(
-      api_token: github_token,
-      repo: "vechain/veworld-mobile",
-      title: "version: build artifacts version-#{version} build-#{build} [iOS]",
-      base: "main",
-      api_url: "https://api.github.com"
-    )
-
-    clean_build_artifacts
+  # A wrong team prefix in application-identifier moves the default keychain group, so users lose their wallets.
+  private_lane :verify_entitlements do |options|
+    bundles = {
+      "Payload/VeWorld.app" => [APP_IDENTIFIER, "../VeWorld/VeWorld.entitlements"],
+      "Payload/VeWorld.app/PlugIns/OneSignalNotificationServiceExtension.appex" => [EXTENSION_IDENTIFIER, "../OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements"],
+    }
+    Dir.mktmpdir do |dir|
+      sh("unzip", "-q", options[:ipa], "-d", dir, log: false)
+      bundles.each do |bundle, (identifier, source)|
+        signed = Plist.parse_xml(IO.popen(["codesign", "-d", "--entitlements", "-", "--xml", File.join(dir, bundle)], err: File::NULL, &:read)) || {}
+        problems = []
+        problems << "application-identifier is #{signed["application-identifier"].inspect}" unless signed["application-identifier"] == "#{TEAM_ID}.#{identifier}"
+        problems << "team-identifier is #{signed["com.apple.developer.team-identifier"].inspect}" unless signed["com.apple.developer.team-identifier"] == TEAM_ID
+        Plist.parse_xml(source).each do |key, value|
+          # Scalars such as aps-environment are rewritten from the profile, so only their presence is checked.
+          next if signed.key?(key) && (!value.is_a?(Array) || Array(signed[key]).sort == value.sort)
+          problems << "#{key} is #{signed[key].inspect}, expected #{value.inspect}"
+        end
+        UI.user_error!("#{bundle} entitlements: #{problems.join("; ")}") unless problems.empty?
+      end
+    end
+    UI.success("Entitlements match team #{TEAM_ID}")
   end
 
   # Builds the app using specified options.
@@ -325,16 +196,22 @@ platform :ios do
     begin
       gh_setup_before_ci(github_username: github_username, github_token: github_token, branch: branch)
 
-      fetch_certificates_from_gh_for_ci
+      install_signing(api_key: api_key)
 
       build_app(
         workspace: "VeWorld.xcworkspace",
         scheme: "VeWorld",
         export_method: "app-store",
+        export_options: {
+          signingStyle: "manual",
+          provisioningProfiles: { APP_IDENTIFIER => APP_PROFILE_NAME, EXTENSION_IDENTIFIER => EXTENSION_PROFILE_NAME },
+        },
         clean: true,
         build_path: "./build",
         output_directory: "./build",
       )
+
+      verify_entitlements(ipa: lane_context[SharedValues::IPA_OUTPUT_PATH])
 
       upload_to_testflight(
         api_key: api_key,
@@ -413,7 +290,6 @@ platform :ios do
     end
     
     sh "cd ../.. && pwd && npx react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios"
-    fetch_certificates_from_gh_for_ci
       # begin -> rescure == try -> catch
       begin
           xcodebuild(
