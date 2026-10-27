@@ -89,8 +89,6 @@ jobs:
                   working-directory: "."
 
             - name: Build apk with fastlane
-              env:
-                  MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
               run: |
                   echo -e "\nIS_CI_BUILD_ENABLED=true" >> .env.production
                   cd ios/fastlane
