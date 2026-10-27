@@ -123,7 +123,8 @@ jobs:
             - name: Build ipa with fastlane
               id: fastlane
               env:
-                  MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
+                  IOS_DIST_CERT_P12_BASE64: ${{ secrets.IOS_DIST_CERT_P12_BASE64 }}
+                  IOS_DIST_CERT_P12_PASSWORD: ${{ secrets.IOS_DIST_CERT_P12_PASSWORD }}
                   APP_STORE_CONNECT_API_KEY_KEY_ID: ${{ secrets.IOS_ASC_KEY_ID }}
                   APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.IOS_ASC_ISSUER_ID }}
                   APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.IOS_ASC_KEY_P8_BASE64 }}
