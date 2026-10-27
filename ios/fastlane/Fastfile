@@ -11,6 +11,9 @@ end
 MATCH_GIT_BRANCH = "main"
 APP_IDENTIFIER = "org.vechain.veworld.app"
 EXTENSION_IDENTIFIER = "org.vechain.veworld.app.OneSignalNotificationServiceExtension"
+# After the team transfer Apple rejects match's default "match AppStore <id>" names as duplicates; must match PROVISIONING_PROFILE_SPECIFIER in the Xcode project
+APP_PROFILE_NAME = "VeWorld AppStore #{APP_IDENTIFIER}"
+EXTENSION_PROFILE_NAME = "VeWorld AppStore #{EXTENSION_IDENTIFIER}"
 
 def github_output(values)
   return unless ENV["GITHUB_OUTPUT"]
@@ -63,6 +66,7 @@ platform :ios do
       api_key: api_key,
       type: "appstore", # The type of code signing identity to generate.
       app_identifier: APP_IDENTIFIER, # The app identifier of your app.
+      profile_name: APP_PROFILE_NAME, # The provisioning profile name to create on the Dev Portal.
       force_for_new_devices: true, # If true, will revoke and recreate all provisioning profiles if there are new devices added to the account.
       readonly: false, # If true, will only print out the commands it would run, without actually running them.
       git_branch: MATCH_GIT_BRANCH, # The branch to commit the code signing files to.
@@ -75,6 +79,7 @@ platform :ios do
       api_key: api_key,
       type: "appstore", # The type of code signing identity to generate.
       app_identifier: EXTENSION_IDENTIFIER, # The app identifier of your app.
+      profile_name: EXTENSION_PROFILE_NAME, # The provisioning profile name to create on the Dev Portal.
       force_for_new_devices: true, # If true, will revoke and recreate all provisioning profiles if there are new devices added to the account.
       readonly: false, # If true, will only print out the commands it would run, without actually running them.
       git_branch: MATCH_GIT_BRANCH, # The branch to commit the code signing files to.
