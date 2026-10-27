@@ -2,11 +2,6 @@ name: Release - iOS
 
 on:
     workflow_dispatch:
-        inputs:
-            version:
-                description: "Version. Defaults to package.json"
-                type: string
-                required: false
 
     workflow_call:
         outputs:
@@ -14,11 +9,6 @@ on:
                 value: ${{ jobs.build-release-ios.outputs.version }}
             build:
                 value: ${{ jobs.build-release-ios.outputs.build }}
-        inputs:
-            version:
-                description: "Version. Defaults to package.json"
-                type: string
-                required: false
 
 jobs:
     build-release-ios:
@@ -26,6 +16,8 @@ jobs:
         runs-on: xcode-27-xlarge
         # Secrets: docs/release-secrets.md
         environment: ios-release
+        permissions:
+            contents: write
         env:
             DEVELOPER_DIR: /Applications/Xcode_27.1.app/Contents/Developer
         outputs:
@@ -119,7 +111,6 @@ jobs:
                   APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.IOS_ASC_ISSUER_ID }}
                   APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.IOS_ASC_KEY_P8_BASE64 }}
                   APP_STORE_CONNECT_API_KEY_IS_KEY_CONTENT_BASE64: "true"
-                  INPUTS_VERSION: ${{inputs.version}}
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
               run: |
                   cd ios
@@ -127,7 +118,7 @@ jobs:
                   git config --local user.name  "github-actions[bot]"
                   git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
                   cd fastlane
-                  fastlane build_ci ${INPUTS_VERSION:+version:"$INPUTS_VERSION"}
+                  fastlane build_ci
 
             - name: Notify Slack
               if: always()
