@@ -3902,6 +3902,10 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_sent_token_transfer: RequiredParams<'amount' | 'token'>
 	/**
+	 * Y​o​u​r​ ​u​s​e​r​n​a​m​e​ ​i​s​ ​t​a​k​i​n​g​ ​l​o​n​g​e​r​ ​t​h​a​n​ ​u​s​u​a​l​ ​t​o​ ​c​o​n​f​i​r​m​.​ ​I​t​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​o​n​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​o​n​c​e​ ​c​o​n​f​i​r​m​e​d​.
+	 */
+	NOTIFICATION_subdomain_pending: string
+	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​{​t​x​I​d​}​ ​w​a​s​ ​r​e​v​e​r​t​e​d​.
 	 * @param {string} txId
 	 */
@@ -4381,6 +4385,10 @@ type RootTranslation = {
 	 * T​h​i​s​ ​u​s​e​r​n​a​m​e​ ​c​a​n​ ​b​e​ ​u​s​e​d​ ​i​n​s​t​e​a​d​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​s​e​n​d​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​o​k​e​n​s​ ​a​n​d​ ​c​o​n​n​e​c​t​ ​t​o​ ​d​A​p​p​s​.​ ​T​h​e​ ​c​l​a​i​m​i​n​g​ ​i​s​ ​f​r​e​e​ ​o​f​ ​c​h​a​r​g​e​.
 	 */
 	SB_CLAIM_USERNAME: string
+	/**
+	 * T​h​i​s​ ​u​s​e​r​n​a​m​e​ ​c​a​n​ ​b​e​ ​u​s​e​d​ ​i​n​s​t​e​a​d​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​s​e​n​d​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​o​k​e​n​s​ ​a​n​d​ ​c​o​n​n​e​c​t​ ​t​o​ ​d​A​p​p​s​.​ ​A​ ​s​m​a​l​l​ ​n​e​t​w​o​r​k​ ​f​e​e​ ​a​p​p​l​i​e​s​ ​w​h​e​n​ ​c​l​a​i​m​i​n​g​.
+	 */
+	SB_CLAIM_USERNAME_SMART_WALLET: string
 	/**
 	 * C​o​l​l​e​c​t​i​b​l​e
 	 */
@@ -10203,6 +10211,10 @@ Unverified apps may be malicious and could put your assets at risk.
 	 */
 	NOTIFICATION_sent_token_transfer: (arg: { amount: string, token: string }) => LocalizedString
 	/**
+	 * Your username is taking longer than usual to confirm. It will appear on your account once confirmed.
+	 */
+	NOTIFICATION_subdomain_pending: () => LocalizedString
+	/**
 	 * Transaction {txId} was reverted.
 	 */
 	NOTIFICATION_transaction_reverted: (arg: { txId: string }) => LocalizedString
@@ -10674,6 +10686,10 @@ Unverified apps may be malicious and could put your assets at risk.
 	 * This username can be used instead of your wallet address to send and receive tokens and connect to dApps. The claiming is free of charge.
 	 */
 	SB_CLAIM_USERNAME: () => LocalizedString
+	/**
+	 * This username can be used instead of your wallet address to send and receive tokens and connect to dApps. A small network fee applies when claiming.
+	 */
+	SB_CLAIM_USERNAME_SMART_WALLET: () => LocalizedString
 	/**
 	 * Collectible
 	 */
