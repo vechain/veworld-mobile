@@ -66,6 +66,10 @@ jobs:
       uses: ./.github/workflows/release-ios.yml
       needs: check-merged-pr
       if: needs.check-merged-pr.outputs.should_release == 'true'
+      # A called workflow can only narrow the caller's token, and the iOS release
+      # pushes a tag and publishes a release through it.
+      permissions:
+        contents: write
       secrets: inherit
 
     release-android:

@@ -129,3 +129,12 @@ jobs:
                   webhook-type: incoming-webhook
                   payload: |
                       text: "${{ job.status == 'success' && ':white_check_mark:' || ':x:' }} iOS release ${{ steps.fastlane.outputs.version || 'unknown version' }} (${{ steps.fastlane.outputs.build || 'no build' }}): ${{ job.status }}\n${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+
+    publish-release:
+        name: Publish release
+        needs: build-release-ios
+        permissions:
+            contents: write
+        uses: ./.github/workflows/publish-release.yml
+        with:
+            tag: v${{ needs.build-release-ios.outputs.version }}-${{ needs.build-release-ios.outputs.build }}

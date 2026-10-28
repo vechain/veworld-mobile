@@ -1,0 +1,77 @@
+name: Publish release
+
+on:
+    workflow_call:
+        inputs:
+            tag:
+                description: "Build tag the release should point at, e.g. v2.6.0-698"
+                required: true
+                type: string
+    workflow_dispatch:
+        inputs:
+            tag:
+                description: "Build tag the release should point at, e.g. v2.6.0-698"
+                required: true
+                type: string
+
+permissions: {}
+
+concurrency:
+    group: publish-release
+    cancel-in-progress: false
+
+jobs:
+    publish:
+        name: Publish release for this version
+        runs-on: ubuntu-24.04
+        permissions:
+            contents: write
+        env:
+            GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            # `gh` walks up looking for a .git to infer the repo, and there is no checkout.
+            GH_REPO: ${{ github.repository }}
+            TAG: ${{ inputs.tag }}
+        steps:
+            # Builds are tagged nightly but a release covers a whole version, so the
+            # version's release is re-pointed at its newest build until the next
+            # version supersedes it.
+            - name: Resolve the version's release
+              id: resolve
+              run: |
+                  set -euo pipefail
+                  version="${TAG%-*}"
+                  gh release list --limit 100 --json tagName,isDraft > releases.json
+                  current=$(jq -r --arg v "$version-" \
+                    'map(select(.tagName | startswith($v))) | .[0].tagName // empty' releases.json)
+                  previous=$(jq -r --arg v "$version-" \
+                    'map(select(.isDraft | not) | select(.tagName | startswith($v) | not)) | .[0].tagName // empty' releases.json)
+                  {
+                    echo "version=$version"
+                    echo "current=$current"
+                    echo "previous=$previous"
+                  } >> "$GITHUB_OUTPUT"
+                  echo "Release ${current:-<new>} for $version, notes from ${previous:-the first commit}"
+
+            - name: Generate notes
+              env:
+                  PREVIOUS: ${{ steps.resolve.outputs.previous }}
+              run: |
+                  set -euo pipefail
+                  args=(-f tag_name="$TAG")
+                  [ -n "$PREVIOUS" ] && args+=(-f previous_tag_name="$PREVIOUS")
+                  gh api "repos/$GH_REPO/releases/generate-notes" "${args[@]}" --jq '.body' > notes.md
+
+            - name: Publish
+              env:
+                  VERSION: ${{ steps.resolve.outputs.version }}
+                  CURRENT: ${{ steps.resolve.outputs.current }}
+              run: |
+                  set -euo pipefail
+                  if [ -n "$CURRENT" ]; then
+                    gh release edit "$CURRENT" --tag "$TAG" --title "$VERSION" \
+                      --notes-file notes.md --draft=false --latest
+                  else
+                    gh release create "$TAG" --title "$VERSION" \
+                      --notes-file notes.md --latest --verify-tag
+                  fi
+                  echo "[$VERSION]($GITHUB_SERVER_URL/$GH_REPO/releases/tag/$TAG) published at \`$TAG\`." >> "$GITHUB_STEP_SUMMARY"
