@@ -1,5 +1,7 @@
 # Changelog
 
+No longer updated. Release notes are on [GitHub Releases](https://github.com/vechain/veworld-mobile/releases).
+
 ## 2.6.1 (2026-10-27)
 
 ### Bug Fixes

@@ -35,7 +35,7 @@ Uploads authenticate with the App Store Connect API key, so no Apple ID or app-s
 
 | Secret | Format | Purpose |
 | --- | --- | --- |
-| `CI_USER`, `CI_USER_TOKEN` | plain | Bot account that pushes release branches |
+| `CI_USER`, `CI_USER_TOKEN` | plain | Bot account that pushes release tags |
 | `RN_ENV_PROD` | base64 file | `.env.production` baked into the app |
 | `SENTRY_AUTH_TOKEN` | plain | Source map and debug symbol uploads during the native build; without it the iOS build fails |
 | `SLACK_RELEASE_WEBHOOK` | plain URL | Posts each release result; a Slack failure never fails the release |

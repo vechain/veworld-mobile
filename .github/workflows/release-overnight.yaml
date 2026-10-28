@@ -74,4 +74,3 @@ jobs:
       secrets: inherit
       with:
         version: ${{ needs.release-ios.outputs.version }}
-        pr_branch: ${{ needs.release-ios.outputs.pr_branch }}

@@ -34,7 +34,6 @@
     "i18n:types": "typesafe-i18n",
     "i18n:generate": "dotenv -e .env.local translo-cli",
     "i18n:generate-diff": "ts-node scripts/remove-changed-translation-keys.ts && yarn i18n:generate",
-    "release:ci": "release-it --ci",
     "prepare": "husky",
     "lint-staged": "lint-staged",
     "translo-cli": "translo-cli",
@@ -235,7 +234,6 @@
     "@react-native/jest-preset": "0.88.0",
     "@react-native/metro-config": "0.88.0",
     "@react-native/typescript-config": "0.88.0",
-    "@release-it/conventional-changelog": "10.0.6",
     "@testing-library/jest-native": "^5.4.3",
     "@testing-library/react-hooks": "^8.0.1",
     "@testing-library/react-native": "^12.7.2",
@@ -279,7 +277,6 @@
     "prettier": "2.8.8",
     "react-native-dotenv": "3.4.11",
     "react-test-renderer": "19.3.0",
-    "release-it": "^19.0.5",
     "translo-cli": "^1.0.10",
     "ts-jest": "^29.4.6",
     "ts-node": "^10.9.2",
@@ -304,37 +301,6 @@
       "eslint --fix",
       "prettier --write"
     ]
-  },
-  "release-it": {
-    "git": {
-      "commit": false,
-      "tag": false,
-      "push": false
-    },
-    "github": {
-      "release": true
-    },
-    "npm": {
-      "publish": false
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "infile": "CHANGELOG.md",
-        "preset": {
-          "name": "conventionalcommits",
-          "types": [
-            {
-              "type": "feat",
-              "section": "Features"
-            },
-            {
-              "type": "fix",
-              "section": "Bug Fixes"
-            }
-          ]
-        }
-      }
-    }
   },
   "packageManager": "yarn@1.22.22+sha256.c17d3797fb9a9115bf375e31bfd30058cac6bc9c3b8807a3d8cb2094794b51ca"
 }
