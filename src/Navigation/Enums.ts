@@ -20,6 +20,7 @@ export enum Routes {
     CHOOSE_DETAILS_BACKUP_PASSWORD = "Choose_Details_Backup_Password",
     USER_CREATE_PASSWORD = "User_Create_Password",
     CLAIM_USERNAME = "Claim_Username",
+    CLAIM_USERNAME_CONFIRM = "Claim_Username_Confirm",
     USERNAME_CLAIMED = "Username_Claimed",
     APP_SECURITY = "App_Security",
     SETTINGS = "Settings",
