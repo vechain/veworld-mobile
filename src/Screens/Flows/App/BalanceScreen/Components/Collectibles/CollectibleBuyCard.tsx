@@ -1,6 +1,7 @@
+import { Pressable } from "react-native-gesture-handler"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { Image, ImageStyle, Pressable, StyleSheet } from "react-native"
+import { Image, ImageStyle, StyleSheet } from "react-native"
 import { CollectiblesEmptyState } from "~Assets"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"

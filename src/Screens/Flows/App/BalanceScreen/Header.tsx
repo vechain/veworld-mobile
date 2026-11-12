@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
-import { LayoutChangeEvent, StyleSheet, TouchableOpacity } from "react-native"
+import { LayoutChangeEvent, StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { clamp, interpolate, SharedValue, useAnimatedStyle, useSharedValue } from "react-native-reanimated"
 import {
@@ -11,6 +11,7 @@ import {
     NetworkSwitcherContextMenu,
     SelectAccountBottomSheet,
     StellaPayBottomSheet,
+    TouchableOpacity,
 } from "~Components"
 import { COLORS, ScanTarget, SCREEN_WIDTH } from "~Constants"
 import { useBottomSheetModal, useCopyClipboard, useIsOnline, useSetSelectedAccount, useThemedStyles } from "~Hooks"

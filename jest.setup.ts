@@ -32,6 +32,15 @@ jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 jest.mock("react-native/src/private/animated/NativeAnimatedHelper.js")
 jest.mock("jail-monkey", () => require("./src/Test/mocks/jail-monkey"))
 jest.mock("react-native-keyboard-controller", () => require("react-native-keyboard-controller/jest"))
+// RNGH 3's Pressable only presses after a native press-in, which RNTL 12's fireEvent can't produce.
+jest.mock("react-native-gesture-handler/src/v3/components/Pressable", () => ({
+    __esModule: true,
+    default: require("react-native").Pressable,
+}))
+jest.mock("react-native-gesture-handler/lib/module/v3/components/Pressable", () => ({
+    __esModule: true,
+    default: require("react-native").Pressable,
+}))
 jest.mock("react-native-onesignal", () => ({
     ...jest.requireActual("react-native-onesignal"),
     OneSignal: {
