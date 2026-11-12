@@ -1,5 +1,6 @@
+import { TouchableOpacity } from "~Components/Base/TouchableOpacity"
 import React, { useEffect, useMemo, useState } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { StyleSheet } from "react-native"
 import { getTimeZone } from "react-native-localize"
 import Animated, { interpolateColor, useAnimatedStyle, withTiming, ZoomIn, ZoomOut } from "react-native-reanimated"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"

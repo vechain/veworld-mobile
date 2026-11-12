@@ -1,4 +1,5 @@
-import { StyleProp, StyleSheet, TextProps, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native"
+import { TouchableOpacity, TouchableOpacityProps } from "./TouchableOpacity"
+import { StyleProp, StyleSheet, TextProps, ViewStyle } from "react-native"
 import React, { useCallback } from "react"
 import { BaseText } from "./BaseText"
 import { TFonts } from "~Constants"

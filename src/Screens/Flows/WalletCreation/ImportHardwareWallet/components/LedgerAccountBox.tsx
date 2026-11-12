@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { StyleSheet } from "react-native"
 import Animated, {
     interpolateColor,
     LinearTransition,
@@ -9,6 +9,7 @@ import Animated, {
     ZoomOut,
 } from "react-native-reanimated"
 import { BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
+import { TouchableOpacity } from "~Components/Base/TouchableOpacity"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useTotalFiatBalance } from "~Hooks/useTotalFiatBalance"

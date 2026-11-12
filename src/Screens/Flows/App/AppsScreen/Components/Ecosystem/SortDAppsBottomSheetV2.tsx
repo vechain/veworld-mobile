@@ -77,7 +77,6 @@ export const SortDAppsBottomSheetV2 = ({ selectedSort, onSortChange, bsRef }: Pr
                 <BaseRadioGroup
                     buttons={buttons}
                     selectedId={internalSort}
-                    isBottomSheet
                     dot={"right"}
                     action={onRadioElementSelected}
                 />

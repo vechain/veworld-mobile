@@ -106,7 +106,7 @@ describe("SwitchWalletBottomSheet", () => {
         const accounts = screen.getAllByTestId("SWITCH_WALLET_ACCOUNT_BOX")
         const lastAccount = accounts[accounts.length - 1]
         await act(() => {
-            fireEvent(lastAccount, "click")
+            fireEvent.press(lastAccount)
         })
 
         expect(postMessage).toHaveBeenCalledWith({

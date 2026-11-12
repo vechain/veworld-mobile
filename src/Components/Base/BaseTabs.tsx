@@ -1,5 +1,6 @@
+import { TouchableOpacity } from "./TouchableOpacity"
 import React, { useCallback, useMemo, useState } from "react"
-import { LayoutChangeEvent, StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
+import { LayoutChangeEvent, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import Animated, { useAnimatedStyle, withDelay, withTiming } from "react-native-reanimated"
 import { COLORS, ColorThemeType, typography } from "~Constants"
 import { useThemedStyles } from "~Hooks"
