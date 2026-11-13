@@ -1,4 +1,5 @@
 export * from "./BaseView"
+export * from "./TouchableOpacity"
 export * from "./BaseSpacer"
 export * from "./BaseText"
 export * from "./BaseSafeArea"

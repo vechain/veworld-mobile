@@ -1,6 +1,6 @@
-import { TouchableOpacity as BottomSheetTouchable } from "@gorhom/bottom-sheet"
+import { TouchableOpacity } from "../TouchableOpacity"
 import React, { useMemo } from "react"
-import { StyleSheet, TextStyle, TouchableOpacity, ViewStyle } from "react-native"
+import { StyleSheet, TextStyle, ViewStyle } from "react-native"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseIcon } from "../BaseIcon"
@@ -13,7 +13,6 @@ type Props = {
     isSelected: boolean
     testID?: string
     disabled?: boolean
-    isBottomSheet?: boolean
     onPress: (id: string) => void
     contentStyle?: ViewStyle
     labelStyle?: TextStyle
@@ -35,7 +34,6 @@ export const BaseRadioButton = ({
     isSelected,
     disabled,
     testID,
-    isBottomSheet,
     onPress,
     contentStyle,
     labelStyle,
@@ -72,10 +70,8 @@ export const BaseRadioButton = ({
         theme.colors.radioButton.textColor,
     ])
 
-    const Touchable = isBottomSheet ? BottomSheetTouchable : TouchableOpacity
-
     return (
-        <Touchable
+        <TouchableOpacity
             testID={testID}
             disabled={disabled}
             style={computeContainerStyles}
@@ -112,7 +108,7 @@ export const BaseRadioButton = ({
                     />
                 )}
             </BaseView>
-        </Touchable>
+        </TouchableOpacity>
     )
 }
 

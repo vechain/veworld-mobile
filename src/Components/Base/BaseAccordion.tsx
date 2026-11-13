@@ -1,5 +1,6 @@
+import { Pressable } from "react-native-gesture-handler"
 import React, { useCallback, useEffect, useMemo } from "react"
-import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import Animated, {
     AnimatedStyle,
     useAnimatedRef,

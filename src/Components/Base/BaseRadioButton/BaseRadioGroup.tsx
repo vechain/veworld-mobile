@@ -14,12 +14,11 @@ type Props<TRadioButtons extends RadioButton<any>[]> = {
     buttons: TRadioButtons
     selectedId: string
     action: (button: TRadioButtons[number]) => void
-} & Pick<ComponentProps<typeof BaseRadioButton>, "isBottomSheet" | "dot">
+} & Pick<ComponentProps<typeof BaseRadioButton>, "dot">
 
 export const BaseRadioGroup = <TRadioButtons extends RadioButton<any>[]>({
     buttons,
     selectedId,
-    isBottomSheet,
     action,
     dot = "right",
 }: Props<TRadioButtons>) => {
@@ -33,7 +32,6 @@ export const BaseRadioGroup = <TRadioButtons extends RadioButton<any>[]>({
                         testID={`RadioButton-${button.id}`}
                         isSelected={selectedId === button.id}
                         {...button}
-                        isBottomSheet={isBottomSheet}
                         dot={dot}
                         onPress={() => action(button)}
                     />

@@ -1,4 +1,5 @@
-import { Pressable, StyleSheet, Text, View } from "react-native"
+import { Pressable } from "react-native-gesture-handler"
+import { StyleSheet, Text, View } from "react-native"
 import React, { useCallback } from "react"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"

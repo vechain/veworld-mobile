@@ -1,6 +1,7 @@
+import { TouchableOpacity } from "~Components"
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { RefObject } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal } from "~Hooks/useBottomSheet"

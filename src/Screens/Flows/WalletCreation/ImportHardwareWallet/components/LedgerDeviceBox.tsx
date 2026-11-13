@@ -1,5 +1,6 @@
+import { TouchableOpacity } from "~Components/Base/TouchableOpacity"
 import React, { useMemo } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { StyleSheet } from "react-native"
 import Animated, {
     interpolateColor,
     LinearTransition,

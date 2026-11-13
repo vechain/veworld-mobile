@@ -1,10 +1,10 @@
 import React, { useCallback } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { StyleSheet } from "react-native"
 import { useSwipeableItemParams } from "react-native-swipeable-item"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 
-import { BaseIcon, BaseView } from "~Components"
+import { BaseIcon, BaseView, TouchableOpacity } from "~Components"
 import { Contact } from "~Model"
 import HapticsService from "~Services/HapticsService"
 
