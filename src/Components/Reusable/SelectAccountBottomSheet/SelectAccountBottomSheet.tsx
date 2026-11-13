@@ -263,5 +263,5 @@ const baseStyles =
             contentContainer: {
                 paddingBottom: PlatformUtils.isAndroid() ? bottomInset + 16 : bottomInset,
             },
-            list: { paddingHorizontal: 16, paddingBottom: 24 },
+            list: { flex: 1, paddingHorizontal: 16, paddingBottom: 24 },
         })
