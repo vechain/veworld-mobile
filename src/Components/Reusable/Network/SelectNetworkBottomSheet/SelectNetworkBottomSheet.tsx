@@ -1,7 +1,7 @@
 import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { SectionListData, SectionListRenderItemInfo, StyleSheet } from "react-native"
+import { SectionList, SectionListData, SectionListRenderItemInfo, StyleSheet } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import {
     BaseBottomSheet,
@@ -13,7 +13,6 @@ import {
     SectionListSeparator,
     TouchableOpacity,
 } from "~Components"
-import { BottomSheetSectionList } from "~Components/Reusable/BottomSheetLists"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useNetworkList } from "~Hooks/useNetworkList"
@@ -104,7 +103,9 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModal, Props
                     </TouchableOpacity>
                 </BaseView>
 
-                <BottomSheetSectionList
+                {/* The container above scrolls; a sheet scrollable here would resize the dynamic-height sheet to the list. */}
+                <SectionList
+                    scrollEnabled={false}
                     sections={sections}
                     keyExtractor={i => i.id}
                     ItemSeparatorComponent={ItemSeparator}
