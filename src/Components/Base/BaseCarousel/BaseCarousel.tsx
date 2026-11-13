@@ -1,3 +1,4 @@
+import { TouchableOpacity } from "../TouchableOpacity"
 import { BottomSheetFlatList, BottomSheetFlatListMethods } from "@gorhom/bottom-sheet"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
@@ -7,7 +8,6 @@ import {
     ScrollView,
     StyleProp,
     StyleSheet,
-    TouchableOpacity,
     ViewStyle,
 } from "react-native"
 import Animated from "react-native-reanimated"

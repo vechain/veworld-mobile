@@ -1,4 +1,4 @@
-import { BottomSheetModal, TouchableOpacity } from "@gorhom/bottom-sheet"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { SectionList, SectionListData, SectionListRenderItemInfo, StyleSheet } from "react-native"
@@ -11,6 +11,7 @@ import {
     BaseText,
     BaseView,
     SectionListSeparator,
+    TouchableOpacity,
 } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"

@@ -1,5 +1,6 @@
+import { Pressable } from "react-native-gesture-handler"
 import React, { useCallback } from "react"
-import { Pressable, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import Animated, { interpolate, interpolateColor, useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"

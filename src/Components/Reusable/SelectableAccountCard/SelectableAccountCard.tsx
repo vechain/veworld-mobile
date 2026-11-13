@@ -1,5 +1,5 @@
 import { default as React, useCallback, useEffect, useMemo } from "react"
-import { StyleProp, StyleSheet, TouchableOpacity, ViewProps, ViewStyle } from "react-native"
+import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
 import Animated, {
     interpolate,
     interpolateColor,
@@ -9,6 +9,7 @@ import Animated, {
     withTiming,
 } from "react-native-reanimated"
 import { AccountIcon, BaseSkeleton, BaseText, BaseView } from "~Components"
+import { TouchableOpacity } from "~Components/Base/TouchableOpacity"
 import { COLORS, ColorThemeType, typography, VET, VTHO } from "~Constants"
 import { useThemedStyles, useVns } from "~Hooks"
 import { useSimplifiedTokenBalance } from "~Hooks/useTokenBalance"

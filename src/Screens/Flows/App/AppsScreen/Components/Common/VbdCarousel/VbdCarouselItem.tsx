@@ -1,5 +1,6 @@
+import { Pressable } from "react-native-gesture-handler"
 import React, { useMemo } from "react"
-import { Pressable, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import { BaseSpacer, BaseText, BaseView, BlurView, DAppIcon } from "~Components"
 import { FastImageBackground } from "~Components/Reusable/FastImageBackground"
 import { COLORS } from "~Constants"

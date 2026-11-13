@@ -1,4 +1,4 @@
-import { BottomSheetModal, TouchableOpacity as BSTouchableOpacity } from "@gorhom/bottom-sheet"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import React, { ComponentProps, PropsWithChildren, useCallback, useMemo, useState } from "react"
 import { SectionListData, StyleSheet } from "react-native"
@@ -12,6 +12,7 @@ import {
     BaseText,
     BaseView,
     SectionListSeparator,
+    TouchableOpacity as BSTouchableOpacity,
 } from "~Components"
 import { BaseTabs } from "~Components/Base/BaseTabs"
 import { BottomSheetSectionList } from "~Components/Reusable/BottomSheetLists"
