@@ -1,6 +1,6 @@
-import { StyleSheet, TouchableOpacity, ViewProps } from "react-native"
+import { StyleSheet, ViewProps } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseSpacer, BaseText, BaseView, TouchableOpacity } from "~Components"
 import { TokenWithCompleteInfo, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { TokenImage } from "../TokenImage"

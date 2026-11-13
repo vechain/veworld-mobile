@@ -1,6 +1,7 @@
+import { Pressable } from "react-native-gesture-handler"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { FlatList, Pressable } from "react-native"
+import { FlatList } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import {

@@ -1,5 +1,6 @@
+import { Pressable } from "react-native-gesture-handler"
 import React, { useCallback, useMemo, useState } from "react"
-import { GestureResponderEvent, Pressable, StyleSheet, TextLayoutEvent } from "react-native"
+import { GestureResponderEvent, StyleSheet, TextLayoutEvent } from "react-native"
 import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withTiming } from "react-native-reanimated"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"

@@ -1,5 +1,6 @@
+import { TouchableOpacity } from "../TouchableOpacity"
 import React, { memo, useMemo } from "react"
-import { StyleProp, StyleSheet, ViewProps, ViewStyle, TouchableOpacity } from "react-native"
+import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType } from "~Constants"
 import { BaseView } from "../BaseView"

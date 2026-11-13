@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
-import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
+import { StyleSheet } from "react-native"
+import { BaseIcon, BaseText, BaseTouchable, BaseView, TouchableOpacity } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { B3TR, VET, VOT3, VTHO } from "~Constants"
 import { ColorThemeType } from "~Constants/Theme"
