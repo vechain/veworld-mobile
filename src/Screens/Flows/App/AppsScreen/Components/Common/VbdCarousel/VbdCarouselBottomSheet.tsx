@@ -149,7 +149,7 @@ const VbdCarouselBottomSheetContent = ({
         if (!isBookMarked && selectedApp) {
             return dispatch(addBookmark(selectedApp))
         } else {
-            dispatch(removeBookmark({ href: selectedApp?.external_url ?? "" }))
+            dispatch(removeBookmark({ href: selectedApp?.external_url ?? "", veBetterDaoId: selectedApp?.id }))
         }
     }, [selectedApp, dispatch, isBookMarked])
 
