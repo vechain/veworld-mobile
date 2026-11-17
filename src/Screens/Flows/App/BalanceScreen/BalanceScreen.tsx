@@ -31,8 +31,6 @@ import { Header } from "./Header"
 import { TabRenderer } from "./Tabs/TabRenderer"
 import { SmartWalletBackupBottomSheet } from "./Components/SmartWalletBackupBottomSheet"
 
-const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient)
-
 export const BalanceScreen = () => {
     //Pre fetch all VNS names and addresses
     usePrefetchAllVns()
@@ -119,24 +117,27 @@ export const BalanceScreen = () => {
                     style={styles.scrollViewRoot}
                     contentContainerStyle={styles.scrollViewContent}>
                     <Animated.View>
-                        <AnimatedLinearGradient
-                            colors={colors}
-                            start={{ x: 0, y: 0 }}
-                            end={{ x: 0, y: 1 }}
+                        {/* LinearGradient is a legacy-interop view, which Reanimated's iOS fast path leaves stale */}
+                        <Animated.View
                             style={[styles.gradient, balanceScrollAnimationStyles]}
-                            locations={[0, 0.55, 1]}
-                            angle={180}
-                            onLayout={onHeaderLayout}
-                            useAngle>
-                            <CurrentBalance />
+                            onLayout={onHeaderLayout}>
+                            <LinearGradient
+                                colors={colors}
+                                start={{ x: 0, y: 0 }}
+                                end={{ x: 0, y: 1 }}
+                                locations={[0, 0.55, 1]}
+                                angle={180}
+                                useAngle>
+                                <CurrentBalance />
 
-                            <BaseSpacer height={6} />
-                            <BaseSpacer height={24} />
+                                <BaseSpacer height={6} />
+                                <BaseSpacer height={24} />
 
-                            {!isObservedAccount && <BalanceActions style={balanceActionsAnimatedStyles} />}
+                                {!isObservedAccount && <BalanceActions style={balanceActionsAnimatedStyles} />}
 
-                            <BaseSpacer height={64} />
-                        </AnimatedLinearGradient>
+                                <BaseSpacer height={64} />
+                            </LinearGradient>
+                        </Animated.View>
                     </Animated.View>
 
                     <TabRenderer onLayout={onLayout} />
