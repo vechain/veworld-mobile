@@ -8,6 +8,7 @@ import {
     ChangeNetworkScreen,
     ChooseBackupDetailsPassword,
     ClaimUsername,
+    ClaimUsernameConfirm,
     ConnectedAppsScreen,
     ContactsScreen,
     DetailsBackupScreen,
@@ -50,6 +51,9 @@ export type RootStackParamListSettings = {
     [Routes.CHOOSE_DETAILS_BACKUP_PASSWORD]: { backupDetails: string[] | string; device: LocalDevice }
     [Routes.SETTINGS_NOTIFICATIONS]: undefined
     [Routes.CLAIM_USERNAME]: undefined
+    [Routes.CLAIM_USERNAME_CONFIRM]: {
+        subdomain: string
+    }
     [Routes.USERNAME_CLAIMED]: {
         username: string
     }
@@ -167,6 +171,11 @@ export const SettingsStack = () => {
             />
 
             <Settings.Screen name={Routes.CLAIM_USERNAME} component={ClaimUsername} options={{ headerShown: false }} />
+            <Settings.Screen
+                name={Routes.CLAIM_USERNAME_CONFIRM}
+                component={ClaimUsernameConfirm}
+                options={{ headerShown: false }}
+            />
             <Settings.Screen
                 name={Routes.USERNAME_CLAIMED}
                 component={UsernameClaimed}
