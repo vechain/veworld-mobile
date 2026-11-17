@@ -51,6 +51,8 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModal, Props>(({
                 removeBookmark({
                     href: dapp.href,
                     isCustom: dapp.isCustom,
+                    id: dapp.id,
+                    veBetterDaoId: dapp.veBetterDaoId,
                 }),
             )
         },

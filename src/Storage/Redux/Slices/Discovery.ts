@@ -159,7 +159,10 @@ export const DiscoverySlice = createSlice({
             const order = state.favoriteRefs.length
             state.favoriteRefs.push(createDAppReference(bookmark, order))
         },
-        removeBookmark: (state, action: PayloadAction<{ href: string; isCustom?: boolean }>) => {
+        removeBookmark: (
+            state,
+            action: PayloadAction<{ href: string; isCustom?: boolean; id?: string; veBetterDaoId?: string }>,
+        ) => {
             const { isCustom, href } = action.payload
 
             if (isCustom) {
@@ -169,13 +172,15 @@ export const DiscoverySlice = createSlice({
                 return
             }
 
-            // For non-custom bookmarks, find the dApp to get its ID
-            const dapp = state.featured.find(d => URIUtils.compareURLs(d.href, href))
-            if (!dapp) return
+            // A favorite stays displayed after its dApp leaves the App Hub, so the App Hub list is only a fallback.
+            const featured = state.featured.find(d => URIUtils.compareURLs(d.href, href))
+            const id = action.payload.id ?? featured?.id
+            const vbdId = action.payload.veBetterDaoId ?? featured?.veBetterDaoId
+            if (!id && !vbdId) return
 
             state.favoriteRefs = state.favoriteRefs.filter(ref => {
-                if (ref.type === "app-hub") return ref.id !== dapp.id
-                if (ref.type === "vbd") return ref.vbdId !== dapp.veBetterDaoId
+                if (ref.type === "app-hub") return !id || ref.id !== id
+                if (ref.type === "vbd") return !vbdId || ref.vbdId !== vbdId
                 return true
             })
         },
