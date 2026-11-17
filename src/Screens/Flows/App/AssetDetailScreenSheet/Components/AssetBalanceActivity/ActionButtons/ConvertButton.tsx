@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { RefObject, useCallback, useMemo } from "react"
 import { GlassButtonWithLabel } from "~Components/Reusable/GlassButton/GlassButton"
 import { AnalyticsEvent } from "~Constants"
@@ -8,10 +8,10 @@ import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 
 type Props = {
-    bsRef: RefObject<BottomSheetModalMethods>
+    bsRef: RefObject<BottomSheetModal>
 }
 
-const useConvert = (bsRef: RefObject<BottomSheetModalMethods>) => {
+const useConvert = (bsRef: RefObject<BottomSheetModal>) => {
     const track = useAnalyticTracking()
     const { onOpen } = useBottomSheetModal({ externalRef: bsRef })
     const selectedAccount = useAppSelector(selectSelectedAccount)

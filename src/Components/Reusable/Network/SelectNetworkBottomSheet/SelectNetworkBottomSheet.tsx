@@ -1,8 +1,7 @@
-import { TouchableOpacity } from "@gorhom/bottom-sheet"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { SectionListData, SectionListRenderItemInfo, StyleSheet } from "react-native"
+import { SectionList, SectionListData, SectionListRenderItemInfo, StyleSheet } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import {
     BaseBottomSheet,
@@ -12,8 +11,8 @@ import {
     BaseText,
     BaseView,
     SectionListSeparator,
+    TouchableOpacity,
 } from "~Components"
-import { BottomSheetSectionList } from "~Components/Reusable/BottomSheetLists"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useNetworkList } from "~Hooks/useNetworkList"
@@ -39,7 +38,7 @@ const SectionSeparator = (props: BaseSectionListSeparatorProps<Network, Section>
     <SectionListSeparator {...props} headerToItemsHeight={8} headerToHeaderHeight={24} />
 )
 
-export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
+export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModal, Props>(({ onClose }, ref) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
@@ -104,7 +103,9 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
                     </TouchableOpacity>
                 </BaseView>
 
-                <BottomSheetSectionList
+                {/* The container above scrolls; a sheet scrollable here would resize the dynamic-height sheet to the list. */}
+                <SectionList
+                    scrollEnabled={false}
                     sections={sections}
                     keyExtractor={i => i.id}
                     ItemSeparatorComponent={ItemSeparator}

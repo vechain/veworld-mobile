@@ -1,5 +1,4 @@
-import { TouchableOpacity as BSTouchableOpacity } from "@gorhom/bottom-sheet"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import React, { ComponentProps, PropsWithChildren, useCallback, useMemo, useState } from "react"
 import { SectionListData, StyleSheet } from "react-native"
@@ -13,6 +12,7 @@ import {
     BaseText,
     BaseView,
     SectionListSeparator,
+    TouchableOpacity as BSTouchableOpacity,
 } from "~Components"
 import { BaseTabs } from "~Components/Base/BaseTabs"
 import { BottomSheetSectionList } from "~Components/Reusable/BottomSheetLists"
@@ -201,7 +201,7 @@ const Content = ({
 }
 
 // component to select an account
-export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     (
         {
             closeBottomSheet,
@@ -263,5 +263,5 @@ const baseStyles =
             contentContainer: {
                 paddingBottom: PlatformUtils.isAndroid() ? bottomInset + 16 : bottomInset,
             },
-            list: { paddingHorizontal: 16, paddingBottom: 24 },
+            list: { flex: 1, paddingHorizontal: 16, paddingBottom: 24 },
         })

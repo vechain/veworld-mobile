@@ -60,7 +60,7 @@ const { Navigator, Screen } = createStackNavigator<HistoryStackParamList>()
 
 export const HistoryStack = () => {
     return (
-        <Navigator id="HistoryStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
+        <Navigator id="HistoryStack" screenOptions={{ headerShown: false, animation: isIOS() ? "default" : "none" }}>
             <Screen name={Routes.HISTORY} component={ActivityScreen} options={{ headerShown: false }} />
             <Screen
                 name={Routes.ACTIVITY_DETAILS}

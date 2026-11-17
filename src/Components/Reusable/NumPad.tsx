@@ -1,4 +1,5 @@
-import { Pressable, StyleSheet } from "react-native"
+import { Pressable } from "react-native-gesture-handler"
+import { StyleSheet } from "react-native"
 import React, { useCallback, useMemo } from "react"
 import { getLocales } from "react-native-localize"
 import { BaseIcon, BaseText, BaseView } from "~Components"

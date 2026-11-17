@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { RefObject, useCallback, useEffect, useMemo } from "react"
 import { FlatList, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
@@ -18,7 +18,7 @@ import { StargateNodeCard } from "../../StargateNodeCard"
 
 type Props = {}
 
-export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>((_, ref) => {
+export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheetModal, Props>((_, ref) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -28,7 +28,7 @@ export const ValidatorDelegationExitedBottomSheet = React.forwardRef<BottomSheet
         onClose: onBottomSheetClose,
         onOpen: onBottomSheetOpen,
     } = useBottomSheetModal({
-        externalRef: ref as RefObject<BottomSheetModalMethods>,
+        externalRef: ref as RefObject<BottomSheetModal>,
     })
     const { data: validatorExitEvents, isLoading: isValidatorExitEventsLoading } = useValidatorExit()
     const { validators, isLoading: isValidatorsLoading } = useFetchValidators()

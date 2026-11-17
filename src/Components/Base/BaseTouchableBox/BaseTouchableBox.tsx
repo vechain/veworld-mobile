@@ -1,5 +1,6 @@
+import { TouchableOpacity, TouchableOpacityProps } from "../TouchableOpacity"
 import React, { useCallback } from "react"
-import { DimensionValue, StyleProp, StyleSheet, TouchableOpacity, TouchableOpacityProps, ViewStyle } from "react-native"
+import { DimensionValue, StyleProp, StyleSheet, ViewStyle } from "react-native"
 
 import { AlignItems, ColorThemeType, FlexDirection, JustifyContent } from "~Constants"
 import { useThemedStyles } from "~Hooks"

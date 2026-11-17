@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useRef, useState } from "react"
-import { ScrollView, StyleSheet } from "react-native"
+import { ScrollViewInstance, StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer, BaseTouchable, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useDappBookmarksList, useThemedStyles } from "~Hooks"
@@ -31,7 +31,7 @@ export const AppsScreen = ({ route }: NativeStackScreenProps<RootStackParamListA
         onOpen: onOpenAppsBottomSheet,
         onClose: onCloseAppsBottomSheet,
     } = useBottomSheetModal()
-    const layoutRef = useRef<ScrollView>(null)
+    const layoutRef = useRef<ScrollViewInstance>(null)
 
     const bookmarkedDApps = useDappBookmarksList()
     const { onDAppPress } = useDAppActions(Routes.APPS)

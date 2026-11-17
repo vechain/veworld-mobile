@@ -79,7 +79,7 @@ export const TabStack = () => {
                 component={HomeStack}
                 options={{
                     tabBarLabel: "Wallet",
-                    tabBarTestID: "wallet-tab",
+                    tabBarButtonTestID: "wallet-tab",
                     tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-home", LL.TAB_TITLE_HOME()),
                 }}
             />
@@ -90,7 +90,7 @@ export const TabStack = () => {
                     component={AppsStack}
                     options={{
                         tabBarLabel: "Apps",
-                        tabBarTestID: "apps-tab",
+                        tabBarButtonTestID: "apps-tab",
                         tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-apps", LL.TAB_TITLE_APPS()),
                     }}
                 />
@@ -101,7 +101,7 @@ export const TabStack = () => {
                 component={HistoryStack}
                 options={{
                     tabBarLabel: Routes.HISTORY,
-                    tabBarTestID: "history-tab",
+                    tabBarButtonTestID: "history-tab",
                     tabBarIcon: ({ focused }) => renderActivityIcon(focused, "icon-history", LL.TAB_TITLE_ACTIVITY()),
                 }}
             />
@@ -111,7 +111,7 @@ export const TabStack = () => {
                 component={SettingsStack}
                 options={{
                     tabBarLabel: "Settings",
-                    tabBarTestID: "settings-tab",
+                    tabBarButtonTestID: "settings-tab",
                     tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-more-horizontal", LL.TAB_TITLE_MORE()),
                 }}
             />

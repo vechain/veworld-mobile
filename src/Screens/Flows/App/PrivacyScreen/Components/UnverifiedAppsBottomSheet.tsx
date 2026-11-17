@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { RefObject, useCallback } from "react"
 import { BaseButton, DefaultBottomSheet } from "~Components"
 import { COLORS } from "~Constants"
@@ -7,7 +7,7 @@ import { useI18nContext } from "~i18n"
 import { setDeveloperAppsEnabled, useAppDispatch } from "~Storage/Redux"
 
 type Props = {
-    bsRef: RefObject<BottomSheetModalMethods>
+    bsRef: RefObject<BottomSheetModal>
 }
 
 export const UnverifiedAppsBottomSheet = ({ bsRef }: Props) => {

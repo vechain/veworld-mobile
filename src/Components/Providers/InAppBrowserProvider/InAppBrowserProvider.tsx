@@ -1,15 +1,8 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import { ethers } from "ethers"
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
-import {
-    NativeModules,
-    NativeScrollEvent,
-    NativeScrollPoint,
-    NativeSyntheticEvent,
-    Platform,
-    PlatformOSType,
-} from "react-native"
+import { NativeModules, NativeScrollEvent, NativeSyntheticEvent, Platform, PlatformOSType } from "react-native"
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
 import { showInfoToast, showWarningToast } from "~Components"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
@@ -102,7 +95,7 @@ type ContextType = {
     addAppAndNavToRequest: (request: InAppRequest) => void
     handleCloseChangeAccountNetworkBottomSheet: (event: TargetEvent) => void
     handleConfirmChangeAccountNetworkBottomSheet: (event: TargetEvent) => void
-    ChangeAccountNetworkBottomSheetRef: React.RefObject<BottomSheetModalMethods | null>
+    ChangeAccountNetworkBottomSheetRef: React.RefObject<BottomSheetModal | null>
     switchAccount: (request: WindowRequest) => void
     isLoading: boolean
     isDapp: boolean
@@ -951,7 +944,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     )
 
     const detectScrollDirection = useCallback(
-        (offset: NativeScrollPoint): ScrollDirection => {
+        (offset: NativeScrollEvent["contentOffset"]): ScrollDirection => {
             const { y } = offset
             let direction = ScrollDirection.NONE
             if (prevY.current < y) direction = ScrollDirection.DOWN

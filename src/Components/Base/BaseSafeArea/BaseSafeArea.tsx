@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useEffect, useState } from "react"
 import { StyleSheet } from "react-native"
-import { SafeAreaViewProps } from "react-native-safe-area-context"
+import { SafeAreaViewProps, useSafeAreaInsets } from "react-native-safe-area-context"
 import { useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { NavProps, getTabbar } from "../Helpers/getTabbar"
@@ -26,6 +26,7 @@ export const BaseSafeArea = ({
 }: Props) => {
     const nav: NavProps = useNavigation()
     const { iosOnlyTabBarBottomMargin } = useTabBarBottomMargin()
+    const { top: topInset } = useSafeAreaInsets()
 
     const [isTab, setIsTab] = useState(false)
 
@@ -36,6 +37,7 @@ export const BaseSafeArea = ({
             flexGrow,
             bgTransparent,
             bg,
+            topInset,
         }),
     )
 
@@ -65,10 +67,11 @@ type BaseStylesProps = {
     flexGrow?: number
     bgTransparent: boolean
     bg?: string
+    topInset: number
 }
 
 const baseStyles =
-    ({ isTab, iosOnlyTabBarBottomMargin, flexGrow, bgTransparent, bg }: BaseStylesProps) =>
+    ({ isTab, iosOnlyTabBarBottomMargin, flexGrow, bgTransparent, bg, topInset }: BaseStylesProps) =>
     (theme: ColorThemeType) =>
         StyleSheet.create({
             container: {
@@ -77,6 +80,7 @@ const baseStyles =
                 backgroundColor: bgTransparent ? "transparent" : bg || theme.colors.background,
             },
             androidTopPadding: {
-                paddingTop: 12,
+                // Overrides SafeAreaView's inset padding, so the inset has to be re-added (edge-to-edge)
+                paddingTop: topInset + 12,
             },
         })

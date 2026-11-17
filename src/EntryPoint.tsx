@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { InteractionManager, NativeModules } from "react-native"
+import { NativeModules } from "react-native"
 import RNBootSplash from "react-native-bootsplash"
 import RNScreenshotPrevent from "react-native-screenshot-prevent"
 import { AutoLockProvider, BaseStatusBar, ErrorBoundary, useApplicationSecurity, useFeatureFlags } from "~Components"
@@ -39,7 +39,7 @@ export const EntryPoint = () => {
                  */
                 RNScreenshotPrevent.enableSecureView()
 
-                InteractionManager.runAfterInteractions(() => {
+                requestIdleCallback(() => {
                     ScreenShieldRN.protectScreenRecording()
                 })
             }

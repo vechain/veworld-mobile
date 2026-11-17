@@ -4,7 +4,6 @@ import { TestWrapper } from "~Test"
 
 import { useQrScanDetection } from "~Hooks/useQrScanDetection"
 
-import { useCodeScanner } from "react-native-vision-camera"
 import { SendReceiveBottomSheet } from "./SendReceiveBottomSheet"
 
 jest.mock("~Hooks/useQrScanDetection", () => ({
@@ -13,7 +12,11 @@ jest.mock("~Hooks/useQrScanDetection", () => ({
 
 jest.mock("expo-camera", () => ({
     Camera: {
-        getCameraPermissionsAsync: jest.fn().mockResolvedValue(true),
+        getCameraPermissionsAsync: jest.fn().mockResolvedValue({ granted: true }),
+    },
+    CameraView: ({ onBarcodeScanned }: { onBarcodeScanned: (result: { data: string }) => void }) => {
+        onBarcodeScanned({ data: "scanned-qr-payload" })
+        return null
     },
     CameraType: {
         back: "back",
@@ -26,11 +29,9 @@ describe("SendReceiveBottomSheet", () => {
     })
     describe("Scan", () => {
         it("should close automatically the BS when scanning returns true", async () => {
-            ;(useQrScanDetection as jest.Mock).mockImplementation(args => args.onScan)
-            ;(useCodeScanner as jest.Mock).mockImplementation(args => {
-                ;(args as any).onCodeScanned()
-                return args
-            })
+            ;(useQrScanDetection as jest.Mock).mockImplementation(
+                args => (result: { data: string }) => args.onScan(result.data),
+            )
 
             const ref = {
                 current: { present: jest.fn(), close: jest.fn() },
@@ -51,11 +52,9 @@ describe("SendReceiveBottomSheet", () => {
             })
         })
         it("should not close automatically the BS when scanning returns false", async () => {
-            ;(useQrScanDetection as jest.Mock).mockImplementation(args => args.onScan)
-            ;(useCodeScanner as jest.Mock).mockImplementation(args => {
-                ;(args as any).onCodeScanned()
-                return args
-            })
+            ;(useQrScanDetection as jest.Mock).mockImplementation(
+                args => (result: { data: string }) => args.onScan(result.data),
+            )
 
             const ref = {
                 current: { present: jest.fn(), close: jest.fn() },
@@ -75,8 +74,9 @@ describe("SendReceiveBottomSheet", () => {
             })
         })
         it("should show WC if it is a supported target", async () => {
-            ;(useQrScanDetection as jest.Mock).mockImplementation(args => args.onScan)
-            ;(useCodeScanner as jest.Mock).mockImplementation(args => args)
+            ;(useQrScanDetection as jest.Mock).mockImplementation(
+                args => (result: { data: string }) => args.onScan(result.data),
+            )
 
             const ref = {
                 current: { present: jest.fn(), close: jest.fn() },

@@ -1,9 +1,9 @@
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister"
 import { QueryClient } from "@tanstack/react-query"
 import moment from "moment"
-import { MMKV } from "react-native-mmkv"
+import { createMMKV } from "react-native-mmkv"
 
-const storage = new MMKV()
+const storage = createMMKV()
 
 const clientStorage = {
     setItem: (key: string, value: string) => {
@@ -14,7 +14,7 @@ const clientStorage = {
         return value === undefined ? null : value
     },
     removeItem: (key: string) => {
-        storage.delete(key)
+        storage.remove(key)
     },
 }
 

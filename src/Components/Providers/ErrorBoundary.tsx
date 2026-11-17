@@ -130,7 +130,7 @@ export class ErrorBoundary extends React.Component<ViewProps> {
         try {
             let concatenatedString = JSON.stringify(error) + JSON.stringify(errorInfo)
             Sentry.captureException(concatenatedString, { tags: { Feature_Tag: ERROR_EVENTS.BOUNDARY } })
-        } catch (_) {
+        } catch {
             Sentry.captureException(`${ERROR_EVENTS.BOUNDARY} - ${error} - ${errorInfo}`, {
                 tags: { Feature_Tag: ERROR_EVENTS.BOUNDARY },
             })

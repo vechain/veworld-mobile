@@ -17,7 +17,7 @@ import { SendContent } from "../Shared"
 import { KnownAddressesList } from "./Components/KnownAddressesList"
 import { WalletAddressCard } from "./Components/WalletAddressCard"
 
-const _ReceiverScreen = ({ address: selectedAddress, name }: { address: string | undefined; name?: string }) => {
+const ReceiverScreenContent = ({ address: selectedAddress, name }: { address: string | undefined; name?: string }) => {
     const { flowState, setFlowState, goToNext } = useSendContext()
 
     const [inputWalletAddress, setInputWalletAddress] = useState<string>(name ?? selectedAddress ?? "")
@@ -122,10 +122,10 @@ export const ReceiverScreen = () => {
         name: "",
     })
 
-    if (!selectedAddress) return <_ReceiverScreen address={selectedAddress} />
+    if (!selectedAddress) return <ReceiverScreenContent address={selectedAddress} />
     if (isLoading) return <BaseView flex={1} />
 
-    return <_ReceiverScreen address={selectedAddress} name={vnsName || undefined} />
+    return <ReceiverScreenContent address={selectedAddress} name={vnsName || undefined} />
 }
 
 const baseStyles = () =>

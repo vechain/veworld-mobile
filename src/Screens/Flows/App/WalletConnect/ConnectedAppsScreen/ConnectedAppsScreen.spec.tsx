@@ -3,6 +3,7 @@ import React from "react"
 import { TestHelpers, TestWrapper } from "~Test"
 
 import { useWalletConnect } from "~Components/Providers/WalletConnectProvider"
+import { DeleteUnderlay } from "~Components/Reusable/DeleteUnderlay"
 import { ConnectedAppsScreen } from "./ConnectedAppsScreen"
 
 const { sessions } = TestHelpers.data
@@ -82,7 +83,9 @@ describe("ConnectedAppsScreen", () => {
             "vechain.org",
         )
 
-        fireEvent(await screen.findAllByTestId("DELETE_UNDERLAY_BTN").then(res => res[0]), "click")
+        await screen.findAllByTestId("DELETE_UNDERLAY_BTN")
+        // The underlay only takes touches once its row is swiped open, which swipeable-item never does under Jest.
+        act(() => screen.UNSAFE_getAllByType(DeleteUnderlay)[0].props.onPress())
 
         expect(screen.getByTestId("CONFIRM_DISCONNECT_APP_DESCRIPTION")).toBeVisible()
 

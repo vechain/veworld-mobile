@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback, useRef, useState } from "react"
 import { DEVICE_TYPE, IMPORT_TYPE, NewLedgerDevice } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
@@ -10,7 +10,7 @@ import {
     addLedgerDeviceAndAccounts,
 } from "~Storage/Redux/Actions"
 import { selectAccountsState, selectHasOnboarded } from "~Storage/Redux/Selectors"
-import { warn } from "~Utils/Logger"
+import { debug, warn } from "~Utils/Logger"
 import { useBiometrics } from "../useBiometrics"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
 import { AnalyticsEvent, DerivationPath, ERROR_EVENTS } from "~Constants"
@@ -31,6 +31,7 @@ export const useCreateWallet = () => {
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const [isComplete, setIsComplete] = useState(false)
     const track = useAnalyticTracking()
+    const localWalletInFlight = useRef(false)
     /**
      * Insert new wallet in store
      * if userPassword is provided, encrypt the wallet with it and store the hash
@@ -55,6 +56,11 @@ export const useCreateWallet = () => {
             onError?: (error: unknown) => void
             derivationPath: DerivationPath
         }) => {
+            if (localWalletInFlight.current) {
+                debug(ERROR_EVENTS.WALLET_CREATION, "create_local_wallet_already_in_flight")
+                return
+            }
+            localWalletInFlight.current = true
             try {
                 const { device, wallet } = createDevice(derivationPath, mnemonic, privateKey, importType)
 
@@ -99,6 +105,8 @@ export const useCreateWallet = () => {
                 }
                 onError?.(e)
                 throw e
+            } finally {
+                localWalletInFlight.current = false
             }
         },
         [createDevice, dispatch, selectedAccount, track, userHasOnboarded],

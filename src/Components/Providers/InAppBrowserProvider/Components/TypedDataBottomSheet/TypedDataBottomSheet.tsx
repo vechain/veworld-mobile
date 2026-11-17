@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
@@ -33,7 +33,7 @@ type Props = {
     request: TypeDataRequest
     onCancel: (request: TypeDataRequest) => Promise<void>
     onSign: (args: { request: TypeDataRequest; password?: string }) => Promise<void>
-    selectAccountBsRef: React.RefObject<BottomSheetModalMethods>
+    selectAccountBsRef: React.RefObject<BottomSheetModal>
     isLoading: boolean
 }
 

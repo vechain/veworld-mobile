@@ -1,0 +1,16 @@
+diff --git a/node_modules/react-native-dotenv/index.js b/node_modules/react-native-dotenv/index.js
+index ddcf3f2..3ca1ee8 100644
+--- a/node_modules/react-native-dotenv/index.js
++++ b/node_modules/react-native-dotenv/index.js
+@@ -152,9 +152,8 @@ module.exports = (api, options) => {
+           const key = path.toComputedKey()
+           if (t.isStringLiteral(key)) {
+             const importedId = key.value
+-            const value = (env && importedId in env) ? env[importedId] : process.env[importedId]
+-            if (value !== undefined) {
+-              path.replaceWith(t.valueToNode(value))
++            if (env && importedId in env) {
++              path.replaceWith(t.valueToNode(env[importedId]))
+             }
+           }
+         }

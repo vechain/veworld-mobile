@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useState } from "react"
-import { FlatList, StyleSheet, ViewToken } from "react-native"
+import { FlatList, StyleSheet, ListViewToken } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { BaseText, BaseView, PaginatedDot } from "~Components"
@@ -40,7 +40,7 @@ export const ClausesCarousel: React.FC<Props> = memo(({ clausesMetadata }) => {
         }
     }, [])
 
-    const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: ViewToken[] }) => {
+    const onViewableItemsChanged = useCallback(({ viewableItems }: { viewableItems: ListViewToken[] }) => {
         const activeIdx = viewableItems[0].index
 
         setActiveIndex(activeIdx ?? 0)

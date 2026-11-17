@@ -1,6 +1,14 @@
 import React, { forwardRef, memo, useMemo } from "react"
 
-import { Insets, KeyboardTypeOptions, StyleProp, StyleSheet, TextInputProps, ViewStyle } from "react-native"
+import {
+    Insets,
+    KeyboardTypeOptions,
+    StyleProp,
+    StyleSheet,
+    TextInputInstance,
+    TextInputProps,
+    ViewStyle,
+} from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -48,7 +56,7 @@ export type BaseTextInputProps = {
     hitSlop?: (number | Insets | null) & HitSlop
 } & TextInputProps
 
-export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
+export const BaseTextInputComponent = forwardRef<TextInputInstance, BaseTextInputProps>(
     (
         {
             placeholder,

@@ -4,7 +4,7 @@ describe("PasswordUtils", () => {
     const encryptionKey = "Test123456!"
 
     it("should hash password without salt", () => {
-        expect(PasswordUtils.hash(encryptionKey)).toBe("hex")
+        expect(PasswordUtils.hash(encryptionKey)).toBe("49cbc143897d40a775f04737d1caa81a")
     })
 
     it("should hash password with salt", () => {

@@ -1,4 +1,6 @@
 import React, { ReactNode } from "react"
+// A native button around the whole screen would compete with its inputs; a missed dismiss is harmless.
+// eslint-disable-next-line no-restricted-imports
 import { Keyboard, ViewProps, ScrollViewProps, TouchableWithoutFeedback } from "react-native"
 
 type Props = {

@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { FC, useCallback, useMemo } from "react"
-import { StyleSheet, TouchableWithoutFeedback } from "react-native"
+import { StyleSheet } from "react-native"
 import { getTimeZone } from "react-native-localize"
-import { BaseIcon, BaseText, BaseView } from "~Components/Base"
+import { BaseIcon, BaseText, BaseView, TouchableOpacity } from "~Components/Base"
 import { COLORS, ColorThemeType, ERROR_EVENTS } from "~Constants"
 import { useDisclosure, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -91,7 +91,7 @@ export const BackupDetailsCard: FC<Props> = ({ backupDetails, souceScreen, devic
 
     return (
         <BaseView>
-            <TouchableWithoutFeedback onPress={onPress}>
+            <TouchableOpacity activeOpacity={1} onPress={onPress}>
                 <BaseView flexDirection="row" style={styles.container}>
                     <BaseView
                         px={8}
@@ -120,7 +120,7 @@ export const BackupDetailsCard: FC<Props> = ({ backupDetails, souceScreen, devic
                         />
                     </BaseView>
                 </BaseView>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
         </BaseView>
     )
 }

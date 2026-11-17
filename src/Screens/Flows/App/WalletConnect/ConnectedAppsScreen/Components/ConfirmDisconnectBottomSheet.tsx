@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React from "react"
 import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
@@ -13,7 +13,7 @@ type Props = {
     onCancel: () => void
 }
 
-export const ConfirmDisconnectBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const ConfirmDisconnectBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     ({ onConfirm, onCancel }, ref) => {
         const { LL } = useI18nContext()
         const theme = useTheme()

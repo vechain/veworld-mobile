@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
@@ -19,7 +19,7 @@ type Props = {
     handleOnCreateWallet: () => void
 }
 
-export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     ({ onClose, handleOnCreateWallet }, ref) => {
         const [navigationState, setNavigationState] = useState<"root" | "social" | "import">("root")
 

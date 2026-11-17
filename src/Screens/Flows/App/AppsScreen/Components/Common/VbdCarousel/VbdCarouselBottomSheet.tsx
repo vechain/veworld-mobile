@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { SkSize } from "@shopify/react-native-skia"
 import React, { ElementType, useCallback, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
@@ -43,7 +43,7 @@ export type VbdCarouselBottomSheetMetadata = {
 }
 
 type VbdCarouselBottomSheetProps = {
-    bsRef: React.RefObject<BottomSheetModalMethods>
+    bsRef: React.RefObject<BottomSheetModal>
 }
 
 const VbdInfoColumn = ({
@@ -149,7 +149,7 @@ const VbdCarouselBottomSheetContent = ({
         if (!isBookMarked && selectedApp) {
             return dispatch(addBookmark(selectedApp))
         } else {
-            dispatch(removeBookmark({ href: selectedApp?.external_url ?? "" }))
+            dispatch(removeBookmark({ href: selectedApp?.external_url ?? "", veBetterDaoId: selectedApp?.id }))
         }
     }, [selectedApp, dispatch, isBookMarked])
 

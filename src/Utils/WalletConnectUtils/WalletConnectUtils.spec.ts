@@ -298,7 +298,7 @@ describe("WalletConnectUtils", () => {
     describe("shouldAutoNavigate", () => {
         it("should return true for a valid WalletConnect route", () => {
             const mockState = (routeName: Routes) => {
-                const navState: NavigationState<ReactNavigation.RootParamList> = {
+                const navState: NavigationState = {
                     key: "key",
                     index: 0,
                     routeNames: [],

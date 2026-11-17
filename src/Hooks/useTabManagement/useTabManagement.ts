@@ -1,5 +1,5 @@
 import { useCallback } from "react"
-import * as FileSystem from "expo-file-system"
+import * as FileSystem from "expo-file-system/legacy"
 import {
     closeTab as closeTabAction,
     closeAllTabs as closeAllTabsAction,

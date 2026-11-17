@@ -6,7 +6,7 @@ require Pod::Executable.execute_command('node', ['-p',
     {paths: [process.argv[1]]},
   )', __dir__]).strip
 
-platform :ios, min_ios_version_supported
+platform :ios, '16.4'
 prepare_react_native_project!
 
 # Force pods to match minimum iOS version for React Native
@@ -16,7 +16,7 @@ def __apply_Xcode_14_3_RC_post_install_workaround(installer)
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       current_target = config.build_settings['IPHONEOS_DEPLOYMENT_TARGET']
-      minimum_target = '15.1'
+      minimum_target = '16.4'
       if current_target.to_f < minimum_target.to_f
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = minimum_target
       end
@@ -42,28 +42,17 @@ target 'VeWorld' do
       end
     end
 
-    # Remove QuickCrypto's custom OpenSSL embed script that duplicates the Pods embed step
-    app_project_path = File.join(__dir__, 'VeWorld.xcodeproj', 'project.pbxproj')
-    if File.exist?(app_project_path)
-      pbx = File.read(app_project_path)
-
-      pbx.gsub!(/^\s*[A-F0-9]+ \/\* \[CP-User\] \[CP-User\] Embed OpenSSL Framework \*\/,\n/m, "")
-      pbx.gsub!(/^\s*[A-F0-9]+ \/\* \[CP-User\] \[CP-User\] Embed OpenSSL Framework \*\/ = \{\n(?:.|\n)*?\t\t\};\n/m, "")
-
-      File.write(app_project_path, pbx)
-    end
   end
   config = use_native_modules!
 
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
-    :app_path => "#{Pod::Config.instance.installation_root}/..",
-    :new_arch_enabled => false
+    :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  # Force OpenSSL version for react-native-quick-crypto
-  # pod 'OpenSSL-Universal', '~> 1.1.1100'
+  # quick-crypto 1.x vendors its own symbol-prefixed OpenSSL and MMKV 4 pins MMKVCore,
+  # so neither needs a pin here any more.
   pod 'react-native-blob-util', :path => '../node_modules/react-native-blob-util'
 
   target 'VeWorldTests' do

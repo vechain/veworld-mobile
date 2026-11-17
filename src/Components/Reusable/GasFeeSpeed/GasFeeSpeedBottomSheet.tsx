@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { ethers } from "ethers"
 import { forwardRef, default as React, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
@@ -28,7 +28,7 @@ type Props = {
     selectedDelegationToken: string
 }
 
-export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function GasFeeSpeedBottomSheet(
+export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModal, Props>(function GasFeeSpeedBottomSheetRender(
     {
         setSelectedFeeOption,
         selectedFeeOption,

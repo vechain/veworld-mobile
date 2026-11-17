@@ -1,9 +1,8 @@
-import { TouchableOpacity } from "@gorhom/bottom-sheet"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import React, { RefObject, useCallback } from "react"
 import { StyleSheet } from "react-native"
-import { BaseBottomSheet, BaseIcon, BaseText, BaseView } from "~Components"
+import { BaseBottomSheet, BaseIcon, BaseText, BaseView, TouchableOpacity } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useBlacklistedCollection } from "~Hooks/useBlacklistedCollection"
@@ -117,7 +116,7 @@ const Content = ({
 }
 
 type Props = {
-    bsRef: RefObject<BottomSheetModalMethods>
+    bsRef: RefObject<BottomSheetModal>
     onOpenReport: () => void
     onOpenHidden: () => void
 }

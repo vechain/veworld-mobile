@@ -1,27 +1,5 @@
-# IOS Build
+# iOS Build
 
-### Build for internal consumption
+Build numbers come from TestFlight: each release uses the latest uploaded build plus one. The version defaults to the one in `package.json`; bump it in a PR to start the next version. Each release tags the commit it built as `v<version>-<build>` and commits nothing back.
 
-On the terminal inside the ios directory:
-
-```bash
-fastlane build username:<your github username> token:<your personal access token>
-```
-
-if you want to specifically set a build number you should write:
-
-```bash
-fastlane build username:<your github username> token:<your personal access token> build:<set the build number>
-```
-
-### Build for official release
-
-```bash
-fastlane build username:<your github username> token:<your personal access token> version:<possible values : "patch", "minor", "major" "1.0.0">
-```
-
-or
-
-```bash
-fastlane build username:<your github username> token:<your personal access token> version:<possible values : "patch", "minor", "major" "1.0.0"> build:<set the build number>
-```
+Releases are built in CI only, because the distribution certificate lives in the `ios-release` environment. Run the **Release - iOS** workflow; it releases the version in `package.json` of the branch it runs on. Signing is described in [docs/release-secrets.md](../../docs/release-secrets.md#distribution-certificate).

@@ -1,26 +1,21 @@
 import React from "react"
 import { StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
-import LinearGradient from "react-native-linear-gradient"
 import Markdown from "react-native-markdown-display"
 import { StellaPayBannerB3MO, StellaPayLogoSVG } from "~Assets"
 import { BaseView } from "~Components"
+import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import FontUtils from "~Utils/FontUtils"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 export const StellaPayBanner = () => {
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
 
     return (
-        <LinearGradient
-            colors={theme.colors.stellaPayBanner.background}
-            angle={90}
-            start={{ x: 0.32, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.container}>
+        <BaseView style={styles.container}>
             <BaseView alignItems={"flex-start"} gap={16} flex={1} justifyContent="center">
                 <StellaPayLogoSVG />
                 <Markdown
@@ -34,18 +29,20 @@ export const StellaPayBanner = () => {
                 </Markdown>
             </BaseView>
             <FastImage source={StellaPayBannerB3MO} style={styles.image as ImageStyle} />
-        </LinearGradient>
+        </BaseView>
     )
 }
 
-const baseStyles = () =>
-    StyleSheet.create({
+const baseStyles = (theme: ColorThemeType) => {
+    const [from, to] = theme.colors.stellaPayBanner.background
+    return StyleSheet.create({
         container: {
             minHeight: 108,
             borderRadius: 12,
             paddingHorizontal: 16,
             paddingVertical: 20,
             paddingRight: 140,
+            backgroundImage: `linear-gradient(90deg, ${from} 32%, ${to})`,
         },
         image: {
             width: 123,
@@ -68,3 +65,4 @@ const baseStyles = () =>
             fontWeight: "600",
         },
     })
+}

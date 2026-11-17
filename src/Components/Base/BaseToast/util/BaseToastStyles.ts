@@ -1,4 +1,4 @@
-import { ColorValue, Dimensions, ViewStyle } from "react-native"
+import { Dimensions, ViewStyle } from "react-native"
 import { COLORS, ColorThemeType } from "~Constants"
 
 // Define the ToastStyles type
@@ -6,7 +6,7 @@ export type ToastStyles = {
     container: ViewStyle
     contentContainer: ViewStyle
     textContainer: ViewStyle
-    iconColor: ColorValue
+    iconColor: string
     textColor?: string
     addressesTextColor?: string
 }

@@ -1,5 +1,5 @@
 import picasso from "@vechain/picasso"
-import * as FileSystem from "expo-file-system"
+import * as FileSystem from "expo-file-system/legacy"
 import React, { useCallback, useMemo, useState } from "react"
 import { Share, StyleSheet } from "react-native"
 import QRCode from "react-native-qrcode-svg"

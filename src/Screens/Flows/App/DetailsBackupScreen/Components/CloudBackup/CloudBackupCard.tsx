@@ -97,7 +97,7 @@ export const CloudBackupCard: FC<Props> = ({ backupDetails, deviceToBackup }) =>
             )
             setIsWalletBackedUp(!!wallet)
             navigation.goBack()
-        } catch (error) {
+        } catch {
             setIsCloudError(true)
             dispatch(setIsAppLoading(false))
         }

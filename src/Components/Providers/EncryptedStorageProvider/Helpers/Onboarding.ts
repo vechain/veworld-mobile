@@ -102,7 +102,7 @@ const prune = (onboardingStorage: MMKV) => {
     const keys = onboardingStorage.getAllKeys()
 
     for (const key of keys) {
-        onboardingStorage.delete(key)
+        onboardingStorage.remove(key)
     }
 }
 

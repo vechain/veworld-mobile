@@ -71,6 +71,8 @@ jest.mock("react-native", () => {
     const RN = jest.requireActual("react-native")
     return {
         ...RN,
+        // Non-enumerable on RN 0.88, so the spread drops it and react-native-svg breaks.
+        Touchable: RN.Touchable,
         NativeModules: {
             ...RN.NativeModules,
             PackageDetails: {

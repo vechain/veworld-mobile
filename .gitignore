@@ -125,4 +125,7 @@ android/keystore.properties
 android/key_alias.txt
 android/store_password.txt
 
+# Provisioning profiles fetched by the iOS release lane
+ios/*.mobileprovision
+
 src/Generated/*

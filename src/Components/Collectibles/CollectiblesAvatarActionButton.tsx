@@ -1,4 +1,4 @@
-import * as FileSystem from "expo-file-system"
+import * as FileSystem from "expo-file-system/legacy"
 import React, { useCallback, useMemo, useState } from "react"
 import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"

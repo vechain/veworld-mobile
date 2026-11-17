@@ -99,7 +99,7 @@ export const CollectiblesList = () => {
                 keyExtractor={v => ("placeholder" in v ? v.placeholder.toString() : `${v.address}_${v.tokenId}`)}
                 columnWrapperStyle={styles.listColumn}
                 ListFooterComponent={
-                    isLoading || nfts.length === 0 ? null : <ListFooterComponent addresses={addresses} />
+                    isLoading || nfts.length === 0 ? undefined : <ListFooterComponent addresses={addresses} />
                 }
             />
             <CollectibleBottomSheet bsRef={ref} />

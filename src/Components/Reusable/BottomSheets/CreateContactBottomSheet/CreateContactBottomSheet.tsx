@@ -1,5 +1,5 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { RefObject, useCallback, useMemo, useState } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import {
     BaseBottomSheet,
     BaseButton,
@@ -106,7 +106,7 @@ const CreateContactBottomSheetContent = ({ address: _address, onClose }: Props) 
     )
 }
 
-export const CreateContactBottomSheet = ({ bsRef }: { bsRef: RefObject<BottomSheetModalMethods> }) => {
+export const CreateContactBottomSheet = ({ bsRef }: { bsRef: RefObject<BottomSheetModal> }) => {
     const { ref: bottomSheetRef, onClose } = useBottomSheetModal({ externalRef: bsRef })
 
     return (

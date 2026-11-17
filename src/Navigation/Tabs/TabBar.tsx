@@ -1,7 +1,9 @@
+import { TouchableOpacity } from "~Components"
 import { BottomTabBarHeightCallbackContext, BottomTabBarProps } from "@react-navigation/bottom-tabs"
 import { CommonActions } from "@react-navigation/native"
 import React, { useContext, useEffect, useMemo } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { StyleSheet } from "react-native"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 import Animated, {
     Extrapolation,
     interpolate,
@@ -53,7 +55,9 @@ const useSafeContext = () => {
 }
 
 export const TabBar = ({ state, descriptors, navigation }: Props) => {
-    const baseHeight = useMemo(() => (PlatformUtils.isIOS() ? 84 : 56), [])
+    const { bottom: bottomInset } = useSafeAreaInsets()
+    // Edge-to-edge: the Android bar draws under the system navigation bar
+    const baseHeight = useMemo(() => (PlatformUtils.isIOS() ? 84 : 56 + bottomInset), [bottomInset])
 
     const { styles } = useThemedStyles(baseStyles(baseHeight))
     const setHeight = useSafeContext()
@@ -124,7 +128,7 @@ export const TabBar = ({ state, descriptors, navigation }: Props) => {
                         accessibilityRole="button"
                         accessibilityState={isFocused ? { selected: true } : {}}
                         accessibilityLabel={options.tabBarAccessibilityLabel}
-                        testID={options.tabBarTestID}
+                        testID={options.tabBarButtonTestID}
                         onPress={onPress}
                         onLongPress={onLongPress}
                         style={styles.tabElement}

@@ -1,6 +1,7 @@
+import { Pressable } from "react-native-gesture-handler"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { FlatList, Pressable } from "react-native"
+import { FlatList } from "react-native"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import {
@@ -211,7 +212,6 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         bannerHeight.value = withSpring(claimableUsernames.length > 0 ? 45 : 0, {
             duration: 500,
             dampingRatio: 1,
-            stiffness: 72,
             overshootClamping: true,
         })
         bannerOpacity.value = withSpring(claimableUsernames.length > 0 ? 1 : 0, { duration: 100 })

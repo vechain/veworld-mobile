@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React from "react"
 import { screen } from "@testing-library/react-native"
 import { TestWrapper, TestHelpers } from "~Test"
@@ -97,7 +97,7 @@ const mockDAppRefs: DAppReference[] = [
 
 describe("FavoritesBottomSheet", () => {
     const mockOnClose = jest.fn()
-    const ref = { current: null } as React.RefObject<BottomSheetModalMethods | null>
+    const ref = { current: null } as React.RefObject<BottomSheetModal | null>
 
     const renderWithFavorites = (
         favoriteRefs: DAppReference[] = mockDAppRefs,

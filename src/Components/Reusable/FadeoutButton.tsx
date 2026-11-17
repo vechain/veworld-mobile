@@ -1,7 +1,7 @@
 import { DimensionValue, StyleSheet } from "react-native"
-import React from "react"
+import React, { useContext } from "react"
 import LinearGradient from "react-native-linear-gradient"
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs"
+import { BottomTabBarHeightContext } from "@react-navigation/bottom-tabs"
 import { SCREEN_WIDTH } from "~Constants"
 import { useTheme } from "~Hooks"
 import { BaseButton, BaseView } from "~Components/Base"
@@ -29,7 +29,7 @@ export const FadeoutButton = ({
     width,
     testID,
 }: Props) => {
-    const tabBarHeight = useBottomTabBarHeight()
+    const tabBarHeight = useContext(BottomTabBarHeightContext) ?? 0
     const theme = useTheme()
 
     if (IS_CI_BUILD) {

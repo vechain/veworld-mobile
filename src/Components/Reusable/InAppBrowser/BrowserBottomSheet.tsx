@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { default as React, useCallback, useMemo, useState } from "react"
@@ -48,7 +48,7 @@ export const getActionTextColor = (
     return theme.colors.actionBottomSheet.text
 }
 
-export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onNavigate, onClose }, ref) => {
+export const BrowserBottomSheet = React.forwardRef<BottomSheetModal, Props>(({ onNavigate, onClose }, ref) => {
     const { LL } = useI18nContext()
     const { navigationState, webviewRef, dappMetadata } = useInAppBrowser()
     const { isBookMarked, toggleBookmark } = useDappBookmarkToggle(navigationState?.url)

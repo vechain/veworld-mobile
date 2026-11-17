@@ -7,206 +7,21 @@ before_all do
 	Dotenv.load ".env"
 end
 
+TEAM_ID = "RKZMX8AZ6P"
+APP_IDENTIFIER = "org.vechain.veworld.app"
+EXTENSION_IDENTIFIER = "org.vechain.veworld.app.OneSignalNotificationServiceExtension"
+# Must match PROVISIONING_PROFILE_SPECIFIER in the Xcode project
+APP_PROFILE_NAME = "VeWorld AppStore #{APP_IDENTIFIER}"
+EXTENSION_PROFILE_NAME = "VeWorld AppStore #{EXTENSION_IDENTIFIER}"
+
+def github_output(values)
+  return unless ENV["GITHUB_OUTPUT"]
+  File.open(ENV["GITHUB_OUTPUT"], "a") { |file| values.each { |key, value| file.puts("#{key}=#{value}") } }
+end
 
 default_platform(:ios)
 
 platform :ios do
-
-  desc "Revoke certificates from Apple Developer Portal" # CAUTION!!! This lane will prompt you to choose which sertificate to revoke. Make sure you choose the right one.
-  lane :nuke_appstore_certificates do
-    match_nuke( # https://docs.fastlane.tools/actions/match_nuke/
-      type: "appstore", # The type of code signing identity to revoke.
-      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
-      readonly: false, # If true, will only print out the commands it would run, without actually running them.
-    )
-  end
-
-  desc "Remove certificates from GitHub"
-  lane :remove_certificates_from_gh do
-    Dir.chdir "../../.." do # Navigate to outside of the project as not have conflicts with this git repo. 
-      puts Dir.pwd # Print the current working directory.
-
-      repo_name = ENV['CERTIFICATES_REPO']
-      sh("git clone #{repo_name}") # Clone the repo with the certificates.
-      Dir.chdir "veworld-mobile-ios-cert" # Navigate to the repo with the certificates.
-
-      puts Dir.pwd # Print the current working directory.
-
-      sh("rm -rf certs/distribution/*") # Remove the certificates.
-      sh("rm -rf profiles/appstore/*") # Remove the profiles.
-      sh("git add --all") # Add the changes.
-      sh("git commit -a -m 'chore: remove certificates'") # Commit the changes.
-      sh("git push -u origin main") # Push the changes to GitHub.
-
-      Dir.chdir ".." # Navigate back outside of the repo.
-      sh("rm -rf veworld-mobile-ios-cert") # Remove the repo folder.
-    end  
-  end
-
-  desc "Generate new certificates"
-  lane :generate_new_certificates do
-    # Generate App certs
-    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
-      type: "appstore", # The type of code signing identity to generate.
-      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
-      force_for_new_devices: true, # If true, will revoke and recreate all provisioning profiles if there are new devices added to the account.
-      readonly: false, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: "main", # The branch to commit the code signing files to.
-      skip_docs: true, # If true, will skip the creation of a README.md file.
-      verbose: true # If true, will print out extra information and debugging info.
-    )
-
-    # Generate Onesignal extension certs
-    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
-      type: "appstore", # The type of code signing identity to generate.
-      app_identifier: ENV["EXTENSION_IDENTIFIER"], # The app identifier of your app.
-      force_for_new_devices: true, # If true, will revoke and recreate all provisioning profiles if there are new devices added to the account.
-      readonly: false, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: "main", # The branch to commit the code signing files to.
-      skip_docs: true, # If true, will skip the creation of a README.md file.
-      verbose: true # If true, will print out extra information and debugging info.
-    )
-  end
-
-  desc "Get certificates"
-  lane :fetch_certificates_from_gh do # Get the certificates from GitHub.
-    # Get Certificates for the App form GitHub
-    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
-      type: "appstore", # The type of code signing identity to generate.
-      app_identifier: [ENV["APP_IDENTIFIER"], ENV["EXTENSION_IDENTIFIER"]], # The app identifier of your app.
-      readonly: true, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: "main", # The branch to commit the code signing files to.
-      verbose: true # If true, will print out extra information and debugging info.
-    )
-  end
-
-  desc "Get certificates"
-  lane :fetch_certificates_from_gh_for_ci do # Get the certificates from GitHub.
-    setup_ci
-    # Get Certificates for App from GitHub
-    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
-      type: "appstore", # The type of code signing identity to generate.
-      app_identifier: [ENV["APP_IDENTIFIER"], ENV["EXTENSION_IDENTIFIER"]], # The app identifier of your app.
-      readonly: true, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: "main", # The branch to commit the code signing files to.
-      git_basic_authorization: ENV["MATCH_GIT_BASIC_AUTHORIZATION"], # The GitHub token for authentication.
-      verbose: true # If true, will print out extra information and debugging info.
-    )
-  end
-
-
-
-  desc "Rotate certificates"
-  lane :rotate_certificates do
-    sh("./rotate_match_password.sh") # Generate new password for the certificates.
-    nuke_appstore_certificates # CAUTION!!! This lane will prompt you to choose which sertificate to revoke. Make sure you choose the right one.
-    remove_certificates_from_gh # Remove the certificates from GitHub.
-    # Before the next step - Need to run fastlane match change_password and use the new password generated in the previous step.
-    generate_new_certificates # Generate new certificates.
-  end
-
-
-
-  desc "Create changelog"
-  lane :create_changelog do |values|
-
-    Dir.chdir "../.." do # Navigate to the root
-      sh("yarn release:ci")
-    end
-
-    version = values[:version]
-
-    package_json = JSON.parse(File.read("../../package.json"))
-    package_json["version"] = version
-    File.write("../../package.json", JSON.pretty_generate(package_json))
-  end
-
-
-
-  desc "Create Release Branch on GitHub for Beta"
-  lane :gh_setup_before do |values|
-
-    github_token = values[:github_token]
-    github_username = values[:github_username]
-    build_number = values[:build_number]
-    version_number = values[:version_number]
-    branch_name = "release-build"
-
-    # Create and push the branch locally
-    sh("git checkout -b #{branch_name}-#{build_number}-#{version_number}")
-
-    # Set the GitHub remote URL with credentials
-    remote_url = "https://#{github_username}:#{github_token}@github.com/vechain/veworld-mobile.git"
-    sh("git remote set-url origin #{remote_url}")
-    
-  end
-
-  desc "Create Release Branch on GitHub via CI"  
-  lane :gh_setup_before_ci do |values|
-
-    github_token = values[:github_token]
-    github_username = values[:github_username]
-    build_number = values[:build_number]
-    version_number = values[:version_number]
-    branch_name = "release-build-ci"
-
-    # Create and push the branch locally
-    sh("git checkout -b #{branch_name}-#{build_number}-#{version_number}")
-
-    # Set the GitHub remote URL with credentials
-    remote_url = "https://#{github_username}:#{github_token}@github.com/vechain/veworld-mobile.git"
-    sh("git remote set-url origin #{remote_url}")
-    
-    # Fetch latest changes from the remote repository
-    sh("git fetch origin")
-
-    sh("git merge origin/#{branch_name}-#{build_number}-#{version_number} || true")
-    # Commit changes
-    sh("git commit -a -m 'build: init'")
-
-    # Push the branch to GitHub
-    sh("git push -u origin #{branch_name}-#{build_number}-#{version_number}")
-  end
-
-
-
-  desc "Commit latest artifacts to GitHub"
-  lane :gh_setup_after do |values|
-    sh("git add --all")
-    sh("git commit -a -m 'build: complete'")
-    # Push the branch to GitHub
-    sh("git push")
-  end
-
-
-
-  lane :upload_source_maps do |values|
-    build = values[:build]
-    version = values[:version]
-
-    Dir.chdir "../.." do # Navigate to the root of the project where the Detox files are placed.
-
-      sentry_check_cli_installed
-
-      # generate source maps for sentry
-      sh("npx react-native bundle --platform ios --dev false --entry-file index.js --reset-cache --bundle-output main.jsbundle --sourcemap-output main.jsbundle.map --minify false")
-      #compile source maps
-      sh("ios/Pods/hermes-engine/destroot/bin/hermesc -O -emit-binary -output-source-map -out=main.jsbundle.hbc main.jsbundle")
-      sh("rm -f main.jsbundle")
-      sh("mv main.jsbundle.hbc main.jsbundle")
-
-      # merge the two source maps
-      sh("mv main.jsbundle.map main.jsbundle.packager.map")
-      sh("node node_modules/react-native/scripts/compose-source-maps.js main.jsbundle.packager.map main.jsbundle.hbc.map -o main.jsbundle.map")
-
-      # upload source maps to sentry with cli - handled by xcode build phase?
-
-      sh("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]}@#{version}+#{build} upload-sourcemaps --dist #{build} --strip-prefix ../../ main.jsbundle main.jsbundle.map --org 'vechain-foundation' --project 'veworld-mobile' --log-level=info")
-      
-    end
-  end
-
- 
 
   lane :create_tags_gh do |values|
     build = values[:build]
@@ -220,186 +35,82 @@ platform :ios do
   end
 
 
-# Builds the app using specified options.
-  #
-  # @param {string} options[:username] - The GitHub username for authentication.
-  # @param {string} options[:token] - The GitHub personal token for authentication.
-  # @param optional {string} options[:version] - The version type for the build (e.g., "patch", "minor", "major").
-  # @param optional {string} options[:build] - The build number for the build.
-  desc "Push a new beta build to TestFlight"
-  lane :build do |options|
-    github_username = options[:username]
-    github_token = options[:token]
-    versionType = options[:version]
-    buildNumber = options[:build]
+  private_lane :set_release_version do
+    version = JSON.parse(File.read("../../package.json"))["version"]
+    increment_version_number(version_number: version, xcodeproj: "VeWorld.xcodeproj")
+  end
 
-    # clean build artifacts if any
-    clean_build_artifacts
+  # TestFlight lists every upload, including failed and processing ones, so its latest build is the one to beat.
+  # Builds uploaded while the app belonged to another team are missing from that list but keep their numbers.
+  private_lane :set_next_build_number do |options|
+    latest = latest_testflight_build_number(api_key: options[:api_key], app_identifier: APP_IDENTIFIER)
+    app = Spaceship::ConnectAPI::App.find(APP_IDENTIFIER)
+    recent = Spaceship::ConnectAPI.get_builds(filter: { app: app.id }, includes: nil, sort: "-uploadedDate", limit: 50).map { |build| build.version.to_i }
+    increment_build_number(build_number: [latest.to_i, *recent].max + 1, xcodeproj: "VeWorld.xcodeproj")
+  end
 
-    # check if spceicifed build number
-    if !buildNumber.nil? 
-      build = increment_build_number(build_number: buildNumber, xcodeproj: "VeWorld.xcodeproj")
-              increment_build_number(build_number: buildNumber, xcodeproj: "VeWorld.xcodeproj")
-    else
-      build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
-              increment_build_number(xcodeproj: "VeWorld.xcodeproj")
-    end
+  # The distribution certificate lives in the ios-release environment; profiles are fetched (or created) on each run.
+  private_lane :install_signing do |options|
+    keychain = ENV.fetch("MATCH_KEYCHAIN_NAME")
+    p12_data = Base64.decode64(ENV.fetch("IOS_DIST_CERT_P12_BASE64"))
+    password = ENV.fetch("IOS_DIST_CERT_P12_PASSWORD")
+    p12 = Tempfile.new(["distribution", ".p12"])
+    File.binwrite(p12.path, p12_data)
+    import_certificate(certificate_path: p12.path, certificate_password: password, keychain_name: keychain, keychain_password: "")
+    p12.close!
+    FastlaneCore::CertChecker.install_missing_wwdr_certificates(in_keychain: FastlaneCore::Helper.keychain_path(keychain))
 
-    # check if spceicifed version number
-    if !versionType.nil? 
-      if versionType.downcase != "patch" && versionType.downcase != "minor" && versionType.downcase != "major"
-        version = increment_version_number(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
-                  increment_version_number(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
-      else 
-        version = increment_version_number(bump_type: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
-                  increment_version_number(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
+    certificate = OpenSSL::PKCS12.new(p12_data, password).certificate.to_der
+    Spaceship::ConnectAPI.token = Spaceship::ConnectAPI::Token.from(hash: options[:api_key])
+    { APP_IDENTIFIER => APP_PROFILE_NAME, EXTENSION_IDENTIFIER => EXTENSION_PROFILE_NAME }.each do |identifier, name|
+      # sigh renames a new profile whose name is taken, which breaks PROVISIONING_PROFILE_SPECIFIER, so clear stale ones first.
+      Spaceship::ConnectAPI::Profile.all(filter: { name: name }, includes: "certificates").each do |profile|
+        next if profile.name != name || (profile.valid? && profile.certificates.any? { |c| Base64.decode64(c.certificate_content) == certificate })
+        UI.important("Deleting profile #{profile.uuid} '#{name}': it cannot sign with the current certificate")
+        profile.delete!
       end
-    else
-      version = get_version_number(xcodeproj: "VeWorld.xcodeproj")
-    end
-
-
-    clear_derived_data
-
-    # update yarn packages and pods
-    Dir.chdir "../.." do
-      sh("yarn purge && yarn install:all")
-    end
-
-
-    # begin -> rescure == try -> catch
-    begin
-      
-
-      # create new branch and push to github
-      gh_setup_before(
-        github_username:github_username, 
-        github_token:github_token,
-        build_number: build,
-        version_number: version,
+      get_provisioning_profile(
+        api_key: options[:api_key],
+        app_identifier: identifier,
+        provisioning_name: name,
+        ignore_profiles_with_different_name: true,
       )
-
-      fetch_certificates_from_gh
-
-      # build app
-      build_app(
-        workspace: "VeWorld.xcworkspace", 
-        scheme: "VeWorld", 
-        export_method: "app-store",
-        clean: true,
-        build_path: "./build",
-        output_directory: "./build",
-      )
-        
-      # upload to testflight
-      upload_to_testflight(
-        skip_waiting_for_build_processing: true, 
-        apple_id: "6446854569",
-        ipa: "./build/VeWorld.ipa",
-      )
-
-      create_changelog(version:version)
-
-      create_tags_gh(build:build, version:version)
-
-      upload_source_maps(build:build, version:version)
-
-      gh_setup_after
-
-      # create pull request
-      create_pull_request(
-        api_token: github_token,
-        repo: "vechain/veworld-mobile",
-        title: versionType.nil? ? "build: build artifacts build-#{build} [iOS]" : "version: build artifacts version-#{version} [iOS]", 
-        base: "main",
-        api_url: "https://api.github.com"
-      )
-
-      # send slack message
-      slack(
-        message: versionType.nil? ? "VeWorld build number: #{build} was successfully released! [iOS]" : "VeWorld version number: #{version} was successfully released! [iOS]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: true,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
-
-      # clean build artifacts if any
-      clean_build_artifacts
-
-
-    rescue => exception # catch
-      puts exception
-
-      # send slack message
-      slack(
-        message: versionType.nil? ? "Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: false,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
-
-      # clean build artifacts if any
-      clean_build_artifacts
-
-      # checkout main
-      sh("git checkout main")
-
-      # delete branch locally
-      sh("git branch -D release-build-#{build}-#{version}")
-      
-      # delete branch remotely
-      sh("git push origin --delete release-build-#{build}-#{version}")
-
-      if git_tag_exists(tag: "v#{version}-#{build}")
-        # delete tag locally
-        sh("git tag -d v#{version}-#{build}") 
-        # delete tag remotely
-        sh("git push --delete origin v#{version}-#{build}") 
-      end
     end
   end
 
-  # Builds the app using specified options.
-  #
-  # @param {string} options[:username] - The GitHub username for authentication.
-  # @param {string} options[:token] - The GitHub personal token for authentication.
-  # @param optional {string} options[:version] - The version type for the build (e.g., "patch", "minor", "major").
-  # @param optional {string} options[:build] - The build number for the build.
-  desc "Push a new beta build to TestFlight"
-  lane :build_ci do |options|
-    github_username = options[:username]
-    github_token = options[:token]
-    version = options[:version]
-    build = options[:build]
+  # A wrong team prefix in application-identifier moves the default keychain group, so users lose their wallets.
+  private_lane :verify_entitlements do |options|
+    bundles = {
+      "Payload/VeWorld.app" => [APP_IDENTIFIER, "../VeWorld/VeWorld.entitlements"],
+      "Payload/VeWorld.app/PlugIns/OneSignalNotificationServiceExtension.appex" => [EXTENSION_IDENTIFIER, "../OneSignalNotificationServiceExtension/OneSignalNotificationServiceExtension.entitlements"],
+    }
+    Dir.mktmpdir do |dir|
+      sh("unzip", "-q", options[:ipa], "-d", dir, log: false)
+      bundles.each do |bundle, (identifier, source)|
+        signed = Plist.parse_xml(IO.popen(["codesign", "-d", "--entitlements", "-", "--xml", File.join(dir, bundle)], err: File::NULL, &:read)) || {}
+        problems = []
+        problems << "application-identifier is #{signed["application-identifier"].inspect}" unless signed["application-identifier"] == "#{TEAM_ID}.#{identifier}"
+        problems << "team-identifier is #{signed["com.apple.developer.team-identifier"].inspect}" unless signed["com.apple.developer.team-identifier"] == TEAM_ID
+        Plist.parse_xml(source).each do |key, value|
+          # Scalars such as aps-environment are rewritten from the profile, so only their presence is checked.
+          next if signed.key?(key) && (!value.is_a?(Array) || Array(signed[key]).sort == value.sort)
+          problems << "#{key} is #{signed[key].inspect}, expected #{value.inspect}"
+        end
+        UI.user_error!("#{bundle} entitlements: #{problems.join("; ")}") unless problems.empty?
+      end
+    end
+    UI.success("Entitlements match team #{TEAM_ID}")
+  end
 
+  desc "Push a new beta build to TestFlight"
+  lane :build_ci do
     setup_ci if ENV['CI']
 
-    if !build.nil? 
-      build = increment_build_number(build_number: build, xcodeproj: "VeWorld.xcodeproj")
-              increment_build_number(build_number: build, xcodeproj: "VeWorld.xcodeproj")
-    else
-      build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
-              increment_build_number(xcodeproj: "VeWorld.xcodeproj")
-    end
+    api_key = app_store_connect_api_key
 
-    # check if spceicifed version number
-    if !version.nil? 
-      if version.downcase != "patch" && version.downcase != "minor" && version.downcase != "major"
-        version = increment_version_number(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
-                  increment_version_number(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
-      else 
-        version = increment_version_number(bump_type: version.downcase, xcodeproj: "VeWorld.xcodeproj")
-                  increment_version_number(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
-      end
-    else
-      version = get_version_number(xcodeproj: "VeWorld.xcodeproj")
-    end
+    version = set_release_version
+    build = set_next_build_number(api_key: api_key)
+    github_output(version: version, build: build)
 
     # clean build artifacts if any
     clean_build_artifacts
@@ -412,116 +123,34 @@ platform :ios do
     end
 
 
-    # begin -> rescure == try -> catch
-    begin
-      
-      sh("echo 'build number: #{build}'")
-      sh("echo 'version type: #{version}'")
-      # create new branch and push to github
-      gh_setup_before_ci(
-        github_username:github_username, 
-        github_token:github_token,
-        build_number: build,
-        version_number: version,
-      )
+    install_signing(api_key: api_key)
 
-      fetch_certificates_from_gh_for_ci
-      
-      begin
-      
-        build_app(
-        workspace: "VeWorld.xcworkspace", 
-        scheme: "VeWorld", 
-        export_method: "app-store",
-        clean: true,
-        build_path: "./build",
-        output_directory: "./build",
-        )
+    build_app(
+      workspace: "VeWorld.xcworkspace",
+      scheme: "VeWorld",
+      export_method: "app-store",
+      export_options: {
+        signingStyle: "manual",
+        provisioningProfiles: { APP_IDENTIFIER => APP_PROFILE_NAME, EXTENSION_IDENTIFIER => EXTENSION_PROFILE_NAME },
+      },
+      clean: true,
+      build_path: "./build",
+      output_directory: "./build",
+    )
 
-        sh("echo 'Build successful'")
-        
-        rescue => exception
-          puts exception
-      
-          sh("echo 'Build failed'")
-            # clean build artifacts if any
-            clean_build_artifacts
-        end
-        
-      # upload to testflight
-      upload_to_testflight(
-        skip_waiting_for_build_processing: true, 
-        apple_id: "6446854569",
-        ipa: "./build/VeWorld.ipa",
-      )
+    verify_entitlements(ipa: lane_context[SharedValues::IPA_OUTPUT_PATH])
 
-      create_changelog(version:version)
+    upload_to_testflight(
+      api_key: api_key,
+      skip_waiting_for_build_processing: true,
+      apple_id: "6446854569",
+      ipa: "./build/VeWorld.ipa",
+    )
 
-      create_tags_gh(build:build, version:version)
+    # Nothing is committed, so the tag lands on the commit that was built.
+    create_tags_gh(build:build, version:version)
 
-      upload_source_maps(build:build, version:version)
-
-      gh_setup_after
-
-      # create pull request
-      create_pull_request(
-        api_token: github_token,
-        repo: "vechain/veworld-mobile",
-        title: version.nil? ? "build: build artifacts build-#{build} [iOS]" : "version: build artifacts version-#{version} [iOS]", 
-        base: "main",
-        body: "This PR was automatically created by the CI pipeline.",
-        api_url: "https://api.github.com"
-      )
-
-      # send slack message
-      slack(
-        message:  "CI: VeWorld version number: #{version}  build number: #{build} was successfully released! [iOS]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: true,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
-
-      # clean build artifacts if any
-      clean_build_artifacts
-
-
-    rescue => exception # catch
-      puts exception
-
-      ## send slack message
-      slack(
-        message: "CI:Error releasing VeWorld version number: #{version} build number: #{build} [iOS]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: false,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
-
-      # clean build artifacts if any
-      clean_build_artifacts
-
-      # checkout main
-      sh("git checkout main")
-
-      # delete branch locally
-      sh("git branch -D release-build-ci-#{build}-#{version}")
-      
-      # delete branch remotely
-      sh("git push origin --delete release-build-ci-#{build}-#{version}")
-
-      if git_tag_exists(tag: "v#{version}-#{build}")
-        # delete tag locally
-        sh("git tag -d v#{version}-#{build}") 
-        # delete tag remotely
-        sh("git push --delete origin v#{version}-#{build}") 
-      end
-      sh("echo 'Build failed'")
-    end
+    clean_build_artifacts
   end
 
   lane :build_test_ci do | options |
@@ -571,7 +200,6 @@ platform :ios do
     end
     
     sh "cd ../.. && pwd && npx react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ios/main.jsbundle --assets-dest ios"
-    fetch_certificates_from_gh_for_ci
       # begin -> rescure == try -> catch
       begin
           xcodebuild(

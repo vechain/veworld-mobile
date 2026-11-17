@@ -1,5 +1,4 @@
-import { BottomSheetTextInput } from "@gorhom/bottom-sheet"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal, BottomSheetTextInput } from "@gorhom/bottom-sheet"
 import { useMutation } from "@tanstack/react-query"
 import * as Haptics from "expo-haptics"
 import React, { RefObject, useCallback, useMemo, useState } from "react"
@@ -16,7 +15,7 @@ import { URIUtils, warn } from "~Utils"
 import FontUtils from "~Utils/FontUtils"
 
 type Props = {
-    bsRef: RefObject<BottomSheetModalMethods>
+    bsRef: RefObject<BottomSheetModal>
 }
 
 const urlSchema = z

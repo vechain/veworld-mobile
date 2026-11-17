@@ -55,6 +55,8 @@ export const AnimatedSplashScreen = ({ playAnimation, useFadeOutAnimation, child
 
     const scaleOut = useAnimatedStyle(() => {
         return {
+            // Reanimated's iOS fast path doesn't render inside the legacy-interop MaskedView; zIndex keeps this on the commit path
+            zIndex: 0,
             transform: [
                 {
                     scale: loadingProgress.value / 6, // Adjust according to your needs

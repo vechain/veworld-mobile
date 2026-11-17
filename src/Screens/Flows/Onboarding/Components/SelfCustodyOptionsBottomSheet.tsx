@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import React, { RefObject, useCallback, useEffect, useMemo, useState } from "react"
 import { FlatList, StyleSheet } from "react-native"
@@ -18,7 +18,7 @@ import { Feedback } from "~Components/Providers/FeedbackProvider/Events"
 import { FeedbackSeverity, FeedbackType } from "~Components/Providers/FeedbackProvider/Model"
 
 type Props = {
-    bsRef: RefObject<BottomSheetModalMethods>
+    bsRef: RefObject<BottomSheetModal>
 }
 
 export const SelfCustodyOptionsBottomSheet = ({ bsRef }: Props) => {

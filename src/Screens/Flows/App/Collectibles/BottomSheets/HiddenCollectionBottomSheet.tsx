@@ -1,11 +1,11 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { RefObject } from "react"
 import { BaseButton, DefaultBottomSheet } from "~Components"
 import { useBottomSheetModal, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 
 type Props = {
-    bsRef: RefObject<BottomSheetModalMethods>
+    bsRef: RefObject<BottomSheetModal>
 }
 
 export const HiddenCollectionBottomSheet = ({ bsRef }: Props) => {

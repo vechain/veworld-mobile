@@ -21,7 +21,7 @@ export const SellStack = () => {
 
     return (
         <Navigator
-            screenOptions={{ headerShown: false, animationEnabled: !isLowEndDevice }}
+            screenOptions={{ headerShown: false, animation: !isLowEndDevice ? "default" : "none" }}
             initialRouteName={Routes.SELL_WEBVIEW}>
             <Group>
                 <Screen

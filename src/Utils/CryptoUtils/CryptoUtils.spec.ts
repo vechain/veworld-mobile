@@ -168,6 +168,15 @@ describe("decryptState", () => {
         const decrypted = CryptoUtils.decryptState(encrypted, "myKey")
         expect(JSON.parse(decrypted)).toEqual({ test: "Hello" })
     })
+
+    // Produced by `openssl enc -aes-256-cbc -md md5 -nosalt -pass pass:myKey`, which is the
+    // derivation quick-crypto 0.7 applied to a null IV. Every release before quick-crypto 1.x
+    // wrote state in this format, so it has to keep decrypting.
+    it("reads state written before the quick-crypto 1.x upgrade", () => {
+        const legacyCiphertext = "ff5f41d90901fd6fcee4b60ac237bb5e165b6c5d6023b2a3ea100896bcfeb7dd"
+        expect(JSON.parse(CryptoUtils.decryptState(legacyCiphertext, "myKey"))).toEqual({ test: "Hello" })
+        expect(CryptoUtils.encryptState({ test: "Hello" }, "myKey")).toEqual(legacyCiphertext)
+    })
 })
 
 describe("shuffleArray", () => {

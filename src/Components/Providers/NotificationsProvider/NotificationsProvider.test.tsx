@@ -6,7 +6,7 @@ import { NavigationContainer } from "@react-navigation/native"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { NotificationsProvider, useNotifications } from "./NotificationsProvider"
 import { reducer, newStorage, NftSlice, NftSliceState } from "~Storage/Redux"
-import { MMKV } from "react-native-mmkv"
+import { createMMKV } from "react-native-mmkv"
 import { PersistConfig } from "redux-persist/es/types"
 import { OneSignal } from "react-native-onesignal"
 import { FeatureFlagsContext, initialState as ffInitialState } from "../FeatureFlagsProvider"
@@ -25,7 +25,7 @@ const mockGetIdAsync = jest.fn()
 
 const nftPersistence: PersistConfig<NftSliceState> = {
     key: NftSlice.name,
-    storage: newStorage(new MMKV({ id: "test-notifications-nft-storage" })),
+    storage: newStorage(createMMKV({ id: "test-notifications-nft-storage" })),
     whitelist: ["blackListedCollections"],
 }
 

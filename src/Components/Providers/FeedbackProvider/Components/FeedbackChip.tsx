@@ -1,5 +1,8 @@
+import { TouchableOpacity } from "~Components"
 import React, { useCallback, useMemo } from "react"
-import { Pressable, StyleSheet, TouchableOpacity } from "react-native"
+// Only fades and layout-animates, which the shadow tree tracks; React Native's Pressable keeps the box-none strip tap-through.
+// eslint-disable-next-line no-restricted-imports
+import { Pressable, StyleSheet } from "react-native"
 import Animated, { FadeIn, FadeOut, ZoomInEasyUp, ZoomOutEasyUp } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BaseIcon } from "~Components/Base"

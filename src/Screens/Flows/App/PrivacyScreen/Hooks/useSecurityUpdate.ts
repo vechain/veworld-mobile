@@ -18,7 +18,7 @@ export const useSecurityUpdate = () => {
                         text1: LL.ERROR_SECURITY_UPDATE_REVERTED(),
                     })
                 }
-            } catch (e) {
+            } catch {
                 showErrorToast({ text1: LL.ERROR_SECURITY_UPDATE_FAILED() })
 
                 dispatch(setIsAppLoading(true))

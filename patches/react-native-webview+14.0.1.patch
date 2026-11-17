@@ -1,10 +1,10 @@
 diff --git a/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebChromeClient.java b/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebChromeClient.java
-index 07f73fd..ae061d3 100644
+index 1b5c4c9..279a633 100644
 --- a/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebChromeClient.java
 +++ b/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebChromeClient.java
-@@ -3,6 +3,10 @@ package com.reactnativecommunity.webview;
+@@ -2,6 +2,10 @@ package com.reactnativecommunity.webview;
+ 
  import android.Manifest;
- import android.annotation.TargetApi;
  import android.app.Activity;
 +import android.app.AlertDialog;
 +import android.content.DialogInterface;
@@ -12,16 +12,16 @@ index 07f73fd..ae061d3 100644
 +import android.os.Handler;
  import android.content.pm.PackageManager;
  import android.net.Uri;
- import android.os.Build;
-@@ -17,6 +21,7 @@ import android.webkit.ValueCallback;
+ import android.os.Message;
+@@ -15,6 +19,7 @@ import android.webkit.ValueCallback;
  import android.webkit.WebChromeClient;
  import android.webkit.WebView;
  import android.webkit.WebViewClient;
 +import android.widget.Button;
  import android.widget.FrameLayout;
  
- import androidx.annotation.RequiresApi;
-@@ -37,6 +42,7 @@ import java.util.Collections;
+ import androidx.core.content.ContextCompat;
+@@ -34,6 +39,7 @@ import java.util.Collections;
  import java.util.List;
  
  public class RNCWebChromeClient extends WebChromeClient implements LifecycleEventListener {
@@ -29,7 +29,7 @@ index 07f73fd..ae061d3 100644
      protected static final FrameLayout.LayoutParams FULLSCREEN_LAYOUT_PARAMS = new FrameLayout.LayoutParams(
              ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, Gravity.CENTER);
  
-@@ -57,7 +63,8 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+@@ -54,7 +60,8 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
  
      /*
       * - Permissions -
@@ -39,7 +39,7 @@ index 07f73fd..ae061d3 100644
       * to be stored to send permissions results to the webview
       */
  
-@@ -65,6 +72,10 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+@@ -62,6 +69,10 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
      protected PermissionRequest permissionRequest;
      // Webview camera & audio permission already granted
      protected List<String> grantedPermissions;
@@ -50,7 +50,7 @@ index 07f73fd..ae061d3 100644
  
      // Webview geolocation permission callback
      protected GeolocationPermissions.Callback geolocationPermissionCallback;
-@@ -90,20 +101,19 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+@@ -87,20 +98,19 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
  
          final WebView newWebView = new WebView(view.getContext());
  
@@ -82,7 +82,7 @@ index 07f73fd..ae061d3 100644
              });
          }
  
-@@ -139,65 +149,133 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+@@ -136,65 +146,133 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
          event.putBoolean("canGoForward", webView.canGoForward());
          event.putDouble("progress", (float) newProgress / 100);
  
@@ -240,7 +240,7 @@ index 07f73fd..ae061d3 100644
  
              /*
               * Keep the trace of callback and origin for the async permission request
-@@ -208,7 +286,28 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+@@ -205,7 +283,28 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
              requestPermissions(Collections.singletonList(Manifest.permission.ACCESS_FINE_LOCATION));
  
          } else {
@@ -270,7 +270,7 @@ index 07f73fd..ae061d3 100644
          }
      }
  
-@@ -217,7 +316,8 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+@@ -214,7 +313,8 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
          if (activity == null) {
              throw new IllegalStateException("Tried to use permissions API while not attached to an Activity.");
          } else if (!(activity instanceof PermissionAwareActivity)) {
@@ -280,7 +280,7 @@ index 07f73fd..ae061d3 100644
          }
          return (PermissionAwareActivity) activity;
      }
-@@ -225,8 +325,10 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+@@ -222,8 +322,10 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
      private synchronized void requestPermissions(List<String> permissions) {
  
          /*
@@ -293,7 +293,7 @@ index 07f73fd..ae061d3 100644
           * to store next required permissions.
           */
  
-@@ -241,23 +343,24 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+@@ -238,23 +340,24 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
          activity.requestPermissions(
                  permissions.toArray(new String[0]),
                  COMMON_PERMISSION_REQUEST,
@@ -324,41 +324,7 @@ index 07f73fd..ae061d3 100644
  
          for (int i = 0; i < permissions.length; i++) {
  
-@@ -317,23 +420,28 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
-     };
- 
-     protected void openFileChooser(ValueCallback<Uri> filePathCallback, String acceptType) {
--      this.mWebView.getThemedReactContext().getNativeModule(RNCWebViewModule.class).startPhotoPickerIntent(filePathCallback, acceptType);
-+        this.mWebView.getThemedReactContext().getNativeModule(RNCWebViewModule.class)
-+                .startPhotoPickerIntent(filePathCallback, acceptType);
-     }
- 
-     protected void openFileChooser(ValueCallback<Uri> filePathCallback) {
--      this.mWebView.getThemedReactContext().getNativeModule(RNCWebViewModule.class).startPhotoPickerIntent(filePathCallback, "");
-+        this.mWebView.getThemedReactContext().getNativeModule(RNCWebViewModule.class)
-+                .startPhotoPickerIntent(filePathCallback, "");
-     }
- 
-     protected void openFileChooser(ValueCallback<Uri> filePathCallback, String acceptType, String capture) {
--      this.mWebView.getThemedReactContext().getNativeModule(RNCWebViewModule.class).startPhotoPickerIntent(filePathCallback, acceptType);
-+        this.mWebView.getThemedReactContext().getNativeModule(RNCWebViewModule.class)
-+                .startPhotoPickerIntent(filePathCallback, acceptType);
-     }
- 
-     @Override
--    public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, FileChooserParams fileChooserParams) {
-+    public boolean onShowFileChooser(WebView webView, ValueCallback<Uri[]> filePathCallback,
-+            FileChooserParams fileChooserParams) {
-         String[] acceptTypes = fileChooserParams.getAcceptTypes();
-         boolean allowMultiple = fileChooserParams.getMode() == WebChromeClient.FileChooserParams.MODE_OPEN_MULTIPLE;
- 
--        return this.mWebView.getThemedReactContext().getNativeModule(RNCWebViewModule.class).startPhotoPickerIntent(filePathCallback, acceptTypes, allowMultiple, fileChooserParams.isCaptureEnabled());
-+        return this.mWebView.getThemedReactContext().getNativeModule(RNCWebViewModule.class).startPhotoPickerIntent(
-+                filePathCallback, acceptTypes, allowMultiple, fileChooserParams.isCaptureEnabled());
-     }
- 
-     @Override
-@@ -344,10 +452,12 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+@@ -329,10 +432,12 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
      }
  
      @Override
@@ -373,7 +339,7 @@ index 07f73fd..ae061d3 100644
  
      protected ViewGroup getRootView() {
          return this.mWebView.getThemedReactContext().getCurrentActivity().findViewById(android.R.id.content);
-@@ -359,14 +469,15 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
+@@ -344,14 +449,15 @@ public class RNCWebChromeClient extends WebChromeClient implements LifecycleEven
  
      /**
       * Set whether or not protected media should be allowed
@@ -392,9 +358,8 @@ index 07f73fd..ae061d3 100644
 +        mHasOnOpenWindowEvent = hasEvent;
      }
  }
-\ No newline at end of file
 diff --git a/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebView.java b/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebView.java
-index 5932fc1..acbeec6 100644
+index 80c6803..11a7cda 100644
 --- a/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebView.java
 +++ b/node_modules/react-native-webview/android/src/main/java/com/reactnativecommunity/webview/RNCWebView.java
 @@ -49,30 +49,25 @@ import java.util.Map;
@@ -455,7 +420,7 @@ index 5932fc1..acbeec6 100644
          progressChangedFilter = new ProgressChangedFilter();
      }
  
-@@ -144,79 +141,77 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+@@ -140,79 +137,77 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
                      new ContentSizeChangeEvent(
                              RNCWebViewWrapper.getReactTagFromWebView(this),
                              w,
@@ -590,7 +555,7 @@ index 5932fc1..acbeec6 100644
      }
  
      @Override
-@@ -229,6 +224,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+@@ -225,6 +220,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
      }
  
      WebChromeClient mWebChromeClient;
@@ -598,7 +563,7 @@ index 5932fc1..acbeec6 100644
      @Override
      public void setWebChromeClient(WebChromeClient client) {
          this.mWebChromeClient = client;
-@@ -242,8 +238,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+@@ -238,8 +234,7 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
          return this.mWebChromeClient;
      }
  
@@ -608,7 +573,7 @@ index 5932fc1..acbeec6 100644
          return mRNCWebViewClient;
      }
  
-@@ -251,39 +246,41 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+@@ -247,39 +242,41 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
          return this.messagingEnabled;
      }
  
@@ -676,7 +641,7 @@ index 5932fc1..acbeec6 100644
      }
  
      @SuppressLint("AddJavascriptInterface")
-@@ -317,15 +314,15 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+@@ -313,15 +310,15 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
                  injectedJSBeforeContentLoaded != null &&
                  !TextUtils.isEmpty(injectedJSBeforeContentLoaded)) {
              evaluateJavascriptWithFallback("(function() {\n" + injectedJSBeforeContentLoaded + ";\n})();");
@@ -695,7 +660,7 @@ index 5932fc1..acbeec6 100644
      }
  
      public void onMessage(String message, String sourceUrl) {
-@@ -346,7 +343,8 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+@@ -342,7 +339,8 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
                      if (mMessagingJSModule != null) {
                          dispatchDirectMessage(data);
                      } else {
@@ -705,7 +670,7 @@ index 5932fc1..acbeec6 100644
                      }
                  }
              });
-@@ -426,20 +424,20 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+@@ -422,20 +420,20 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
          super.destroy();
      }
  
@@ -734,7 +699,7 @@ index 5932fc1..acbeec6 100644
          }
  
          /**
-@@ -449,15 +447,16 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
+@@ -445,15 +443,16 @@ public class RNCWebView extends WebView implements LifecycleEventListener {
          @JavascriptInterface
          public void postMessage(String message) {
              if (mWebView.getMessagingEnabled()) {
@@ -754,3 +719,16 @@ index 5932fc1..acbeec6 100644
      protected static class ProgressChangedFilter {
          private boolean waitingForCommandLoadUrl = false;
  
+diff --git a/node_modules/react-native-webview/index.d.ts b/node_modules/react-native-webview/index.d.ts
+index 10b9c14..193e4a7 100644
+--- a/node_modules/react-native-webview/index.d.ts
++++ b/node_modules/react-native-webview/index.d.ts
+@@ -5,7 +5,7 @@ export { FileDownload, WebViewMessageEvent, WebViewNavigation } from './lib/WebV
+ 
+ export type WebViewProps = IOSWebViewProps & AndroidWebViewProps & WindowsWebViewProps;
+ 
+-declare class WebView<P = undefined> extends Component<WebViewProps & P> {
++declare class WebView<P = object> extends Component<WebViewProps & P> {
+   /**
+    * Go back one page in the webview's history.
+    */

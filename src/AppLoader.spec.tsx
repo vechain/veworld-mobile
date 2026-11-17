@@ -5,7 +5,10 @@ import { TestWrapper } from "~Test"
 import { RootState } from "~Storage/Redux/Types"
 import { DerivationPath } from "~Constants"
 import { Text } from "react-native"
-import { withReanimatedTimer } from "react-native-reanimated"
+import { withReanimatedTimer as withReanimatedTimerUntyped } from "react-native-reanimated"
+
+// The web build TS resolves types this as taking no callback; the native one takes the test.
+const withReanimatedTimer = withReanimatedTimerUntyped as unknown as (animationTest: () => void) => void
 
 const createWrapper = (preloadedState: Partial<RootState>) => {
     return ({ children }: { children: React.ReactNode }) => TestWrapper({ children, preloadedState })

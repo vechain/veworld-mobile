@@ -36,7 +36,8 @@ export const CreateWalletAppStack = () => {
     const { isLowEndDevice } = useDevice()
 
     return (
-        <CreateWalletApp.Navigator screenOptions={{ headerShown: false, animationEnabled: !isLowEndDevice }}>
+        <CreateWalletApp.Navigator
+            screenOptions={{ headerShown: false, animation: !isLowEndDevice ? "default" : "none" }}>
             <CreateWalletApp.Screen
                 name={Routes.IMPORT_MNEMONIC}
                 component={ImportLocalWallet}

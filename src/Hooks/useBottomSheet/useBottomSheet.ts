@@ -15,12 +15,12 @@ export const useBottomSheetRef = () => {
     return ref
 }
 
-type UseBottomSheetModalOpts = {
-    externalRef?: RefObject<BottomSheetModal>
+type UseBottomSheetModalOpts<TData> = {
+    externalRef?: RefObject<BottomSheetModal<TData>>
 }
 
-export const useBottomSheetModal = <TData>({ externalRef }: UseBottomSheetModalOpts = {}) => {
-    const ref = useRef<BottomSheetModal>(undefined!)
+export const useBottomSheetModal = <TData>({ externalRef }: UseBottomSheetModalOpts<TData> = {}) => {
+    const ref = useRef<BottomSheetModal<TData>>(undefined!)
 
     const onOpen = useCallback(
         (newData?: TData) => {

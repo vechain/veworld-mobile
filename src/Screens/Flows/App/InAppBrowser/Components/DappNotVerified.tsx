@@ -1,6 +1,7 @@
+import { Pressable } from "react-native-gesture-handler"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { Linking, Pressable, StyleSheet } from "react-native"
+import { Linking, StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { SelectNetworkBottomSheet } from "~Components/Reusable/Network"
 import { COLORS, ColorThemeType } from "~Constants"

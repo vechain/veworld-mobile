@@ -42,7 +42,7 @@ export const useNFTInfo = (tokenId: string, contractAddress: string) => {
                 if (!metadata) throw Error("No metadata found")
 
                 setTokenMetadata(metadata)
-            } catch (e) {
+            } catch {
                 warn(ERROR_EVENTS.NFT, `Failed to load NFT token info ${tokenId} of collection ${contractAddress}`)
             } finally {
                 setIsMediaLoading(false)

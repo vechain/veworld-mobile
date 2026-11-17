@@ -1,6 +1,8 @@
+import { Pressable } from "react-native-gesture-handler"
 import React, { useCallback, useEffect, useMemo } from "react"
-import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native"
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native"
 import Animated, {
+    AnimatedStyle,
     useAnimatedRef,
     useAnimatedStyle,
     useDerivedValue,
@@ -17,7 +19,7 @@ type Props = {
     headerStyle?: StyleProp<ViewStyle>
     headerOpenedStyle?: ViewStyle
     headerClosedStyle?: ViewStyle
-    chevronContainerStyle?: StyleProp<Animated.AnimateStyle<StyleProp<ViewStyle>>>
+    chevronContainerStyle?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>
     bodyComponent: React.ReactNode
     defaultIsOpen?: boolean
     extraData: number

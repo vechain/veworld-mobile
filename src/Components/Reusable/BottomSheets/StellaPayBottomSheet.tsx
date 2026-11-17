@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { RefObject, useCallback, useMemo, useState } from "react"
@@ -17,7 +17,7 @@ import { CheckBoxWithText } from "../CheckBoxWithText"
 
 type Props = {}
 
-export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({}, ref) => {
+export const StellaPayBottomSheet = React.forwardRef<BottomSheetModal, Props>(({}, ref) => {
     const [isChecked, setIsChecked] = useState(false)
 
     const currentRoute = useAppSelector(selectCurrentScreen)
@@ -27,7 +27,7 @@ export const StellaPayBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     const { LL } = useI18nContext()
     const { navigateWithTab } = useBrowserTab()
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
-    const { onClose } = useBottomSheetModal({ externalRef: ref as RefObject<BottomSheetModalMethods> })
+    const { onClose } = useBottomSheetModal({ externalRef: ref as RefObject<BottomSheetModal> })
 
     const returnScreen = useMemo(() => {
         switch (currentRoute) {

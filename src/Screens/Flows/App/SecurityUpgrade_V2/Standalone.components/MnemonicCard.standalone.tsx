@@ -1,7 +1,7 @@
 import React, { FC, useCallback, useMemo } from "react"
-import { StyleSheet, TouchableWithoutFeedback } from "react-native"
+import { StyleSheet } from "react-native"
 import { PlatformBlur } from "~Components"
-import { BaseIcon, BaseText, BaseView } from "~Components/Base"
+import { BaseIcon, BaseText, BaseView, TouchableOpacity } from "~Components/Base"
 import { useDisclosure, useTheme } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
 import { useI18nContext } from "~i18n"
@@ -24,7 +24,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
 
     return (
         <BaseView>
-            <TouchableWithoutFeedback onPress={onPress}>
+            <TouchableOpacity activeOpacity={1} onPress={onPress}>
                 <BaseView flexDirection="row" w={100} borderRadius={16} bg={theme.colors.card}>
                     <BaseView
                         px={16}
@@ -64,7 +64,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                         />
                     </BaseView>
                 </BaseView>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
         </BaseView>
     )
 }

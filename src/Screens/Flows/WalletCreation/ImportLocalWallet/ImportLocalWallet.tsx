@@ -233,7 +233,7 @@ export const ImportLocalWallet = () => {
                     default:
                         throw new Error("Unknown import type")
                 }
-            } catch (err) {
+            } catch {
                 HapticsService.triggerNotification({ level: "Error" })
                 setIsError(LL.ERROR_INVALID_IMPORT_DATA())
             }

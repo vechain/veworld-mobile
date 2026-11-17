@@ -1,15 +1,10 @@
-import { TransitionSpec } from "@react-navigation/stack/lib/typescript/src/types"
+import type { TransitionPreset } from "@react-navigation/stack"
 import { Easing } from "react-native"
 
 export const TRANSITION_DURATION_OPEN = 400
 export const TRANSITION_DURATION_CLOSE = 500
 
-type TransitionSpecs = {
-    open: TransitionSpec
-    close: TransitionSpec
-}
-
-export const TRANSITION_SPECS: TransitionSpecs = {
+export const TRANSITION_SPECS: TransitionPreset["transitionSpec"] = {
     open: {
         animation: "timing",
         config: {

@@ -29,9 +29,18 @@ index 0000000..b7281a5
 +target_link_libraries(scrypt_jni log)
 +target_link_options(scrypt_jni PRIVATE -Wl,-z,max-page-size=16384)
 diff --git a/node_modules/react-native-scrypt/android/build.gradle b/node_modules/react-native-scrypt/android/build.gradle
-index dac9cc5..ff53cdb 100644
+index dac9cc5..ab8bf2d 100644
 --- a/node_modules/react-native-scrypt/android/build.gradle
 +++ b/node_modules/react-native-scrypt/android/build.gradle
+@@ -6,7 +6,7 @@ buildscript {
+     if (project == rootProject) {
+         repositories {
+             google()
+-            jcenter()
++            mavenCentral()
+         }
+ 
+         dependencies {
 @@ -27,25 +27,26 @@ android {
  
      defaultConfig {

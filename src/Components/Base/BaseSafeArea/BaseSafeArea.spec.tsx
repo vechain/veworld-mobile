@@ -4,6 +4,8 @@ import React from "react"
 import { render, screen } from "@testing-library/react-native"
 import { BaseSafeArea } from "./BaseSafeArea"
 import { Text } from "react-native"
+import { SafeAreaInsetsContext } from "react-native-safe-area-context"
+import { PlatformUtils } from "~Utils"
 
 const baseSafeAreaTestId = "BaseSafeArea"
 const findBaseSafeArea = async () => screen.findByTestId(baseSafeAreaTestId, {}, { timeout: 5000 })
@@ -71,5 +73,19 @@ describe("BaseSafeArea", () => {
 
         const content = await screen.findByText("Hello World!")
         expect(content).toBeVisible()
+    })
+
+    it("adds the top inset to the Android top padding", async () => {
+        jest.spyOn(PlatformUtils, "isAndroid").mockReturnValue(true)
+        render(
+            <SafeAreaInsetsContext.Provider value={{ top: 24, bottom: 0, left: 0, right: 0 }}>
+                <BaseSafeArea testID={baseSafeAreaTestId}>
+                    <Text>Hello World!</Text>
+                </BaseSafeArea>
+            </SafeAreaInsetsContext.Provider>,
+            { wrapper: TestWrapper },
+        )
+
+        expect(await findBaseSafeArea()).toHaveStyle({ paddingTop: 36 })
     })
 })

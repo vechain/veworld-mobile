@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo } from "react"
 import { useThemedStyles } from "~Hooks"
 
-import { Pressable, StyleSheet, ViewStyle } from "react-native"
-import { TouchableOpacity } from "react-native-gesture-handler"
+import { StyleSheet, ViewStyle } from "react-native"
+import { TouchableOpacity, Pressable } from "react-native-gesture-handler"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, LedgerBadge, WatchedAccountBadge } from "~Components"
 import { ColorThemeType, DerivationPath } from "~Constants"
 import { BaseDevice, DEVICE_TYPE } from "~Model"

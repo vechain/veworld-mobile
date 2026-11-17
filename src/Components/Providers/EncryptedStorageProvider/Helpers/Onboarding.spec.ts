@@ -14,7 +14,7 @@ const createStorage = () => {
         storage: {
             getString: jest.fn((key: string) => values.get(key)),
             set: jest.fn((key: string, value: string) => values.set(key, value)),
-            delete: jest.fn((key: string) => values.delete(key)),
+            remove: jest.fn((key: string) => values.delete(key)),
             getAllKeys: jest.fn(() => [...values.keys()]),
         } as unknown as MMKV,
         values,

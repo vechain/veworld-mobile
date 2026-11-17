@@ -1,42 +1,54 @@
-import React, { memo, useCallback, forwardRef } from "react"
+import React, { memo, useCallback, useEffect, forwardRef, useImperativeHandle, useRef } from "react"
 
 import { BaseTextInput, BaseTextInputProps } from "../BaseTextInput"
 import { useBottomSheetInternal } from "@gorhom/bottom-sheet"
 import { BottomSheetTextInputProps } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetTextInput"
-import { TextInput } from "react-native-gesture-handler"
-import { NativeSyntheticEvent, TextInputFocusEventData } from "react-native"
-import { runOnUI } from "react-native-reanimated"
+import { TextInput as RNTextInput, TextInputFocusEvent, TextInputInstance, findNodeHandle } from "react-native"
 
-const BottomSheetTextInputComponent = forwardRef<TextInput, BottomSheetTextInputProps & BaseTextInputProps>(
-    ({ onFocus, onBlur, ...rest }, ref) => {
-        const bottomSheetInternal = useBottomSheetInternal()
+// Mirrors the library's BottomSheetTextInput; v5 tracks the focused input by node handle.
+const BottomSheetTextInputComponent = forwardRef<TextInputInstance, BottomSheetTextInputProps & BaseTextInputProps>(
+    ({ onFocus, onBlur, ...rest }, providedRef) => {
+        const ref = useRef<TextInputInstance>(null)
+        const { animatedKeyboardState, textInputNodesRef } = useBottomSheetInternal()
 
         const handleOnFocus = useCallback(
-            (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-                runOnUI(() => {
-                    if (!bottomSheetInternal) {
-                        return
-                    }
-
-                    bottomSheetInternal.shouldHandleKeyboardEvents.value = true
-                })()
+            (e: TextInputFocusEvent) => {
+                animatedKeyboardState.set(state => ({ ...state, target: e.nativeEvent.target }))
                 onFocus?.(e)
             },
-            [onFocus, bottomSheetInternal],
+            [onFocus, animatedKeyboardState],
         )
-        const handleOnBlur = useCallback(
-            (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-                runOnUI(() => {
-                    if (!bottomSheetInternal) {
-                        return
-                    }
 
-                    bottomSheetInternal.shouldHandleKeyboardEvents.value = false
-                })()
+        const handleOnBlur = useCallback(
+            (e: TextInputFocusEvent) => {
+                const currentFocusedInput = findNodeHandle(RNTextInput.State.currentlyFocusedInput())
+                const isOwnTarget = animatedKeyboardState.get().target === e.nativeEvent.target
+                const movedToAnotherInput = currentFocusedInput && textInputNodesRef.current.has(currentFocusedInput)
+
+                if (isOwnTarget && !movedToAnotherInput) {
+                    animatedKeyboardState.set(state => ({ ...state, target: undefined }))
+                }
                 onBlur?.(e)
             },
-            [bottomSheetInternal, onBlur],
+            [onBlur, animatedKeyboardState, textInputNodesRef],
         )
+
+        useEffect(() => {
+            const node = findNodeHandle(ref.current)
+            if (!node) return
+
+            const nodes = textInputNodesRef.current
+            nodes.add(node)
+
+            return () => {
+                if (animatedKeyboardState.get().target === node) {
+                    animatedKeyboardState.set(state => ({ ...state, target: undefined }))
+                }
+                nodes.delete(node)
+            }
+        }, [textInputNodesRef, animatedKeyboardState])
+
+        useImperativeHandle(providedRef, () => ref.current as TextInputInstance, [])
 
         return <BaseTextInput ref={ref} onFocus={handleOnFocus} onBlur={handleOnBlur} {...rest} />
     },

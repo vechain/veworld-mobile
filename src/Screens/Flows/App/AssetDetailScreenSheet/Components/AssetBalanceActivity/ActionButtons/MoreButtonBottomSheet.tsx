@@ -1,7 +1,7 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { RefObject, useCallback } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
-import { BaseBottomSheet, BaseIcon, BaseText, BaseView } from "~Components"
+import { StyleSheet } from "react-native"
+import { BaseBottomSheet, BaseIcon, BaseText, BaseView, TouchableOpacity } from "~Components"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -14,7 +14,7 @@ import { SendButton } from "./SendButton"
 import { SwapButton } from "./SwapButton"
 
 type Props = {
-    bsRef: RefObject<BottomSheetModalMethods>
+    bsRef: RefObject<BottomSheetModal>
     openReceiveBottomsheet: () => void
     token: FungibleTokenWithBalance
 }

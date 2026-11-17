@@ -1,7 +1,6 @@
 import React from "react"
 import { StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
-import LinearGradient from "react-native-linear-gradient"
 import Markdown from "react-native-markdown-display"
 import { navigatorB3mo, VeBetterLogoGreenSVG, VeBetterSVG } from "~Assets"
 import { BaseView } from "~Components"
@@ -16,14 +15,7 @@ export const VeBetterNavigatorsBanner = () => {
     const { LL } = useI18nContext()
 
     return (
-        <LinearGradient
-            colors={theme.colors.veBetterNavigatorsBanner.background}
-            angle={270}
-            useAngle
-            locations={[0, 1]}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-            style={styles.container}>
+        <BaseView style={styles.container}>
             <BaseView alignItems={"flex-start"} gap={16} flex={0.8}>
                 <BaseView flexDirection="row" alignItems="center" justifyContent="center" gap={4}>
                     <VeBetterLogoGreenSVG color={theme.colors.veBetterNavigatorsBanner.vbdLogo.symbol} />
@@ -42,7 +34,7 @@ export const VeBetterNavigatorsBanner = () => {
                 </Markdown>
             </BaseView>
             <FastImage source={navigatorB3mo} style={styles.image as ImageStyle} />
-        </LinearGradient>
+        </BaseView>
     )
 }
 
@@ -55,6 +47,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 12,
             paddingHorizontal: 16,
             paddingVertical: 20,
+            backgroundImage: `linear-gradient(270deg, ${theme.colors.veBetterNavigatorsBanner.background.join(", ")})`,
         },
         image: {
             width: 100,

@@ -1,5 +1,5 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useI18nContext } from "~i18n"
 import { DefaultBottomSheet } from "../DefaultBottomSheet"
 import { BaseButton } from "~Components"
@@ -11,7 +11,7 @@ type Props = {
     onClose: () => void
 }
 
-export const EnableCloudBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
+export const EnableCloudBottomSheet = React.forwardRef<BottomSheetModal, Props>(({ onClose }, ref) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
 

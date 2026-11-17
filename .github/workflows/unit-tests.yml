@@ -6,7 +6,7 @@ env:
 
 jobs:
     changes:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         permissions:
             pull-requests: read
         outputs:
@@ -22,7 +22,7 @@ jobs:
                   if [ -z "$PR" ]; then echo "code=true" >> "$GITHUB_OUTPUT"; exit 0; fi
                   files=$(gh api --paginate "/repos/$REPO/pulls/$PR/files" --jq '.[].filename')
                   if echo "$files" | grep -qvE '^(\.github|docs)/|\.md$' ||
-                      echo "$files" | grep -qE '^\.github/workflows/(unit-tests|install-build-test-scan)\.yml$'; then
+                      echo "$files" | grep -qE '^\.github/(workflows/(unit-tests|install-build-test-scan)\.yml|actions/yarn-cache/)'; then
                       echo "code=true" >> "$GITHUB_OUTPUT"
                   else
                       echo "code=false" >> "$GITHUB_OUTPUT"
@@ -31,10 +31,11 @@ jobs:
     unit:
         needs: [changes]
         if: needs.changes.outputs.code == 'true'
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         strategy:
+            # Lint rides the matrix so it shares the install steps and runs alongside the shards.
             matrix:
-                shard: [1, 2, 3, 4]
+                task: [lint, "1", "2", "3", "4"]
             fail-fast: false
         permissions:
             contents: read
@@ -42,43 +43,74 @@ jobs:
 
         steps:
             - name: Checkout repository
-              uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
             - name: Setup Node.js
-              uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+              uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
               with:
-                  node-version: 20.19
-                  cache: "yarn"
+                  node-version-file: .nvmrc
+
+            - name: Restore dependency cache
+              uses: ./.github/actions/yarn-cache
+              with:
+                  mode: restore
 
             - name: Install & Patch packages
               run: |
                   yarn abi:install
                   yarn abi:build
-                  yarn install
+                  for attempt in 1 2 3; do
+                      yarn install --network-timeout 300000 && break
+                      [ "$attempt" = 3 ] && exit 1
+                      sleep 20
+                  done
                   yarn abi:generate
                   yarn generate:indexer-schema:mainnet
 
+            # Only main writes the cache: PR-scoped copies would evict it from the 10 GB quota.
+            - name: Save dependency cache
+              if: github.ref == 'refs/heads/main' && matrix.task == 'lint'
+              uses: ./.github/actions/yarn-cache
+              with:
+                  mode: save
+
             - name: Lint, Format Check & TS Check
-              run: yarn lint && yarn format:check & yarn ts-check
+              if: matrix.task == 'lint'
+              run: yarn lint && yarn format:check && yarn ts-check
 
             - name: Tests with Coverage
+              if: matrix.task != 'lint'
               env:
                   NODE_OPTIONS: "--max_old_space_size=8192"
                   REACT_APP_WALLET_CONNECT_PROJECT_ID: "f1c07ceecbc6115eaa26b2221c2e43cd"
-              run: yarn test:coverage --shard=${{ matrix.shard }}/${{ strategy.job-total }} | tee ./coverage.txt  && exit ${PIPESTATUS[0]}
+                  SHARD: ${{ matrix.task }}
+              run: yarn test:coverage --shard=$SHARD/4 --json --outputFile=jest-results.json | tee ./coverage.txt  && exit ${PIPESTATUS[0]}
 
             - name: Upload coverage folder
-              run: mkdir -p $COVERAGE_PARENT_FOLDER && mv coverage/coverage-final.json $COVERAGE_PARENT_FOLDER/${{ matrix.shard }}.json
+              if: matrix.task != 'lint'
+              env:
+                  SHARD: ${{ matrix.task }}
+              run: mkdir -p $COVERAGE_PARENT_FOLDER && mv coverage/coverage-final.json $COVERAGE_PARENT_FOLDER/$SHARD.json
 
             - name: Upload coverage folder
-              uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+              if: matrix.task != 'lint'
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
               with:
-                  name: coverage-artifacts-${{ matrix.shard }}
+                  name: coverage-artifacts-${{ matrix.task }}
                   path: ${{ env.COVERAGE_PARENT_FOLDER }}
                   retention-days: 1
 
+            # Input for scripts/update-jest-shard-timings.mjs.
+            - name: Upload test timings
+              if: matrix.task != 'lint'
+              uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+              with:
+                  name: jest-results-${{ matrix.task }}
+                  path: jest-results.json
+                  retention-days: 7
+
     coverage:
-        runs-on: ubuntu-latest
+        runs-on: ubuntu-24.04
         needs: [unit]
         permissions:
             contents: read
@@ -87,12 +119,12 @@ jobs:
             id-token: write
         steps:
             - name: Checkout repository
-              uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
               with:
                   fetch-depth: 0
                   clean: false
             - name: Download coverage folder
-              uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+              uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
               with:
                   pattern: coverage-artifacts-*
                   path: ${{ env.COVERAGE_PARENT_FOLDER }}
@@ -105,7 +137,7 @@ jobs:
                   npx nyc report --temp-dir merged-coverage --reporter=json-summary --report-dir merged-coverage
 
             - name: Jest Coverage Comment
-              uses: MishaKav/jest-coverage-comment@174f9cbf582b7cc2a7a3acce14dcfc8362e9d37f
+              uses: MishaKav/jest-coverage-comment@1b5d15445c8afba0c13bd00167bd31130b812d0a # v1.0.37
               with:
                   coverage-summary-path: ./merged-coverage/coverage-summary.json
                   title: Jest Report

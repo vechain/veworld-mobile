@@ -1,5 +1,5 @@
 import React, { FC, memo } from "react"
-import { StyleSheet, TextStyle } from "react-native"
+import { StyleSheet } from "react-native"
 import { BaseText, BaseView } from "~Components/Base"
 import { Icon } from "~Components/Reusable/DesignSystemIconSet"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -16,12 +16,12 @@ type Props = {
 }
 
 export const TabIcon: FC<Props> = memo(({ focused, title, label, isSettings, isShowBackupModal }) => {
-    const { styles } = useThemedStyles(baseStyles(focused))
+    const { styles, theme } = useThemedStyles(baseStyles(focused))
 
     return (
         <BaseView justifyContent="center" alignItems="center" style={styles.container}>
             {isSettings && isShowBackupModal && <BaseView style={styles.warningLabel} />}
-            <Icon name={title} size={20} color={(styles.icon as TextStyle).color} />
+            <Icon name={title} size={20} color={iconColor(focused, theme)} />
             <BaseText typographyFont="smallCaptionSemiBold" style={styles.label}>
                 {label}
             </BaseText>
@@ -39,7 +39,7 @@ export const AnimatedTabIcon: FC<Props & { isLoading?: boolean }> = memo(
                 {isLoading ? (
                     <Spinner color={theme.isDark ? COLORS.LIME_GREEN : theme.colors.text} size={20} />
                 ) : (
-                    <Icon name={title} size={20} color={(styles.icon as TextStyle).color} />
+                    <Icon name={title} size={20} color={iconColor(focused, theme)} />
                 )}
 
                 <BaseText typographyFont="smallCaptionSemiBold" style={styles.label}>
@@ -50,16 +50,13 @@ export const AnimatedTabIcon: FC<Props & { isLoading?: boolean }> = memo(
     },
 )
 
-const baseStyles = (isFocused: boolean) => (theme: ColorThemeType) => {
-    const iconColor = () => {
-        if (isFocused) return theme.isDark ? COLORS.LIME_GREEN : theme.colors.text
-        return theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
-    }
+const iconColor = (isFocused: boolean, theme: ColorThemeType) => {
+    if (isFocused) return theme.isDark ? COLORS.LIME_GREEN : theme.colors.text
+    return theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
+}
 
-    return StyleSheet.create({
-        icon: {
-            color: iconColor(),
-        },
+const baseStyles = (isFocused: boolean) => (theme: ColorThemeType) =>
+    StyleSheet.create({
         container: {
             borderRadius: 8,
             paddingHorizontal: 8,
@@ -69,7 +66,7 @@ const baseStyles = (isFocused: boolean) => (theme: ColorThemeType) => {
             gap: 4,
         },
         label: {
-            color: iconColor(),
+            color: iconColor(isFocused, theme),
         },
         warningLabel: {
             width: 5,
@@ -81,4 +78,3 @@ const baseStyles = (isFocused: boolean) => (theme: ColorThemeType) => {
             right: 2,
         },
     })
-}

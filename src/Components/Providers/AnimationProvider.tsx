@@ -1,8 +1,8 @@
 import React from "react"
 import { ViewProps } from "react-native"
-import Animated, { AnimateProps } from "react-native-reanimated"
+import Animated, { AnimatedProps } from "react-native-reanimated"
 
-interface Props extends AnimateProps<ViewProps> {
+interface Props extends AnimatedProps<ViewProps> {
     children: React.ReactNode
 }
 

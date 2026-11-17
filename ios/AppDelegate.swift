@@ -1,56 +1,36 @@
-import ExpoModulesCore
+internal import Expo
 import RNBootSplash
 import React
 import ReactAppDependencyProvider
-import React_RCTAppDelegate
 import UIKit
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: ExpoAppDelegate, ExpoReactNativeFactoryProvider {
     var window: UIWindow?
 
-    var reactNativeDelegate: ReactNativeDelegate?
+    var reactNativeDelegate: ExpoReactNativeFactoryDelegate?
     var reactNativeFactory: RCTReactNativeFactory?
+    var reactNativeFactoryModuleName: String { "VeWorld" }
 
-    func application(
+    public override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
     ) -> Bool {
         let delegate = ReactNativeDelegate()
-        let factory = RCTReactNativeFactory(delegate: delegate)
+        let factory = ExpoReactNativeFactory(delegate: delegate)
         delegate.dependencyProvider = RCTAppDependencyProvider()
 
         reactNativeDelegate = delegate
         reactNativeFactory = factory
 
-        window = UIWindow(frame: UIScreen.main.bounds)
-        factory.startReactNative(
-            withModuleName: "VeWorld",
-            in: window,
-            launchOptions: launchOptions
-        )
-
-        return true
-    }
-
-    // MARK: - Deep Linking Support
-    func application(
-        _ application: UIApplication, open url: URL,
-        options: [UIApplication.OpenURLOptionsKey: Any] = [:]
-    ) -> Bool {
-        return RCTLinkingManager.application(application, open: url, options: options)
-    }
-
-    func application(
-        _ application: UIApplication, continue userActivity: NSUserActivity,
-        restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void
-    ) -> Bool {
-        return RCTLinkingManager.application(
-            application, continue: userActivity, restorationHandler: restorationHandler)
+        // SceneDelegate creates the window and starts React Native (UIScene life cycle, required by the iOS 27 SDK).
+        return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
 
     // MARK: - Privacy Screen (Secure View on Background)
-    func applicationDidEnterBackground(_ application: UIApplication) {
+    public override func applicationDidEnterBackground(_ application: UIApplication) {
+        super.applicationDidEnterBackground(application)
+
         let secureView = UIView(frame: window?.bounds ?? UIScreen.main.bounds)
         secureView.tag = 9_824_684
         secureView.backgroundColor = UIColor(
@@ -72,18 +52,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.addSubview(secureView)
     }
 
-    func applicationWillEnterForeground(_ application: UIApplication) {
+    public override func applicationWillEnterForeground(_ application: UIApplication) {
+        super.applicationWillEnterForeground(application)
 
         if let secureView = window?.viewWithTag(9_824_684) {
             secureView.removeFromSuperview()
         }
     }
-
 }
 
-class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
+class ReactNativeDelegate: ExpoReactNativeFactoryDelegate {
     override func sourceURL(for bridge: RCTBridge) -> URL? {
-        self.bundleURL()
+        bridge.bundleURL ?? bundleURL()
     }
 
     override func bundleURL() -> URL? {
@@ -95,7 +75,7 @@ class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
     }
 
     // MARK: - BootSplash Integration
-    override func customize(_ rootView: RCTRootView) {
+    override func customize(_ rootView: UIView) {
         super.customize(rootView)
         RNBootSplash.initWithStoryboard("BootSplash", rootView: rootView)
     }

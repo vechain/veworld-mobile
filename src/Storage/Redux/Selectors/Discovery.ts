@@ -19,8 +19,7 @@ export const selectAllDapps = createSelector(selectFeaturedDapps, selectCustomDa
     const normalizeUrl = (url: string) => {
         try {
             const parsed = new URL(url.toLowerCase())
-            parsed.hostname = parsed.hostname.replace("www.", "")
-            return parsed.origin + parsed.pathname
+            return `${parsed.protocol}//${parsed.host.replace("www.", "")}${parsed.pathname}`
         } catch {
             return url.toLowerCase()
         }

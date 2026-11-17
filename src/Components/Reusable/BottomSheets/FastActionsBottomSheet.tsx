@@ -5,8 +5,7 @@ import { ColorThemeType } from "~Constants"
 import { useScrollableBottomSheet, useThemedStyles } from "~Hooks"
 import { FastAction } from "~Model"
 
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet"
 
 type Props = {
     onDismiss?: () => void
@@ -16,7 +15,7 @@ type Props = {
 
 const ItemSeparatorComponent = () => <BaseSpacer height={14} />
 
-export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const FastActionsBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     ({ closeBottomSheet, onDismiss, actions }, ref) => {
         const { styles, theme } = useThemedStyles(baseStyles)
         const iconColor = theme.colors.actionBottomSheet

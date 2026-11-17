@@ -1,5 +1,5 @@
 import React from "react"
-import { ScrollView, ScrollViewProps, StyleProp, StyleSheet, ViewStyle } from "react-native"
+import { ScrollView, ScrollViewInstance, ScrollViewProps, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { useTheme } from "~Hooks"
 import { BaseView } from "./BaseView"
 
@@ -13,7 +13,7 @@ type Props = {
  * NOTE: the wrapper view is needed because you can't set height to a scrollView directly
  * reference: https://stackoverflow.com/questions/49373417/react-native-scrollview-height-always-stays-static-and-does-not-change
  */
-export const BaseScrollView = React.forwardRef<ScrollView, Props>(
+export const BaseScrollView = React.forwardRef<ScrollViewInstance, Props>(
     ({ h, w, style, containerStyle, ...otherProps }, ref) => {
         const theme = useTheme()
 

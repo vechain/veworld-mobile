@@ -1,14 +1,14 @@
 import { useCallback, useMemo, useRef, useState } from "react"
-import { View } from "react-native"
+import { HostInstance } from "react-native"
 import { captureRef, releaseCapture } from "react-native-view-shot"
-import * as FileSystem from "expo-file-system"
+import * as FileSystem from "expo-file-system/legacy"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { DiscoveryDApp, ERROR_EVENTS } from "~Constants"
 import { useAppSelector, useAppDispatch, updateTab, selectCurrentTabId, updateLastVisitedUrl } from "~Storage/Redux"
 import { ErrorMessageUtils, debug, URIUtils } from "~Utils"
 
 export const useBrowserScreenshot = () => {
-    const webviewContainerRef = useRef<View>(null)
+    const webviewContainerRef = useRef<HostInstance>(null)
     const [performingScreenshot, setPerformingScreenshot] = useState(false)
     const selectedTabId = useAppSelector(selectCurrentTabId)
     const dispatch = useAppDispatch()

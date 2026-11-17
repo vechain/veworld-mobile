@@ -1,5 +1,6 @@
+import { TouchableOpacity } from "~Components"
 import React, { ReactNode } from "react"
-import { StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import Animated, { AnimatedStyle } from "react-native-reanimated"
 import { BaseView } from "~Components/Base"
 import { useTheme } from "~Hooks"

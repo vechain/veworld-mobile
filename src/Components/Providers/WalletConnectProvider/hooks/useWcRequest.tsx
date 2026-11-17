@@ -329,7 +329,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
                 try {
                     // Get the session for this topic
                     session = web3Wallet.engine.signClient.session.get(requestEvent.topic)
-                } catch (e) {
+                } catch {
                     warn(
                         ERROR_EVENTS.WALLET_CONNECT,
                         "Failed to get WC session for wallet: ",
@@ -367,7 +367,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
                         )
                         break
                 }
-            } catch (e) {
+            } catch {
                 await web3Wallet.respondSessionRequest({
                     topic: requestEvent.topic,
                     response: {

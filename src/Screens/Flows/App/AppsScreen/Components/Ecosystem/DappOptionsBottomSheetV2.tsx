@@ -1,8 +1,7 @@
-import { TouchableOpacity } from "@gorhom/bottom-sheet"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { default as React, RefObject, useCallback } from "react"
 import { Share, StyleSheet } from "react-native"
-import { BaseBottomSheet, BaseIcon, BaseText, BaseView, DAppIcon } from "~Components"
+import { BaseBottomSheet, BaseIcon, BaseText, BaseView, DAppIcon, TouchableOpacity } from "~Components"
 import { COLORS, ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useDappBookmarkToggle } from "~Hooks/useDappBookmarkToggle"
@@ -104,7 +103,7 @@ const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }
 }
 
 type Props = {
-    bsRef: RefObject<BottomSheetModalMethods>
+    bsRef: RefObject<BottomSheetModal>
 }
 
 export const DappOptionsBottomSheetV2 = ({ bsRef }: Props) => {

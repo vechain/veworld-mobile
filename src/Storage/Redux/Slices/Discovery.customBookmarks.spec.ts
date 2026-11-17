@@ -183,4 +183,54 @@ describe("Discovery Slice - Custom Bookmarks", () => {
             expect(state.favoriteRefs).toHaveLength(0)
         })
     })
+
+    describe("removeBookmark - dApp no longer in the App Hub", () => {
+        const stateWithRefs = {
+            ...initialDiscoverState,
+            featured: [],
+            favoriteRefs: [
+                { type: "vbd" as const, vbdId: "0xvbd", order: 0 },
+                { type: "app-hub" as const, id: "app.gone", order: 1 },
+            ],
+        }
+
+        it("should remove a VeBetterDAO favorite by veBetterDaoId", () => {
+            const state = DiscoverySlice.reducer(stateWithRefs, {
+                type: "discovery/removeBookmark",
+                payload: { href: "https://vbd.app", isCustom: false, veBetterDaoId: "0xvbd" },
+            })
+
+            expect(state.favoriteRefs).toEqual([{ type: "app-hub", id: "app.gone", order: 1 }])
+        })
+
+        it("should remove an App Hub favorite by id", () => {
+            const state = DiscoverySlice.reducer(stateWithRefs, {
+                type: "discovery/removeBookmark",
+                payload: { href: "https://gone.app", isCustom: false, id: "app.gone" },
+            })
+
+            expect(state.favoriteRefs).toEqual([{ type: "vbd", vbdId: "0xvbd", order: 0 }])
+        })
+
+        it("should fall back to the App Hub list when only href is given", () => {
+            const state = DiscoverySlice.reducer(
+                {
+                    ...stateWithRefs,
+                    featured: [
+                        {
+                            id: "app.gone",
+                            name: "Gone",
+                            href: "https://gone.app",
+                            isCustom: false,
+                            createAt: 0,
+                            amountOfNavigations: 0,
+                        },
+                    ],
+                },
+                { type: "discovery/removeBookmark", payload: { href: "https://gone.app", isCustom: false } },
+            )
+
+            expect(state.favoriteRefs).toEqual([{ type: "vbd", vbdId: "0xvbd", order: 0 }])
+        })
+    })
 })

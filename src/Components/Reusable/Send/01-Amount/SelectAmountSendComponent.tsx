@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import { ethers } from "ethers"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
@@ -41,7 +41,7 @@ const SelectAmountSendComponentContent = ({
 }) => {
     const { setFlowState, goToNext, flowState } = useTokenSendContext()
 
-    const bottomSheetRef = useRef<BottomSheetModalMethods>(null)
+    const bottomSheetRef = useRef<BottomSheetModal>(null)
 
     const currency = useAppSelector(selectCurrency)
 

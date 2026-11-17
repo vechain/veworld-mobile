@@ -1,4 +1,24 @@
+# Changelog
 
+No longer updated. Release notes are on [GitHub Releases](https://github.com/vechain/veworld-mobile/releases).
+
+## 2.6.1 (2026-10-27)
+
+### Bug Fixes
+
+* **ios:** count builds from before the team transfer when picking the build number ([#4010](https://github.com/vechain/veworld-mobile/issues/4010)) ([3e85645](https://github.com/vechain/veworld-mobile/commit/3e856450e0f85c223a9b0d7aa8232a946c6442f8))
+
+## 2.6.1 (2026-10-20)
+
+### Bug Fixes
+
+* stop the Apps screen banners clipping on RN 0.88 ([#3994](https://github.com/vechain/veworld-mobile/issues/3994)) ([b0dc5f3](https://github.com/vechain/veworld-mobile/commit/b0dc5f35e5bd10fd7544660b62a10dc58ca2993d))
+
+## 2.5.11 (2026-10-19)
+
+## 2.5.11 (2026-10-13)
+
+## 2.5.11 (2026-10-13)
 
 ## 2.5.10 (2026-09-11)
 
@@ -47,7 +67,7 @@
 
 ## 2.4.16 (2026-01-19)
 
-# Changelog
+
 
 ## <small>2.4.15 (2026-01-14)</small>
 

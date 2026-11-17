@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet } from "~Components"
@@ -13,7 +13,7 @@ import { useI18nContext } from "~i18n"
 import { SocialProvider } from "@vechain/embedded-wallet-sdk"
 
 type Props = {
-    bsRef: React.RefObject<BottomSheetModalMethods>
+    bsRef: React.RefObject<BottomSheetModal>
 }
 
 type ConfirmUnlinkAccountBottomSheetData = {

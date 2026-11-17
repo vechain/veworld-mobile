@@ -7,8 +7,6 @@ import { DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
 import { HexUtils } from "~Utils"
 import { DerivationPath } from "~Constants"
 
-jest.mock("react-native-quick-crypto")
-
 const device1 = {
     rootAddress: "0x123",
     publicKey: "pub1",

@@ -2,32 +2,7 @@
 
 # Environment setup
 
-I order to run this project install the following dependencies:
-
-**Global Dependencies**
-
-```
-- Homebrew
-- Node - v18.12.1
-- Ruby - v2.7.5
-```
-
-**Platform specific**
-
-iOS:
-
-Download Xcode form the Mac AppStore
-
-```
-- Xcode - v15
-```
-
-**Android**
-
-```
-- JDK - zulu11
-- Android Studio
-```
+For required tool versions and the step-by-step iOS setup, see [Prerequisites](../README.md#prerequisites) in the main README.
 
 # Run the project
 

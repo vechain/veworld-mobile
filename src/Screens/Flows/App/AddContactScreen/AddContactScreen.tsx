@@ -50,7 +50,7 @@ export const AddContactScreen = () => {
             try {
                 dispatch(addContact(name, address))
                 nav.navigate(Routes.SETTINGS_CONTACTS)
-            } catch (e) {
+            } catch {
                 showErrorToast({
                     text1: LL.ERROR(),
                     text2: LL.ERROR_GENERIC_OPERATION(),

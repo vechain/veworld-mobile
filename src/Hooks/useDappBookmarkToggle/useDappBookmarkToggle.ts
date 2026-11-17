@@ -37,6 +37,8 @@ export const useDappBookmarkToggle = (url?: string, title?: string) => {
                 removeBookmark({
                     href: existingBookmark.href ?? "",
                     isCustom: existingBookmark.isCustom,
+                    id: existingBookmark.id,
+                    veBetterDaoId: existingBookmark.veBetterDaoId,
                 }),
             )
 

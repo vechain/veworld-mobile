@@ -1,10 +1,9 @@
 import React, { useCallback, useMemo, useState } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseSpacer, BaseText, BaseView, BaseBottomSheet } from "~Components"
 import { useI18nContext } from "~i18n"
 import { BaseDevice, DEVICE_TYPE } from "~Model"
 import { StyleSheet } from "react-native"
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
+import { BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet"
 import { useScrollableList } from "~Hooks"
 import { DeviceBox } from "../DeviceBox"
 
@@ -22,7 +21,7 @@ type Props<T extends BaseDevice = BaseDevice> = {
 
 function SelectDeviceBottomSheetInner<T extends BaseDevice = BaseDevice>(
     { devices, onClose }: Props<T>,
-    ref: React.Ref<BottomSheetModalMethods>,
+    ref: React.Ref<BottomSheetModal>,
 ) {
     const { LL } = useI18nContext()
 

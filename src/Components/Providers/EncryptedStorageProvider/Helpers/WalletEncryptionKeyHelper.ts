@@ -103,8 +103,15 @@ const encryptWallet = async (wallet: Wallet, pinCode?: string) => {
     const iv = PasswordUtils.base64ToBuffer(base64IV)
     const encryptedWallet = await CryptoUtils.encrypt(wallet, walletKey, salt, iv)
 
-    const decryptedWallet = await CryptoUtils.decrypt<Wallet>(encryptedWallet, walletKey, salt, iv)
+    const stored = await SaltHelper.getSaltAndIV()
+    const decryptedWallet = await CryptoUtils.decrypt<Wallet>(
+        encryptedWallet,
+        walletKey,
+        stored.salt,
+        PasswordUtils.base64ToBuffer(stored.iv),
+    ).catch(() => undefined)
     if (
+        !decryptedWallet ||
         !AddressUtils.compareAddresses(decryptedWallet.rootAddress, wallet.rootAddress) ||
         (!decryptedWallet.mnemonic?.length && !decryptedWallet.privateKey)
     ) {

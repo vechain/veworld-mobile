@@ -1,0 +1,31 @@
+diff --git a/node_modules/react-native-android-location-enabler/android/src/main/java/com/heanoria/library/reactnative/locationenabler/AndroidLocationEnablerModule.kt b/node_modules/react-native-android-location-enabler/android/src/main/java/com/heanoria/library/reactnative/locationenabler/AndroidLocationEnablerModule.kt
+index 3b098e4..24e5d22 100644
+--- a/node_modules/react-native-android-location-enabler/android/src/main/java/com/heanoria/library/reactnative/locationenabler/AndroidLocationEnablerModule.kt
++++ b/node_modules/react-native-android-location-enabler/android/src/main/java/com/heanoria/library/reactnative/locationenabler/AndroidLocationEnablerModule.kt
+@@ -38,7 +38,7 @@ class AndroidLocationEnablerModule(reactContext: ReactApplicationContext) :
+   }
+ 
+   override fun isLocationEnabled(promise: Promise) {
+-    if (currentActivity == null) return
++    if (getCurrentActivity() == null) return
+ 
+     val locationManager = this.context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+ 
+@@ -52,7 +52,7 @@ class AndroidLocationEnablerModule(reactContext: ReactApplicationContext) :
+   }
+ 
+   override fun promptForEnableLocationIfNeeded(params: ReadableMap?, promise: Promise) {
+-    if (currentActivity == null) return
++    if (getCurrentActivity() == null) return
+ 
+     this.promise = promise
+ 
+@@ -114,7 +114,7 @@ class AndroidLocationEnablerModule(reactContext: ReactApplicationContext) :
+   }
+ 
+   private fun isLocationProviderEnabled(): Boolean {
+-    val locationManager = currentActivity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
++    val locationManager = getCurrentActivity()?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+     if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+       return true
+     }

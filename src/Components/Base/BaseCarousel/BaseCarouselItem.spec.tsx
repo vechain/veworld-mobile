@@ -1,4 +1,4 @@
-import { useNavigation, useNavigationState } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import { act, fireEvent, render, waitFor } from "@testing-library/react-native"
 import React from "react"
 import { TestWrapper } from "~Test"
@@ -16,7 +16,6 @@ jest.mock("@react-navigation/native", () => ({
     ...jest.requireActual("@react-navigation/native"),
     useNavigation: jest.fn(),
     useRoute: jest.fn(),
-    useNavigationState: jest.fn(),
 }))
 
 jest.mock("react-native", () => {
@@ -31,6 +30,7 @@ jest.mock("react-native", () => {
 })
 
 const onPress = jest.fn()
+const homeState = { index: 0, routes: [{ name: Routes.HOME }] }
 
 describe("BaseCarouselItem", () => {
     beforeEach(() => {
@@ -38,7 +38,6 @@ describe("BaseCarouselItem", () => {
     })
 
     it("should render correctly", () => {
-        ;(useNavigationState as jest.Mock).mockReturnValue(Routes.APPS)
         const { getByTestId } = render(
             <BaseCarouselItem testID="carousel-item">
                 <Text testID="test-text">{"test text"}</Text>
@@ -51,8 +50,20 @@ describe("BaseCarouselItem", () => {
         expect(getByTestId("test-text")).toBeTruthy()
     })
 
+    it("should render outside a navigator, as in the dApp sign sheets", () => {
+        ;(useNavigation as jest.Mock).mockImplementation(jest.requireActual("@react-navigation/native").useNavigation)
+        const { getByTestId } = render(
+            <BaseCarouselItem testID="carousel-item" href="https://example.com" name="outside-navigator">
+                <Text>{"Outside navigator"}</Text>
+            </BaseCarouselItem>,
+            {
+                wrapper: TestWrapper,
+            },
+        )
+        expect(getByTestId("carousel-item")).toBeTruthy()
+    })
+
     it("should open external link when isExternalLink is true and href is provided", async () => {
-        ;(useNavigationState as jest.Mock).mockReturnValue(Routes.APPS)
         const testHref = "https://example.com"
         const { getByTestId } = render(
             <BaseCarouselItem
@@ -81,8 +92,7 @@ describe("BaseCarouselItem", () => {
 
     it("should navigate to browser when isExternalLink is false and href is provided", () => {
         const navigate = jest.fn()
-        ;(useNavigation as jest.Mock).mockReturnValue({ navigate })
-        ;(useNavigationState as jest.Mock).mockReturnValue(Routes.HOME)
+        ;(useNavigation as jest.Mock).mockReturnValue({ navigate, getState: () => homeState })
         const testHref = "https://example.com"
         const { getByTestId } = render(
             <BaseCarouselItem
@@ -107,8 +117,7 @@ describe("BaseCarouselItem", () => {
 
     it("should not call Linking.openURL or navigate when href is not provided", () => {
         const navigate = jest.fn()
-        ;(useNavigation as jest.Mock).mockReturnValue({ navigate })
-        ;(useNavigationState as jest.Mock).mockReturnValue(Routes.HOME)
+        ;(useNavigation as jest.Mock).mockReturnValue({ navigate, getState: () => homeState })
         const { getByTestId } = render(
             <BaseCarouselItem testID="carousel-item" onPress={onPress} name="no-link">
                 <Text>{"No Link"}</Text>
@@ -127,8 +136,7 @@ describe("BaseCarouselItem", () => {
 
     it("should call onPress after navigation when onPressActivation is 'after'", () => {
         const navigate = jest.fn()
-        ;(useNavigation as jest.Mock).mockReturnValue({ navigate })
-        ;(useNavigationState as jest.Mock).mockReturnValue(Routes.HOME)
+        ;(useNavigation as jest.Mock).mockReturnValue({ navigate, getState: () => homeState })
         const testHref = "https://example.com"
         const { getByTestId } = render(
             <BaseCarouselItem
@@ -154,8 +162,7 @@ describe("BaseCarouselItem", () => {
 
     it("should call onPress before navigation when onPressActivation is 'before'", () => {
         const navigate = jest.fn()
-        ;(useNavigation as jest.Mock).mockReturnValue({ navigate })
-        ;(useNavigationState as jest.Mock).mockReturnValue(Routes.HOME)
+        ;(useNavigation as jest.Mock).mockReturnValue({ navigate, getState: () => homeState })
         const testHref = "https://example.com"
         const { getByTestId } = render(
             <BaseCarouselItem

@@ -1,6 +1,6 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import React, { RefObject, useCallback, useEffect, useRef, useState } from "react"
-import { ScrollView, StyleSheet, View } from "react-native"
+import { HostInstance, ScrollViewInstance, StyleSheet, View } from "react-native"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { UseDappsWithPaginationSortKey } from "~Hooks/useDappsWithPagination"
 import { useAppHubDapps } from "~Hooks/useDappsWithPagination/useAppHubDapps"
@@ -18,7 +18,7 @@ export const EcosystemSection = ({
     scrollViewRef,
 }: {
     defaultFilter?: DappTypeV2
-    scrollViewRef: RefObject<ScrollView | null>
+    scrollViewRef: RefObject<ScrollViewInstance | null>
 }) => {
     const [selectedFilter, setSelectedFilter] = useState(defaultFilter ?? DappTypeV2.ALL)
     const [selectedSort, setSelectedSort] = useState<UseDappsWithPaginationSortKey>("alphabetic_asc")
@@ -28,7 +28,7 @@ export const EcosystemSection = ({
 
     const { styles } = useThemedStyles(baseStyles)
 
-    const containerRef = useRef<View>(null)
+    const containerRef = useRef<HostInstance>(null)
 
     const selectedFilterRef = useRef(selectedFilter)
 

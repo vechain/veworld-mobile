@@ -1,8 +1,8 @@
 import { StyleSheet } from "react-native"
 import React, { memo } from "react"
-import Animated, { Extrapolation, interpolate, useAnimatedStyle } from "react-native-reanimated"
+import Animated, { Extrapolation, interpolate, SharedValue, useAnimatedStyle } from "react-native-reanimated"
 
-export const FadableSafeAreaTop = memo(({ scrollValue }: { scrollValue: Animated.SharedValue<number> }) => {
+export const FadableSafeAreaTop = memo(({ scrollValue }: { scrollValue: SharedValue<number> }) => {
     const animStyle = useAnimatedStyle(() => {
         const opacity = interpolate(scrollValue.value, [-59, 15], [0, 0.85], {
             extrapolateRight: Extrapolation.CLAMP,

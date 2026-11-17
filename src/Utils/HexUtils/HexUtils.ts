@@ -73,7 +73,7 @@ const normalize = (hex: string): string => {
 const compare = (hex1: string, hex2: string): boolean => {
     try {
         return removePrefix(hex1).toLowerCase() === removePrefix(hex2).toLowerCase()
-    } catch (e) {
+    } catch {
         return false
     }
 }

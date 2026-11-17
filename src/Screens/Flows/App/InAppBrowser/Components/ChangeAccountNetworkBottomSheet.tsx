@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React from "react"
 import {
     BaseBottomSheet,
@@ -16,7 +16,7 @@ import { useI18nContext } from "~i18n"
 
 type Props = {}
 
-export const ChangeAccountNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({}, ref) => {
+export const ChangeAccountNetworkBottomSheet = React.forwardRef<BottomSheetModal, Props>(({}, ref) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
 

@@ -1,4 +1,4 @@
-import { MMKV } from "react-native-mmkv"
+import { createMMKV } from "react-native-mmkv"
 import { PersistedState } from "redux-persist/es/types"
 import { getPersistorConfig } from "./Helpers"
 
@@ -34,7 +34,7 @@ describe("getPersistorConfig", () => {
     })
 
     it("disables the rehydration timeout — the seal relies on it", async () => {
-        const config = await getPersistorConfig(new MMKV({ id: "helpers-spec" }), ENCRYPTION_KEY)
+        const config = await getPersistorConfig(createMMKV({ id: "helpers-spec" }), ENCRYPTION_KEY)
 
         // Load-bearing: with the default timeout (5000ms) redux-persist rehydrates
         // undefined after 5s, staging reducer defaults for writing over the encrypted
@@ -44,7 +44,7 @@ describe("getPersistorConfig", () => {
 
     it("runs migrations normally when none of them throw", async () => {
         const onRehydrationError = jest.fn()
-        const config = await getPersistorConfig(new MMKV({ id: "helpers-spec" }), ENCRYPTION_KEY, onRehydrationError)
+        const config = await getPersistorConfig(createMMKV({ id: "helpers-spec" }), ENCRYPTION_KEY, onRehydrationError)
 
         const state = persistedStateAtVersion(37)
         const migrated = await config.migrate?.(state, 38)
@@ -56,7 +56,7 @@ describe("getPersistorConfig", () => {
     it("seals the persistor when a migration throws instead of rehydrating defaults", async () => {
         process.env.HELPERS_SPEC_THROWING_MIGRATION = "true"
         const onRehydrationError = jest.fn()
-        const config = await getPersistorConfig(new MMKV({ id: "helpers-spec" }), ENCRYPTION_KEY, onRehydrationError)
+        const config = await getPersistorConfig(createMMKV({ id: "helpers-spec" }), ENCRYPTION_KEY, onRehydrationError)
 
         const result = config.migrate?.(persistedStateAtVersion(37), 38) as Promise<unknown>
 
@@ -68,7 +68,7 @@ describe("getPersistorConfig", () => {
 
     it("seals the persistor when the stored state cannot be read", async () => {
         const onRehydrationError = jest.fn()
-        const config = await getPersistorConfig(new MMKV({ id: "helpers-spec" }), ENCRYPTION_KEY, onRehydrationError)
+        const config = await getPersistorConfig(createMMKV({ id: "helpers-spec" }), ENCRYPTION_KEY, onRehydrationError)
 
         const failingConfig = {
             ...config,

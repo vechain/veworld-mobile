@@ -1,4 +1,4 @@
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { Dispatch, PropsWithChildren, RefObject, SetStateAction, useContext, useMemo, useState } from "react"
 import { useBottomSheetModal } from "~Hooks"
 import {
@@ -12,13 +12,13 @@ import {
 } from "~Model"
 
 type ContextType = {
-    connectBsRef: RefObject<BottomSheetModalMethods>
-    certificateBsRef: RefObject<BottomSheetModalMethods>
-    transactionBsRef: RefObject<BottomSheetModalMethods>
-    typedDataBsRef: RefObject<BottomSheetModalMethods>
-    loginBsRef: RefObject<BottomSheetModalMethods>
-    switchWalletBsRef: RefObject<BottomSheetModalMethods>
-    disconnectBsRef: RefObject<BottomSheetModalMethods>
+    connectBsRef: RefObject<BottomSheetModal>
+    certificateBsRef: RefObject<BottomSheetModal>
+    transactionBsRef: RefObject<BottomSheetModal>
+    typedDataBsRef: RefObject<BottomSheetModal>
+    loginBsRef: RefObject<BottomSheetModal>
+    switchWalletBsRef: RefObject<BottomSheetModal>
+    disconnectBsRef: RefObject<BottomSheetModal>
     connectBsData: ConnectAppRequest | null
     setConnectBsData: Dispatch<SetStateAction<ConnectAppRequest | null>>
     certificateBsData: CertificateRequest | null

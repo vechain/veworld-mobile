@@ -1,5 +1,6 @@
+import { Pressable, PressableProps } from "react-native-gesture-handler"
 import React, { useCallback } from "react"
-import { Pressable, PressableProps, StyleProp, StyleSheet, ViewStyle } from "react-native"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { useBaseAccordionV2 } from "./BaseAccordionV2Context"
 

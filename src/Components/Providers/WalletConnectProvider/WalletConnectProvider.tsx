@@ -46,7 +46,7 @@ const WalletConnectContextProvider = ({ children }: WalletConnectContextProvider
             typedDataBsData?.type === "wallet-connect"
         )
             return true
-        return !WalletConnectUtils.shouldAutoNavigate(nav.getState() as NavigationState<ReactNavigation.RootParamList>)
+        return !WalletConnectUtils.shouldAutoNavigate(nav.getState() as NavigationState)
     }, [certificateBsData?.type, connectBsData?.type, nav, transactionBsData?.type, typedDataBsData?.type])
 
     const { addSessionDisconnect, disconnectSession, activeSessions, addSession } = useWcSessions()

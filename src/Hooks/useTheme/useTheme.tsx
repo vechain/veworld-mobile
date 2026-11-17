@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { StyleSheet } from "react-native"
+import { ImageStyle, TextStyle, ViewStyle } from "react-native"
 import { usePersistedTheme } from "~Components/Providers/PersistedThemeProvider/PersistedThemeProvider"
 import { ThemeEnum } from "~Constants"
 import { ColorTheme, ColorThemeType } from "../../Constants/Theme/Theme"
@@ -26,7 +26,9 @@ export const useTheme = (): ColorThemeType => {
     return useMemo(() => ColorTheme(themeColor), [themeColor])
 }
 
-export const useThemedStyles = <T,>(styles: (theme: ColorThemeType) => StyleSheet.NamedStyles<T>) => {
+type NamedStyles<T> = { [P in keyof T]: ViewStyle | TextStyle | ImageStyle }
+
+export const useThemedStyles = <T,>(styles: (theme: ColorThemeType) => NamedStyles<T>) => {
     const theme = useTheme()
     return useMemo(() => ({ styles: styles(theme), theme }), [styles, theme])
 }

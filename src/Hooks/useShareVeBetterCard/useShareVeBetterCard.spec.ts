@@ -23,7 +23,7 @@ describe("useShareVeBetterCard", () => {
 
     it("should not capture or share when cardRef is not set", async () => {
         const { result } = renderHook(() => useShareVeBetterCard(), { wrapper: TestWrapper })
-        jest.spyOn(Share, "share").mockResolvedValue({ action: "sharedAction" })
+        jest.spyOn(Share, "share").mockResolvedValue({ action: "sharedAction", activityType: undefined })
 
         await result.current.shareCard()
 
@@ -33,7 +33,7 @@ describe("useShareVeBetterCard", () => {
 
     it("should capture and share the view successfully", async () => {
         ;(captureRef as jest.Mock).mockResolvedValue(mockUri)
-        jest.spyOn(Share, "share").mockResolvedValue({ action: "sharedAction" })
+        jest.spyOn(Share, "share").mockResolvedValue({ action: "sharedAction", activityType: undefined })
 
         const { result } = renderHook(() => useShareVeBetterCard(), { wrapper: TestWrapper })
         const mockRefValue = {} as any
@@ -87,7 +87,7 @@ describe("useShareVeBetterCard", () => {
     })
 
     it("should prevent duplicate share operations", async () => {
-        jest.spyOn(Share, "share").mockResolvedValue({ action: "sharedAction" })
+        jest.spyOn(Share, "share").mockResolvedValue({ action: "sharedAction", activityType: undefined })
         ;(captureRef as jest.Mock).mockImplementation(
             () =>
                 new Promise(resolve => {

@@ -1,4 +1,5 @@
 import { renderHook } from "@testing-library/react-hooks"
+import { ViewStyle } from "react-native"
 import { useContentSwipeAnimation } from "./useContentSwipeAnimation"
 
 jest.mock("react-native-reanimated", () => ({
@@ -47,7 +48,7 @@ describe("useContentSwipeAnimation", () => {
             }),
         )
 
-        const style = result.current.animatedStyle
+        const style = result.current.animatedStyle as unknown as ViewStyle
 
         expect(style).toHaveProperty("transform")
         expect(style).toHaveProperty("opacity")

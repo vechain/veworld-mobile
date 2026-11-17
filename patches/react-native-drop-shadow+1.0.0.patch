@@ -1,0 +1,20 @@
+diff --git a/node_modules/react-native-drop-shadow/android/build.gradle b/node_modules/react-native-drop-shadow/android/build.gradle
+index 64ce252..8c4994d 100644
+--- a/node_modules/react-native-drop-shadow/android/build.gradle
++++ b/node_modules/react-native-drop-shadow/android/build.gradle
+@@ -23,13 +23,9 @@ def resolveReactNativeDirectory() {
+   try {
+     // Resolve React Native location with Node
+     // This will make sure that we get installation location correctly in monorepos
+-    def reactNativePackageJsonPathStdout = new ByteArrayOutputStream()
+-
+-    exec {
++    def reactNativePackageJsonPathStdout = providers.exec {
+       commandLine("node", "-p", "require.resolve('react-native/package.json')")
+-      ignoreExitValue true
+-      standardOutput = reactNativePackageJsonPathStdout
+-    }
++    }.standardOutput.asText.get()
+ 
+     def reactNativeFromProjectNodeModules = file(reactNativePackageJsonPathStdout.toString().trim()).getParentFile();
+ 

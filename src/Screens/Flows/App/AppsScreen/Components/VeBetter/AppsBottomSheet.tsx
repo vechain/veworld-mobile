@@ -1,5 +1,4 @@
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { BottomSheetFlatList, BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
 import { ListRenderItemInfo, StyleSheet } from "react-native"
 import Animated, { AnimatedRef, useAnimatedRef } from "react-native-reanimated"
@@ -242,7 +241,7 @@ const AppList = React.memo(
     },
 )
 
-export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottomSheetProps>(
+export const AppsBottomSheet = forwardRef<BottomSheetModal, X2EAppsBottomSheetProps>(
     ({ onDismiss, initialCategoryId }, ref) => {
         const { data: allApps, isLoading } = useVeBetterDaoActiveDapps()
         const theme = useTheme()

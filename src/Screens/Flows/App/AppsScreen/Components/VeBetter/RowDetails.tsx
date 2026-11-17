@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useMemo } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { StyleSheet } from "react-native"
 import Animated, { AnimatedRef, LinearTransition } from "react-native-reanimated"
-import { BaseIcon, BaseSpacer, BaseText, DAppIcon } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, DAppIcon, TouchableOpacity } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -82,12 +82,7 @@ export const RowDetails = React.memo(
             if (showDetails) return null
 
             return (
-                <TouchableOpacity
-                    onPress={e => {
-                        e.stopPropagation()
-                        onToggleFavorite?.()
-                    }}
-                    style={styles.iconWrapper}>
+                <TouchableOpacity onPress={onToggleFavorite} style={styles.iconWrapper}>
                     <BaseIcon
                         name={isFavorite ? "icon-star-on" : "icon-star"}
                         haptics="Light"

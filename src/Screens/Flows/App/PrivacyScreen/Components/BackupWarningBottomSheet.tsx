@@ -1,5 +1,5 @@
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
 import React, { useCallback } from "react"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, CheckBoxWithText } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AnalyticsEvent, COLORS } from "~Constants"
@@ -13,7 +13,7 @@ type Props = {
     isUpgradeSecurity?: boolean
 }
 
-export const BackupWarningBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+export const BackupWarningBottomSheet = React.forwardRef<BottomSheetModal, Props>(
     ({ onClose, onConfirm, isUpgradeSecurity = false }, ref) => {
         const { LL } = useI18nContext()
         const track = useAnalyticTracking()

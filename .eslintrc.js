@@ -23,6 +23,23 @@ module.exports = {
                 "no-useless-escape": "error",
                 "react-native/no-inline-styles": "error",
                 "es/no-numeric-separators": "error",
+                "no-restricted-imports": [
+                    "error",
+                    {
+                        paths: ["react-native", "@gorhom/bottom-sheet"].map(name => ({
+                            name,
+                            importNames: [
+                                "TouchableOpacity",
+                                "TouchableHighlight",
+                                "TouchableWithoutFeedback",
+                                "Pressable",
+                            ],
+                            message:
+                                "These drop taps inside Reanimated transforms on iOS. Use TouchableOpacity from " +
+                                "~Components or Pressable from react-native-gesture-handler.",
+                        })),
+                    },
+                ],
             },
         },
         {

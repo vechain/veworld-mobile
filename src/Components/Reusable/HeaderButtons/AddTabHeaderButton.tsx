@@ -1,6 +1,6 @@
 import React from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
-import { BaseIcon, BaseView } from "~Components"
+import { StyleSheet } from "react-native"
+import { BaseIcon, BaseView, TouchableOpacity } from "~Components"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 

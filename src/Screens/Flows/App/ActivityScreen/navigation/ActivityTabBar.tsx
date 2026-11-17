@@ -1,6 +1,7 @@
+import { Pressable } from "react-native-gesture-handler"
 import { MaterialTopTabBarProps } from "@react-navigation/material-top-tabs"
 import React from "react"
-import { Pressable, StyleSheet, Text } from "react-native"
+import { StyleSheet, Text } from "react-native"
 import { TabBar, TabBarIndicator } from "react-native-tab-view"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"

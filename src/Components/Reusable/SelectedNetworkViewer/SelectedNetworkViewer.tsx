@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
-import { BaseIcon, BaseText, BaseView } from "~Components"
+import { StyleSheet } from "react-native"
+import { BaseIcon, BaseText, BaseView, TouchableOpacity } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { useBlockchainNetwork, useThemedStyles } from "~Hooks"
 
