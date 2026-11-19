@@ -57,7 +57,8 @@ export const AccountIcon: React.FC<AccountIconProps> = memo(
         }, [linkedAccounts, isAuthenticated])
 
         return (
-            <BaseView style={styles.container}>
+            // Unflattened, so a badge mounted later isn't put under the avatar by a gesture-handler button parent
+            <BaseView style={styles.container} collapsable={false}>
                 <AccountPfp account={account} size={size} borderRadius={borderRadius} />
 
                 {showLedger && (
