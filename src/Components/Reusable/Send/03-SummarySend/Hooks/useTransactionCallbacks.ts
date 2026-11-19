@@ -15,7 +15,7 @@ export const useTransactionCallbacks = ({ token, onFailure }: { token: Token; on
         (success: boolean) => {
             dispatch(setIsAppLoading(false))
             if (success) {
-                nav.navigate(Routes.HOME)
+                nav.navigate(Routes.HOME, undefined, { pop: true })
                 return
             }
             onFailure()

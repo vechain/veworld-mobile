@@ -37,7 +37,7 @@ export const useCloseBrowser = ({ returnScreen, onNavigate }: Args) => {
         if (_returnScreen === Routes.COLLECTIBLES_COLLECTION_DETAILS) {
             nav.goBack()
         } else {
-            nav.navigate(_returnScreen as any)
+            nav.navigate(_returnScreen as any, undefined, { pop: true })
         }
     }, [nav, onNavigate, _returnScreen])
 }

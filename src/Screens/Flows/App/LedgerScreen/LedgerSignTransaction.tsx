@@ -299,9 +299,9 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             nav.goBack()
         } else {
             if (initialRoute) {
-                nav.navigate(initialRoute)
+                nav.navigate(initialRoute, undefined, { pop: true })
             } else {
-                nav.navigate(Routes.HOME)
+                nav.navigate(Routes.HOME, undefined, { pop: true })
             }
         }
     }, [initialRoute, dappRequest, dispatch, nav])

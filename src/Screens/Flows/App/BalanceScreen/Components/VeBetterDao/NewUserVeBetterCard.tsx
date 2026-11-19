@@ -42,7 +42,7 @@ export const NewUserVeBetterCard = () => {
     const { data: globalOverview } = useVeBetterGlobalOverview()
 
     const navigateToAppScreen = useCallback(() => {
-        nav.navigate(Routes.APPS_STACK, { screen: Routes.APPS })
+        nav.navigate(Routes.APPS_STACK, { screen: Routes.APPS, pop: true })
     }, [nav])
 
     const closeCard = useCallback(() => {

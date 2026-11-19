@@ -263,6 +263,7 @@ export const addPendingTransferTransactionActivity =
                     params: {
                         screen: Routes.ACTIVITY_ALL,
                     },
+                    pop: true,
                 })
             },
         })
@@ -307,6 +308,7 @@ export const addPendingNFTtransferTransactionActivity =
                     params: {
                         screen: Routes.ACTIVITY_ALL,
                     },
+                    pop: true,
                 })
             },
         })

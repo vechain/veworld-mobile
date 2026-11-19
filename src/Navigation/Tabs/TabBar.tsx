@@ -110,7 +110,7 @@ export const TabBar = ({ state, descriptors, navigation }: Props) => {
                         navigation.dispatch(
                             CommonActions.navigate({
                                 name: route.name,
-                                params: { screen: initialScreen },
+                                params: { screen: initialScreen, pop: true },
                             }),
                         )
                     }

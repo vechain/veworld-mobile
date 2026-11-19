@@ -73,7 +73,7 @@ describe("useTransactionCallbacks", () => {
             )
         })
 
-        expect(navigate).toHaveBeenCalledWith(Routes.HOME)
+        expect(navigate).toHaveBeenCalledWith(Routes.HOME, undefined, { pop: true })
         expect(onFailure).not.toHaveBeenCalled()
         expect(addPendingTransferTransactionActivity).toHaveBeenCalledWith(expect.any(Transaction), {
             medium: AnalyticsEvent.SEND,

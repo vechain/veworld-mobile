@@ -93,7 +93,7 @@ describe("URLBar", () => {
 
             await waitFor(() => {
                 expect(onNavigateFn).toHaveBeenCalled()
-                expect(navigateFn).toHaveBeenCalledWith(Routes.SETTINGS)
+                expect(navigateFn).toHaveBeenCalledWith(Routes.SETTINGS, undefined, { pop: true })
             })
         })
 
@@ -131,7 +131,7 @@ describe("URLBar", () => {
 
             await waitFor(() => {
                 expect(onNavigateFn).toHaveBeenCalled()
-                expect(navigateFn).toHaveBeenCalledWith(Routes.HOME)
+                expect(navigateFn).toHaveBeenCalledWith(Routes.HOME, undefined, { pop: true })
             })
         })
 
@@ -167,7 +167,7 @@ describe("URLBar", () => {
 
             await waitFor(() => {
                 expect(onNavigateFn).toHaveBeenCalled()
-                expect(navigateFn).toHaveBeenCalledWith(Routes.APPS)
+                expect(navigateFn).toHaveBeenCalledWith(Routes.APPS, undefined, { pop: true })
             })
         })
 
@@ -205,7 +205,7 @@ describe("URLBar", () => {
 
             await waitFor(() => {
                 expect(onNavigateFn).toHaveBeenCalled()
-                expect(navigateFn).toHaveBeenCalledWith(Routes.APPS)
+                expect(navigateFn).toHaveBeenCalledWith(Routes.APPS, undefined, { pop: true })
             })
         })
 
@@ -235,7 +235,7 @@ describe("URLBar", () => {
             fireEvent.press(backButton)
 
             await waitFor(() => {
-                expect(navigateFn).toHaveBeenCalledWith(Routes.HOME)
+                expect(navigateFn).toHaveBeenCalledWith(Routes.HOME, undefined, { pop: true })
             })
         })
     })

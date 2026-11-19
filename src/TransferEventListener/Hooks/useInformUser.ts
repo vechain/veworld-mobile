@@ -17,7 +17,7 @@ export const useInformUser = ({ network }: { network: Network }) => {
                 Linking.openURL(`${network.explorerUrl ?? defaultMainNetwork.explorerUrl}/transactions/${params.txId}`)
             } else {
                 // received token/VET
-                nav.navigate(Routes.HOME)
+                nav.navigate(Routes.HOME, undefined, { pop: true })
                 disptach(
                     setSelectedAccount({
                         address: params.accountAddress,
@@ -35,7 +35,7 @@ export const useInformUser = ({ network }: { network: Network }) => {
                 Linking.openURL(`${network.explorerUrl ?? defaultMainNetwork.explorerUrl}/transactions/${params.txId}`)
             } else {
                 // 1. User received NFT
-                nav.navigate(Routes.HOME)
+                nav.navigate(Routes.HOME, undefined, { pop: true })
                 disptach(
                     setSelectedAccount({
                         address: params.accountAddress,

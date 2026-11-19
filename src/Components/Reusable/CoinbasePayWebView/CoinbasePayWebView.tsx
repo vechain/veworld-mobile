@@ -182,7 +182,7 @@ export const CoinbasePayWebView = ({ destinationAddress }: { destinationAddress:
                     track(AnalyticsEvent.BUY_CRYPTO_CLOSED, {
                         provider: "coinbase",
                     })
-                    nav.navigate(Routes.HOME)
+                    nav.navigate(Routes.HOME, undefined, { pop: true })
                 }
 
                 if (data.eventName === "error") {
