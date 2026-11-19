@@ -104,7 +104,7 @@ export const DeviceBackupBottomSheet = () => {
 
     const goToPrivacyScreen = () => {
         onClose()
-        navigation.navigate("SettingsStack", { screen: Routes.SETTINGS, initial: true })
+        navigation.navigate("SettingsStack", { screen: Routes.SETTINGS, initial: true, pop: true })
         navigation.navigate("SettingsStack", { screen: Routes.SETTINGS_PRIVACY, initial: false })
     }
 

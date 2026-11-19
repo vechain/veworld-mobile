@@ -34,7 +34,7 @@ export const SmartWalletBackupBottomSheet = () => {
 
     const onLinkPress = useCallback(() => {
         onClose()
-        nav.navigate("SettingsStack", { screen: Routes.SETTINGS, initial: true })
+        nav.navigate("SettingsStack", { screen: Routes.SETTINGS, initial: true, pop: true })
         nav.navigate("SettingsStack", { screen: Routes.SETTINGS_PRIVACY, initial: false })
     }, [onClose, nav])
 

@@ -49,7 +49,7 @@ export const AddContactScreen = () => {
         if (isFormValid) {
             try {
                 dispatch(addContact(name, address))
-                nav.navigate(Routes.SETTINGS_CONTACTS)
+                nav.navigate(Routes.SETTINGS_CONTACTS, undefined, { pop: true })
             } catch {
                 showErrorToast({
                     text1: LL.ERROR(),

@@ -225,7 +225,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModal, Props
         )
 
         const onSettingsClick = useCallback(() => {
-            nav.navigate(Routes.WALLET_MANAGEMENT)
+            nav.navigate(Routes.WALLET_MANAGEMENT, undefined, { pop: true })
             closeBottomSheet?.()
         }, [closeBottomSheet, nav])
 
