@@ -92,7 +92,7 @@ export const TransakPayWebView = ({ destinationAddress }: { destinationAddress: 
         }
     }
 
-    const onButtonPress = useCallback(() => nav.navigate(Routes.BUY), [nav])
+    const onButtonPress = useCallback(() => nav.navigate(Routes.BUY, undefined, { pop: true }), [nav])
     const config = useMemo(() => {
         if (!transakRes?.url) return
         return { widgetUrl: transakRes?.url }

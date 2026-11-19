@@ -39,6 +39,7 @@ const ListFooterComponent = ({ tab }: { tab: BalanceTab }) => {
             params: {
                 screen: tabRoute,
             },
+            pop: true,
         })
     }, [nav, tabRoute])
 

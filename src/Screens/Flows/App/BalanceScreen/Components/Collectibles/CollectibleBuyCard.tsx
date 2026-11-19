@@ -20,6 +20,7 @@ export const CollectibleBuyCard = () => {
             params: {
                 filter: DappTypeV2.NFTS,
             },
+            pop: true,
         })
     }, [nav])
     return (

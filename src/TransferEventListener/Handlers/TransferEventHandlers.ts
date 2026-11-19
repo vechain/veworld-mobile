@@ -31,6 +31,7 @@ const showTransferReceivedFeedback = (
                     params: {
                         screen: Routes.ACTIVITY_ALL,
                     },
+                    pop: true,
                 })
             },
         })

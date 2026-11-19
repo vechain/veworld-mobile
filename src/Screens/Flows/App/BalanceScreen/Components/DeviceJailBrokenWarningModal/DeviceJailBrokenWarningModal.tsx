@@ -31,7 +31,7 @@ export const DeviceJailBrokenWarningModal = () => {
     const goToPrivacyScreen = () => {
         onClose()
         dispatch(setShowJailbrokeDeviceWarning(false))
-        nav.navigate("SettingsStack", { screen: Routes.SETTINGS, initial: true })
+        nav.navigate("SettingsStack", { screen: Routes.SETTINGS, initial: true, pop: true })
         nav.navigate("SettingsStack", { screen: Routes.SETTINGS_PRIVACY, initial: false })
     }
 

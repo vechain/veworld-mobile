@@ -111,7 +111,7 @@ describe("NewUserVeBetterCard", () => {
         const startButton = await screen.findByText("Start your impact")
         fireEvent.press(startButton)
 
-        expect(mockNavigate).toHaveBeenCalledWith(Routes.APPS_STACK, { screen: Routes.APPS })
+        expect(mockNavigate).toHaveBeenCalledWith(Routes.APPS_STACK, { screen: Routes.APPS, pop: true })
     })
 
     it("displays cta text", async () => {
