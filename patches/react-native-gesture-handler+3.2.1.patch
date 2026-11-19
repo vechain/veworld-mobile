@@ -1,0 +1,22 @@
+diff --git a/node_modules/react-native-gesture-handler/apple/RNGestureHandlerButton.mm b/node_modules/react-native-gesture-handler/apple/RNGestureHandlerButton.mm
+index b480fa9..6809cfd 100644
+--- a/node_modules/react-native-gesture-handler/apple/RNGestureHandlerButton.mm
++++ b/node_modules/react-native-gesture-handler/apple/RNGestureHandlerButton.mm
+@@ -1507,6 +1507,17 @@ - (NSString *)accessibilityLabel
+   return str;
+ }
+ 
++// UIKit's insertSubview:atIndex: indexes into the layer's sublayers, which include _underlayLayer, so children
++// mounted after the first layout land one layer too low and draw under their earlier siblings.
++- (void)mountChildComponentView:(RNGHUIView *)childComponentView index:(NSInteger)index
++{
++  if (index < (NSInteger)self.subviews.count) {
++    [self insertSubview:childComponentView belowSubview:self.subviews[index]];
++  } else {
++    [self addSubview:childComponentView];
++  }
++}
++
+ #else
+ 
+ - (void)mountChildComponentView:(RNGHUIView *)childComponentView index:(NSInteger)index
