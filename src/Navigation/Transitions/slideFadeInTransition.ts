@@ -1,12 +1,16 @@
 import { StackCardInterpolationProps, StackCardStyleInterpolator } from "@react-navigation/stack"
 import { Animated } from "react-native"
 import { COLORS } from "~Constants"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 export const slideFadeInTransition: StackCardStyleInterpolator = ({
     current,
-    next,
+    next: coveringCard,
     layouts,
 }: StackCardInterpolationProps) => {
+    // Android stacks don't animate, so the covered card's pushed-back style is never undone and hides it after close
+    const next = isIOS() ? coveringCard : undefined
+
     const translateY = current.progress.interpolate({
         inputRange: [0, 1],
         outputRange: [0, 1],
