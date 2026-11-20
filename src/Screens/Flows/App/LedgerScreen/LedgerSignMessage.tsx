@@ -171,7 +171,7 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
     /** Effects */
 
     const navigateOnFinish = useCallback(() => {
-        nav.navigate(Routes.HOME)
+        nav.navigate(Routes.HOME, undefined, { pop: true })
     }, [nav])
 
     const handleOnConfirm = useCallback(async () => {

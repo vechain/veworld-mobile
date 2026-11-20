@@ -62,11 +62,16 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
     const onFinish = useCallback(() => {
         if (navigation)
-            nav.navigate(navigation.route, {
-                screen: navigation.screen,
-                params: navigation.params,
-            })
-        else nav.navigate(Routes.HOME)
+            nav.navigate(
+                navigation.route,
+                {
+                    screen: navigation.screen,
+                    params: navigation.params,
+                    pop: true,
+                },
+                { pop: true },
+            )
+        else nav.navigate(Routes.HOME, undefined, { pop: true })
         dispatch(setIsAppLoading(false))
     }, [navigation, nav, dispatch])
 

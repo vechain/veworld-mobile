@@ -17,6 +17,7 @@ export const ActivityB3trScreen = () => {
             screen: Routes.APPS_STACK,
             params: {
                 screen: Routes.APPS,
+                pop: true,
             },
         })
     }, [navigation])

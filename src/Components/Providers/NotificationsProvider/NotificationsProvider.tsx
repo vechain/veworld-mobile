@@ -177,7 +177,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
                             parsedParams.returnScreen = Routes.HOME
                         }
 
-                        navigation.navigate(route as any, parsedParams)
+                        navigation.navigate(route as any, parsedParams, { pop: true })
                     }
                 }
             } catch {}

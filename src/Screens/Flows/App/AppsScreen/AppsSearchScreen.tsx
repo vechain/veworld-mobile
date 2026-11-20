@@ -44,7 +44,7 @@ export const AppsSearchScreen = () => {
         const routes = nav.getState()?.routes
         const previousRoute = routes?.[routes.length - 2]
         if (previousRoute?.name === Routes.APPS_SEARCH) {
-            nav.navigate(Routes.APPS)
+            nav.navigate(Routes.APPS, undefined, { pop: true })
         } else {
             nav.goBack()
         }

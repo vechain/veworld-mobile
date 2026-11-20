@@ -19,7 +19,7 @@ export const BackupDevicesAlert = () => {
     const isBackupNeeded = useCheckWalletBackup(selectedAccount)
 
     const goToPrivacyScreen = () => {
-        navigation.navigate("SettingsStack", { screen: Routes.SETTINGS })
+        navigation.navigate("SettingsStack", { screen: Routes.SETTINGS, pop: true })
         settingsNavigation.navigate(Routes.SETTINGS_PRIVACY)
     }
 

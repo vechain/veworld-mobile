@@ -290,16 +290,18 @@ export const ActivityDetailsScreen = ({ route }: Props) => {
                     params: {
                         token: token as TokenWithCompleteInfo,
                     },
+                    pop: true,
                 })
                 break
             case Routes.HOME:
                 navigation.navigate(Routes.HOME_STACK, {
                     screen: Routes.HOME,
+                    pop: true,
                 })
                 break
 
             default:
-                navigation.navigate(returnScreen)
+                navigation.navigate(returnScreen, undefined, { pop: true })
         }
     }, [navigation, returnScreen, token])
 
