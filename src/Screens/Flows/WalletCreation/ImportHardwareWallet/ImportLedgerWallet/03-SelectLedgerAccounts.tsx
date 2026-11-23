@@ -210,7 +210,6 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
             safeAreaTestID="Select_Ledger_Accounts_Screen"
             beforeNavigating={disconnectLedger}
             title={LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}
-            noStaticBottomPadding
             headerRightElement={
                 <BaseIcon
                     name="icon-info"
@@ -248,7 +247,7 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                 <>
                     <ConnectionErrorBottomSheet ref={ref} onDismiss={onClose} error={ledgerErrorCode} />
                     <BaseActivityIndicator isVisible={ledgerAccountsLoading} />
-                    <BaseView flexGrow={1} mx={24}>
+                    <BaseView flex={1} mx={24}>
                         {!!ledgerAccounts.length && (
                             <FlashList
                                 data={ledgerAccounts}
