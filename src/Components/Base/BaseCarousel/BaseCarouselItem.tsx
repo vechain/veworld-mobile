@@ -138,7 +138,6 @@ const baseStyles = () =>
         container: {
             flex: 1,
             width: SCREEN_WIDTH,
-            pointerEvents: "box-none",
             position: "relative",
         },
         contentWrapper: {
