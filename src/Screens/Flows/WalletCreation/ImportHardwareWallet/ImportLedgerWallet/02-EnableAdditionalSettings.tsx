@@ -10,7 +10,6 @@ import { RootStackParamListCreateWalletApp, RootStackParamListOnboarding, Routes
 
 import { useTheme } from "~Hooks"
 
-import * as Haptics from "expo-haptics"
 import { FlatList } from "react-native-gesture-handler"
 
 type Props = {} & NativeStackScreenProps<
@@ -29,8 +28,7 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
     const nav = useNavigation()
     const theme = useTheme()
 
-    const onConfirm = useCallback(async () => {
-        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)
+    const onConfirm = useCallback(() => {
         nav.navigate(Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS, {
             device,
         })
@@ -103,7 +101,7 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
                     keyExtractor={(_item, index) => index.toString()}
                 />
             }
-            footer={<BaseButton action={onConfirm} title={LL.BTN_CONTINUE()} />}
+            footer={<BaseButton action={onConfirm} title={LL.BTN_CONTINUE()} haptics="Light" />}
         />
     )
 }
