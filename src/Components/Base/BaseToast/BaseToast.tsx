@@ -1,4 +1,5 @@
 import React from "react"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
 import Toast, { ToastConfigParams } from "react-native-toast-message"
 import { ColorThemeType } from "~Constants"
 import { useTheme } from "~Hooks"
@@ -137,12 +138,20 @@ type CustomToastConfig = {
  */
 export const BaseToast: React.FC = () => {
     const theme = useTheme()
+    // Android draws edge-to-edge, so the toast has to clear the status bar itself
+    const { top } = useSafeAreaInsets()
 
     // Disable toast notification for CI build
     // Tests with maestro become unreliable with them active
     if (IS_CI_BUILD) return <></>
 
-    return <Toast config={toastConfig(theme)} {...commonToastParams} />
+    return (
+        <Toast
+            config={toastConfig(theme)}
+            {...commonToastParams}
+            topOffset={commonToastParams.topOffset + (PlatformUtils.isIOS() ? 0 : top)}
+        />
+    )
 }
 
 export const hideToast = () => {
