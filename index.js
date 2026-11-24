@@ -288,6 +288,8 @@ const NavigationProvider = ({ children }) => {
             onReady={() => {
                 if (routeNameRef && routeNameRef.current === null) {
                     routeNameRef.current = NAVIGATION_REF.getCurrentRoute()?.name
+                    // The screen is persisted, so the last session's one would otherwise hide the tab bar
+                    dispatch(setCurrentMountedScreen(routeNameRef.current ?? ""))
                 }
             }}
             onStateChange={async () => {
