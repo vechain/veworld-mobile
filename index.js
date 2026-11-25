@@ -75,6 +75,7 @@ import { FeedbackProvider } from "~Components/Providers/FeedbackProvider"
 import { ReceiptProcessorProvider } from "~Components/Providers/ReceiptProcessorProvider"
 import { configureReanimatedLogger, ReanimatedLogLevel } from "react-native-reanimated"
 import { useOnlineManager } from "~Hooks/useOnlineManager"
+import { ignoreUnhandledBleErrors } from "~Utils/LedgerUtils/ignoreUnhandledBleErrors"
 
 const { fontFamily } = typography
 
@@ -88,6 +89,8 @@ configureReanimatedLogger({
     strict: false,
     level: ReanimatedLogLevel.warn,
 })
+
+ignoreUnhandledBleErrors()
 
 if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
     // hide all ui logs

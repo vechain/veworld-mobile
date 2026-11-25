@@ -1,6 +1,5 @@
 import { BottomSheetModal, BottomSheetTextInput } from "@gorhom/bottom-sheet"
 import { useMutation } from "@tanstack/react-query"
-import * as Haptics from "expo-haptics"
 import React, { RefObject, useCallback, useMemo, useState } from "react"
 import { Keyboard, StyleSheet } from "react-native"
 import { z } from "zod"
@@ -13,6 +12,7 @@ import { useI18nContext } from "~i18n"
 import { selectNetworks, useAppDispatch, useAppSelector, validateAndAddCustomNode } from "~Storage/Redux"
 import { URIUtils, warn } from "~Utils"
 import FontUtils from "~Utils/FontUtils"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {
     bsRef: RefObject<BottomSheetModal>
@@ -50,7 +50,7 @@ export const AddCustomNetworkBottomSheet = ({ bsRef }: Props) => {
                 }),
             ).unwrap()
 
-            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+            HapticsService.triggerHaptics({ haptics: "Success" })
             Feedback.show({
                 message: LL.NETWORK_ADDED(),
                 severity: FeedbackSeverity.SUCCESS,
@@ -59,7 +59,7 @@ export const AddCustomNetworkBottomSheet = ({ bsRef }: Props) => {
             })
         } catch (e) {
             warn(ERROR_EVENTS.SETTINGS, "onAddNetworkPress", e)
-            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
+            HapticsService.triggerHaptics({ haptics: "Error" })
             setUrlError(true)
             throw e
         }

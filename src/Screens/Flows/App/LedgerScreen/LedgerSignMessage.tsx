@@ -22,9 +22,9 @@ import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { error, HexUtils, LedgerUtils, SignMessageUtils, warn } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
-import * as Haptics from "expo-haptics"
 import { ERROR_EVENTS, LEDGER_ERROR_CODES } from "~Constants"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import HapticsService from "~Services/HapticsService"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.LEDGER_SIGN_MESSAGE>
 
@@ -179,7 +179,7 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
             if (!signature) return
             setIsSending(true)
 
-            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+            HapticsService.triggerHaptics({ haptics: "Success" })
 
             await processRequest(requestEvent, HexUtils.addPrefix(signature.toString("hex")))
 
@@ -192,7 +192,6 @@ export const LedgerSignMessage: React.FC<Props> = ({ route }) => {
                 text1: LL.ERROR(),
                 text2: LL.ERROR_GENERIC_OPERATION(),
             })
-            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
         } finally {
             setIsSending(false)
         }

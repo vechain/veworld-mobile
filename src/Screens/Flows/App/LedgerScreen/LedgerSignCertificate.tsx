@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import * as Haptics from "expo-haptics"
 import Lottie from "lottie-react-native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
@@ -29,6 +28,7 @@ import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { addLoginActivity, addSession, addSignCertificateActivity, useAppDispatch } from "~Storage/Redux"
 import { debug, error, HexUtils, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
+import HapticsService from "~Services/HapticsService"
 
 const MUTEX_TIMEOUT = 1000
 
@@ -193,7 +193,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
             if (!signature) return
             setIsSending(true)
 
-            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+            HapticsService.triggerHaptics({ haptics: "Success" })
 
             const certResponse: Connex.Vendor.CertResponse = {
                 annex: {
@@ -278,7 +278,6 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                 text1: LL.ERROR(),
                 text2: LL.ERROR_GENERIC_OPERATION(),
             })
-            await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error)
         } finally {
             setIsSending(false)
         }
