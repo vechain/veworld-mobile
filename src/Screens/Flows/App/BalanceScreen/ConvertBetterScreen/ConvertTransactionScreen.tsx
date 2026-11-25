@@ -49,11 +49,12 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
     }, [transactionClauses])
 
     const convertFromTo = useMemo(() => {
-        // When we want to convert B3TR to VOT3 token we have to first do
+        // When we want to convert B3TR to VOT3 token we have to do
         // a call to the B3TR contract in order to approve the transaction
-        // here I'm checking if the first clause is to the B3TR address then
+        // here I'm checking if any clause is to the B3TR address then
         // we are converting B3TR --> VOT3 otherwise is VOT3 --> B3TR
-        if (AddressUtils.compareAddresses(toAddresses[0], B3TR.address)) {
+        // (the first clause can be a VOT3 delegate clause for smart accounts)
+        if (toAddresses.some(toAddress => AddressUtils.compareAddresses(toAddress, B3TR.address))) {
             return {
                 fromToken: B3TR,
                 toToken: VOT3,
