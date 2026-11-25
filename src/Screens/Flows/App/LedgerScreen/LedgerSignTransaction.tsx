@@ -307,13 +307,14 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     }, [initialRoute, dappRequest, dispatch, nav])
 
     const handleOnConfirm = useCallback(async () => {
+        let txId: string | undefined
         try {
             if (!signature) return
             setIsSending(true)
 
             dispatch(setIsAppLoading(true))
 
-            const txId = await sendTransaction(
+            txId = await sendTransaction(
                 Transaction.of(
                     transaction.body,
                     delegationSignature
@@ -357,6 +358,11 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             navigateOnFinish()
         } catch (e) {
             error(ERROR_EVENTS.LEDGER, e)
+            // The transaction is already sent, so staying here would let Confirm send it again
+            if (txId) {
+                navigateOnFinish()
+                return
+            }
             showErrorToast({
                 text1: LL.ERROR(),
                 text2: LL.ERROR_GENERIC_OPERATION(),
